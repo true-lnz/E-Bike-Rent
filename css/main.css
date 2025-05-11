@@ -1,0 +1,158 @@
+:root {
+  --bg-color: #f9f9f9;
+  --dark-color: #2d2d2d;
+  --accent: #000;
+  --brend-color: linear-gradient(-45deg, #3289b2 0%, #409fcb 10%, #dd7f9e 60%, rgb(255, 155, 40) 100%);
+;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+	font-family: "Open Sans", Arial, Helvetica, sans-serif;
+}
+
+body {
+  font-family: sans-serif;
+  background-color: var(--bg-color);
+  color: var(--dark-color);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  margin: 0 16vw;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  background-color: var(--bg-color);
+  z-index: 10;
+}
+
+.logo img {
+  max-height: 4vw;
+  width: auto;
+}
+
+.nav {
+  display: flex;
+  gap: 2vw;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nav a {
+  text-decoration: none;
+  color: var(--dark-color);
+  font-weight: 500;
+}
+
+.nav a:hover {
+  color: var(--accent);
+}
+
+.phone {
+  background-color: #fff;
+  padding: .8rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: bold;
+	font-size: 1.2rem;
+  white-space: nowrap;
+}
+
+.btn-cabinet {
+  background: var(--dark-color);
+  color: #fff;
+  border: none;
+	font-size: 1rem;
+	padding: .8rem 1.5rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	gap: 6vw;
+
+	flex: 1;
+  padding: 2vw 16vw;
+	margin-bottom: 6vw;
+}
+
+.footer {
+  background-color: #222;
+  color: #fff;
+  text-align: center;
+  padding: 1rem 0;
+  margin-top: auto;
+}
+
+.bnr {
+	border-radius: 2rem;
+	background: #fff;
+	width: 100%;
+}
+
+.bg-white {
+	background: #fff;
+}
+
+.bg-dark {
+	background: var(--dark-color);
+}
+
+.bg-brend {
+	background: var(--brend-color);
+}
+
+
+#main-banner {
+	min-height: 25vw;
+}
+
+#how-it-works-banner {
+	min-height: 25vw;
+}
+
+
+#test-drive-banner {
+	min-height: 25vw;
+}
+
+.cards-container {
+	display:flex;
+	flex-wrap: wrap;
+	gap: 2vw;
+
+}
+
+.card-item {
+	flex: 1;
+	min-height: 10vw;
+	border-radius: 1rem;
+}
+
+
+
+.heading {
+	font-size: 3rem;
+	margin-bottom: 2rem;
+}
+
+.sub-heading {
+	font-weight: normal;
+	font-size: 1rem;
+}
