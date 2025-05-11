@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Личный кабинет / FULGAZ - Аренда, прокат и обслуживание велосипедов, электровелосипедов в Уфе</title>
+	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/lk.css">
+</head>
+
+<body class="lk">
+	<header class="header">
+		<div class="container">
+			<a href="#" class="logo">
+				<img src="img/Logo512x512.png" alt="FULGAZ Logo" />
+			</a>
+			<nav class="nav">
+				<a class="active" href="#">Устройства</a>
+				<a href="my-rent.html">Моя аренда</a>
+				<a href="#">Платежи</a>
+				<a href="#">О нас</a>
+				<a href="#">Частые вопросы</a>
+				<div style="display: flex; align-items: center; gap: 1vw;">
+					<button class="btn-cabinet" onclick="location.href='auth.html'">Выйти</button>
+				</div>
+
+			</nav>
+		</div>
+		<div class="blur"></div>
+	</header>
+
+	<main class="content">
+		<section class="rental-section">
+			<h2>Электровелосипеды</h2>
+			<div class="cards-wrapper">
+				<div class="rental-card">
+					<span class="category">Электровелосипед</span>
+					<h3>Liming V8 MAX</h3>
+					<span class="badge hidden">-</span>
+					<img src="img/jelektrovelosiped-liming-v8-z_1000x1000.jpg" alt="Monster V20" />
+					<p class="price">аренда от 3 300 ₽</p>
+					<a href="rent-overview.html" class="rental-open">Забронировать</a>
+				</div>
+				<div class="rental-card">
+					<span class="category">Электровелосипед</span>
+					<h3>Kolyan</h3>
+					<span class="badge hidden">-</span>
+					<img src="img/kolyan.png" alt="Kolyan Monster 21Ah" />
+					<p class="price">аренда от 3 300 ₽</p>
+					<a href="rent-overview.html" class="rental-open">Забронировать</a>
+				</div>
+				<div class="rental-card">
+					<span class="category">Электровелосипед</span>
+					<h3>Kirin V3 Pro</h3>
+					<div>
+						<span class="badge orange">2 АКБ</span>
+						<span class="badge gray">До 8 часов</span>
+					</div>
+
+					<img src="img/kugoo-kirin-v3-pro-1-500x500.png" alt="MonsterPRO" />
+					<p class="price">аренда от 3 300 ₽</p>
+					<a href="rent-overview.html" class="rental-open">Забронировать</a>
+				</div>
+			</div>
+		</section>
+
+
+	</main>
+
+	<footer class="footer">
+		<div class="container">
+			<p>© 2025 FULGAZ. Все права защищены.</p>
+		</div>
+	</footer>
+</body>
+
+</html>

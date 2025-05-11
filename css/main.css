@@ -2,6 +2,7 @@
   --bg-color: #f9f9f9;
   --dark-color: #2d2d2d;
   --accent: #000;
+  --bg-brend: rgb(255, 155, 40);
   --brend-color: linear-gradient(-45deg, #3289b2 0%, #409fcb 10%, #dd7f9e 60%, rgb(255, 155, 40) 100%);
 ;
 }
@@ -27,7 +28,7 @@ body {
 
 .container {
   margin: 0 16vw;
-  padding: 1rem;
+  padding: 1rem 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -35,9 +36,22 @@ body {
 
 .header {
   position: sticky;
+	overflow: hidden;
   top: 0;
   background-color: var(--bg-color);
-  z-index: 10;
+  z-index: 1000;
+}
+
+.blur {
+	position: absolute;
+	width: 120%;
+	height: 120%;
+	top: -20%;
+	left: -20;
+	/* filter: blur(200px); */
+  background-color: var(--bg-color);
+	opacity: 1;
+	z-index: -2;
 }
 
 .logo img {
@@ -56,10 +70,14 @@ body {
   text-decoration: none;
   color: var(--dark-color);
   font-weight: 500;
+	padding: .8rem;
+	border-radius: 9999px;
+	border: 1px solid transparent;
 }
 
 .nav a:hover {
   color: var(--accent);
+	border: 1px solid var(--dark-color);
 }
 
 .phone {
@@ -102,20 +120,20 @@ body {
 
 .bnr {
 	border-radius: 2rem;
-	background: #fff;
+	/* background: #fff; */
 	width: 100%;
 }
 
 .bg-white {
-	background: #fff;
+	/* background: #fff; */
 }
 
 .bg-dark {
-	background: var(--dark-color);
+	/* background: var(--dark-color); */
 }
 
 .bg-brend {
-	background: var(--brend-color);
+	/* background: var(--brend-color); */
 }
 
 
@@ -124,12 +142,18 @@ body {
 }
 
 #how-it-works-banner {
-	min-height: 25vw;
+	min-height: 16vw;
 }
 
 
 #test-drive-banner {
 	min-height: 25vw;
+}
+
+img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 }
 
 .cards-container {
@@ -156,3 +180,17 @@ body {
 	font-weight: normal;
 	font-size: 1rem;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
