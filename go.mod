@@ -1,4 +1,4 @@
-module E-Bike-Rent
+module SplitSystemShop
 
 go 1.23.0
 
