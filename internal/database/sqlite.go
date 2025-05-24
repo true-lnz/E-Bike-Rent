@@ -39,7 +39,12 @@ func GetConnection(cfg config.DatabaseConfig) (*gorm.DB, error) {
 		}
 
 		err = db.AutoMigrate(
+			&models.Company{},
 			&models.User{},
+			&models.Bicycle{},
+			&models.Accessory{},
+			&models.Rent{},
+			&models.Maintenance{},
 		)
 		addTriggers(db)
 		if err = populateDB(db); err != nil {

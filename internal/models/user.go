@@ -13,4 +13,6 @@ type User struct {
 	Birthday         time.Time `gorm:"not null"`
 	Role             string    `gorm:"default:'user'" json:"role"`
 	VerificationCode string    `json:"verification_code"`
+	CompanyID        uint      `json:"company_id"`
+	Company          Company   `gorm:"foreignkey:CompanyID" json:"company"`
 }

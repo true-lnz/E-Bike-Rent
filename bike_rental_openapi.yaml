@@ -1,0 +1,309 @@
+openapi: 3.0.3
+info:
+  title: Bike Rental API
+  version: 1.0.0
+  description: API для аренды велосипедов
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /bicycle:
+    get:
+      summary: Получить список всех велосипедов
+      responses:
+        '200':
+          description: Успешный ответ
+
+
+  /bicycle/{id}:
+    get:
+      summary: Получить информацию о велосипеде
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешный ответ
+
+  /admin/bicycle:
+    post:
+      summary: Создать новый велосипед
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                model:
+                  type: string
+                price:
+                  type: number
+      responses:
+        '201':
+          description: Велосипед создан
+
+  /admin/bicycle/{id}:
+    put:
+      summary: Обновить информацию о велосипеде
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                model:
+                  type: string
+                price:
+                  type: number
+      responses:
+        '200':
+          description: Успешное обновление
+
+    delete:
+      summary: Удалить велосипед
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Успешное удаление
+
+  /accessories:
+    get:
+      summary: Получить все аксессуары
+      responses:
+        '200':
+          description: Успешный ответ
+
+  /admin/accessories:
+    post:
+      summary: Создать аксессуар
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+      responses:
+        '201':
+          description: Аксессуар создан
+
+  /admin/accessories/{id}:
+    put:
+      summary: Обновить аксессуар
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+      responses:
+        '200':
+          description: Успешное обновление
+
+    delete:
+      summary: Удалить аксессуар
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Успешное удаление
+
+  /rent:
+    post:
+      summary: Забронировать велосипед
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bicycle_id:
+                  type: integer
+                start_date:
+                  type: string
+                  format: date
+                end_date:
+                  type: string
+                  format: date
+      responses:
+        '201':
+          description: Аренда создана
+
+  /admin/rent:
+    get:
+      summary: Получить все аренды
+      responses:
+        '200':
+          description: Успешный ответ
+
+  /admin/rent/{id}/extend:
+    put:
+      summary: Продлить аренду
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                new_end_date:
+                  type: string
+                  format: date
+      responses:
+        '200':
+          description: Аренда продлена
+
+  /admin/rent/{id}/status:
+    put:
+      summary: Обновить статус аренды
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+      responses:
+        '200':
+          description: Статус обновлён
+
+  /maintenance:
+    post:
+      summary: Создать заявку на обслуживание
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bicycle_id:
+                  type: integer
+                issue:
+                  type: string
+      responses:
+        '201':
+          description: Заявка создана
+
+    get:
+      summary: Получить все заявки пользователя
+      responses:
+        '200':
+          description: Успешный ответ
+
+  /maintenance/{id}:
+    get:
+      summary: Получить информацию о заявке
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешный ответ
+
+  /admin/maintenance:
+    get:
+      summary: Получить все заявки
+      responses:
+        '200':
+          description: Успешный ответ
+
+  /admin/maintenance/{id}:
+    put:
+      summary: Обновить данные заявки
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                price:
+                  type: number
+                details:
+                  type: string
+                repair_time:
+                  type: string
+                  format: date-time
+      responses:
+        '200':
+          description: Обновлено
+
+  /feedback:
+    post:
+      summary: Отправить сообщение админу
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                phone_number:
+                  type: string
+      responses:
+        '200':
+          description: Сообщение отправлено
