@@ -1,8 +1,8 @@
 package database
 
 import (
-	"SplitSystemShop/internal/config"
-	"SplitSystemShop/internal/models"
+	"E-Bike-Rent/internal/config"
+	"E-Bike-Rent/internal/models"
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"

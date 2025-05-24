@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"BicycleShop/internal/config"
-	"BicycleShop/internal/context"
-	"BicycleShop/internal/utils"
+	"E-Bike-Rent/internal/config"
+	"E-Bike-Rent/internal/context"
+	"E-Bike-Rent/internal/utils"
 	"github.com/gofiber/fiber/v2"
 )
 

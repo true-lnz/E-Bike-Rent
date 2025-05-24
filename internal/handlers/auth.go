@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"BicycleShop/internal/config"
-	"BicycleShop/internal/dto"
-	"BicycleShop/internal/services"
-	"BicycleShop/internal/utils"
+	"E-Bike-Rent/internal/config"
+	"E-Bike-Rent/internal/dto"
+	"E-Bike-Rent/internal/services"
+	"E-Bike-Rent/internal/utils"
 	"github.com/gofiber/fiber/v2"
 	"time"
 )

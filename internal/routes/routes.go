@@ -1,10 +1,10 @@
 package routes
 
 import (
-	"BicycleShop/internal/config"
-	"BicycleShop/internal/context"
-	"BicycleShop/internal/handlers"
-	"BicycleShop/internal/middlewares"
+	"E-Bike-Rent/internal/config"
+	"E-Bike-Rent/internal/context"
+	"E-Bike-Rent/internal/handlers"
+	"E-Bike-Rent/internal/middlewares"
 	"github.com/gofiber/fiber/v2"
 )
 

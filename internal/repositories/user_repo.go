@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"SplitSystemShop/internal/models"
+	"E-Bike-Rent/internal/models"
 	"context"
 	"gorm.io/gorm"
 )

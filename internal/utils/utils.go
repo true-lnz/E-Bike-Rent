@@ -1,9 +1,9 @@
 package utils
 
 import (
-	"SplitSystemShop/internal/config"
-	"SplitSystemShop/internal/dto"
-	"SplitSystemShop/internal/models"
+	"E-Bike-Rent/internal/config"
+	"E-Bike-Rent/internal/dto"
+	"E-Bike-Rent/internal/models"
 	"encoding/base64"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"

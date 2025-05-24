@@ -1,9 +1,9 @@
 package middlewares
 
 import (
-	"SplitSystemShop/internal/config"
-	"SplitSystemShop/internal/services"
-	"SplitSystemShop/internal/utils"
+	"E-Bike-Rent/internal/config"
+	"E-Bike-Rent/internal/services"
+	"E-Bike-Rent/internal/utils"
 	"github.com/gofiber/fiber/v2"
 	"strings"
 )

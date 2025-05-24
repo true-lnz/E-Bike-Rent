@@ -1,8 +1,8 @@
 package context
 
 import (
-	"SplitSystemShop/internal/repositories"
-	"SplitSystemShop/internal/services"
+	"E-Bike-Rent/internal/repositories"
+	"E-Bike-Rent/internal/services"
 	"gorm.io/gorm"
 )
 

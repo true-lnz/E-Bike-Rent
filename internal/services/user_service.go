@@ -1,9 +1,9 @@
 package services
 
 import (
-	"SplitSystemShop/internal/dto"
-	"SplitSystemShop/internal/models"
-	"SplitSystemShop/internal/repositories"
+	"E-Bike-Rent/internal/dto"
+	"E-Bike-Rent/internal/models"
+	"E-Bike-Rent/internal/repositories"
 	"context"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"

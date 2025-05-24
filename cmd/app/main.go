@@ -1,8 +1,8 @@
 package main
 
 import (
-	"SplitSystemShop/internal/app"
-	"SplitSystemShop/internal/config"
+	"E-Bike-Rent/internal/app"
+	"E-Bike-Rent/internal/config"
 	"log"
 )
 

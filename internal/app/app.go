@@ -1,10 +1,10 @@
 package app
 
 import (
-	"SplitSystemShop/internal/config"
-	"SplitSystemShop/internal/context"
-	"SplitSystemShop/internal/database"
-	"SplitSystemShop/internal/routes"
+	"E-Bike-Rent/internal/config"
+	"E-Bike-Rent/internal/context"
+	"E-Bike-Rent/internal/database"
+	"E-Bike-Rent/internal/routes"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
