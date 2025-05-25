@@ -7,14 +7,24 @@ import (
 )
 
 type AppContext struct {
-	UserService *services.UserService
+	UserService        *services.UserService
+	BicycleService     *services.BicycleService
+	MaintenanceService *services.MaintenanceService
 }
 
 func InitServices(db *gorm.DB) *AppContext {
 	userRepo := repositories.NewUserRepository(db)
 	userService := services.NewUserService(userRepo)
 
+	bicycleRepo := repositories.NewBicycleRepo(db)
+	bicycleService := services.NewBicycleService(bicycleRepo)
+
+	maintenanceRepo := repositories.NewMaintenanceRepo(db)
+	maintenanceService := services.NewMaintenanceService(maintenanceRepo)
+
 	return &AppContext{
-		UserService: userService,
+		UserService:        userService,
+		BicycleService:     bicycleService,
+		MaintenanceService: maintenanceService,
 	}
 }
