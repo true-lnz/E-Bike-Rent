@@ -6,17 +6,43 @@ import {
 	Stack,
 	Text,
 	TextInput,
-	Title
+	Title,
 } from "@mantine/core";
+import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { validateEmail } from "../../utils/validateEmail";
 
 export default function AuthForm() {
 	const [email, setEmail] = useState("");
 	const [touched, setTouched] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+
+	const navigate = useNavigate();
 
 	const isValid = validateEmail(email);
+
+	const handleSubmit = async () => {
+		setTouched(true);
+		setError(null);
+
+		if (!isValid) return;
+
+		setLoading(true);
+
+		try {
+			await axios.post("http://localhost:8080/api/auth/login/send-code", { email });
+
+			// Успешно — переход ко второму шагу
+			navigate("/auth/code", { state: { email } });
+		} catch (err: any) {
+			console.error(err);
+			setError("Не удалось отправить код. Проверь адрес почты или попробуй позже.");
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	return (
 		<Center h="72vh">
@@ -40,10 +66,11 @@ export default function AuthForm() {
 						radius="md"
 						size="md"
 						value={email}
-						onChange={(event) => setEmail(event.currentTarget.value)}
+						onChange={(e) => setEmail(e.currentTarget.value)}
 						onBlur={() => setTouched(true)}
 						error={touched && !isValid ? "Введите корректную почту" : null}
 						required
+						disabled={loading}
 					/>
 
 					<Button
@@ -53,14 +80,17 @@ export default function AuthForm() {
 						radius="xl"
 						size="md"
 						fullWidth
-						disabled={!isValid}
-						onClick={() => {
-							// здесь будет логика отправки запроса
-							console.log("Отправка кода на:", email);
-						}}
+						disabled={!isValid || loading}
+						onClick={handleSubmit}
 					>
 						Получить код
 					</Button>
+
+					{error && (
+						<Text size="sm" c="red" ta="center">
+							{error}
+						</Text>
+					)}
 
 					<Text size="xs" c="dimmed" ta="center" mt="xs">
 						Вводя адрес электронной почты, ты соглашаешься с{" "}

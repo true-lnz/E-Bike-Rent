@@ -6,6 +6,7 @@ import (
 	"E-Bike-Rent/internal/database"
 	"E-Bike-Rent/internal/routes"
 	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
@@ -22,6 +23,7 @@ func App(cfg *config.Config) error {
 
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "http://localhost:5173",
+		AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH",
 		AllowHeaders: "*",
 	}))
 

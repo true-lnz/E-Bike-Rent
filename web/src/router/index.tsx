@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import PinCodeForm from "../components/Auth/PinCodeForm";
 import BikeListPage from "../components/BikeList";
 import AdminLayout from "../layouts/AdminLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -12,7 +13,10 @@ export const router = createBrowserRouter([
     element: <MainLayout />, // Для большинства страниц
     children: [
       { path: "/", element: <HomePage /> },
+
       { path: "/auth", element: <AuthPage /> },
+			{ path: "/auth/code", element: <PinCodeForm /> },
+
       { path: "/bikes", element: <BikeListPage /> },
       { path: "/bikes/:id", element: <BikeDetailPage /> },
       { path: "*", element: <HomePage /> },

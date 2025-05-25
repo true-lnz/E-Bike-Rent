@@ -3,6 +3,7 @@ package services
 import (
 	"E-Bike-Rent/internal/config"
 	"fmt"
+
 	"gopkg.in/gomail.v2"
 )
 
@@ -55,7 +56,7 @@ func SendVerificationCode(to string, code string, cfg *config.Config) error {
 				<p>Вы запрашивали вход или регистрацию в системе. Пожалуйста, используйте код ниже для подтверждения действия:</p>
 				<div class="code">%s</div>
 				<p>Если вы не запрашивали код, просто проигнорируйте это письмо.</p>
-				<div class="footer">С уважением,<br>Команда поддержки</div>
+				<div class="footer">С уважением,<br>Команда поддержки «ФулГаз»</div>
 			</div>
 		</body>
 		</html>
