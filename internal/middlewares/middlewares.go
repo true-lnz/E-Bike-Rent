@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func RequireAuth(cfg *config.Config, onlyUserId bool) fiber.Handler {
+func RequireAuth(cfg *config.Config, userService *services.UserService, onlyUserId bool) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		tokenString := c.Cookies("token")
 		if tokenString == "" && !onlyUserId {
@@ -21,7 +21,11 @@ func RequireAuth(cfg *config.Config, onlyUserId bool) fiber.Handler {
 			return fiber.NewError(fiber.StatusUnauthorized, "Invalid token")
 		}
 		if err == nil {
-			c.Locals("userId", userID)
+			user, err := userService.GetUser(c.Context(), userID)
+			if err != nil {
+				return fiber.NewError(fiber.StatusUnauthorized, "Missing token")
+			}
+			c.Locals("user", user)
 		}
 		return c.Next()
 	}

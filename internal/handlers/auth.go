@@ -9,59 +9,95 @@ import (
 	"time"
 )
 
-func Registration(s *services.UserService, cfg *config.Config) fiber.Handler {
+func SendRegistrationVerificationCode(us *services.UserService, cfg *config.Config) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		var input dto.RegistrationRequest
-
-		if err := c.BodyParser(&input); err != nil {
-			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid input"})
+		var req struct {
+			Email string `json:"email"`
+		}
+		if err := c.BodyParser(&req); err != nil {
+			return fiber.NewError(fiber.StatusBadRequest, "Неверный формат запроса")
 		}
 
-		user, err := s.RegisterUser(c.Context(), input)
-		if err != nil {
-			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		user, err := us.GetUserByEmail(c.Context(), req.Email)
+		if err == nil && user.IsVerified {
+			return fiber.NewError(fiber.StatusConflict, "Пользователь с таким email уже существует")
 		}
 
-		token, _ := utils.GenerateJWT(user, cfg)
+		// Генерация и отправка кода
+		code := utils.GenerateCode()
 
-		c.Cookie(&fiber.Cookie{
-			Name:     "token",
-			Value:    token,
-			Expires:  time.Now().Add(24 * time.Hour),
-			HTTPOnly: true,
-			Secure:   false,
-			SameSite: "Strict",
-		})
+		if err = services.SendVerificationCode(req.Email, code, cfg); err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Не удалось отправить код"})
+		}
 
-		return c.JSON(fiber.Map{"message": "Registration successful"})
+		// Установка или обновление кода (в том числе создание пользователя, если нужно)
+		if err = us.SetVerificationCode(c.Context(), req.Email, code); err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Не удалось сохранить код"})
+		}
+
+		return c.SendStatus(fiber.StatusOK)
 	}
 }
 
-func Login(s *services.UserService, cfg *config.Config) fiber.Handler {
+func SendLoginVerificationCode(us *services.UserService, cfg *config.Config) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		var input dto.LoginRequest
-
-		if err := c.BodyParser(&input); err != nil {
-			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid input"})
+		var req struct {
+			Email string `json:"email"`
+		}
+		if err := c.BodyParser(&req); err != nil {
+			return fiber.NewError(fiber.StatusBadRequest, "Неверный формат запроса")
 		}
 
-		user, err := s.LoginUser(c.Context(), input)
+		user, err := us.GetUserByEmail(c.Context(), req.Email)
 		if err != nil {
-			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+			return fiber.NewError(fiber.StatusNotFound, "Пользователь с такой почтой не найден")
+		}
+		if !user.IsVerified {
+			return fiber.NewError(fiber.StatusConflict, "Почта не подтверждена")
 		}
 
-		token, _ := utils.GenerateJWT(user, cfg)
+		// Генерация и отправка кода
+		code := utils.GenerateCode()
 
-		c.Cookie(&fiber.Cookie{
-			Name:     "token",
-			Value:    token,
-			Expires:  time.Now().Add(24 * time.Hour),
-			HTTPOnly: true,
-			Secure:   false,
-			SameSite: "Strict",
-		})
+		if err = services.SendVerificationCode(req.Email, code, cfg); err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Не удалось отправить код"})
+		}
 
-		return c.JSON(fiber.Map{"message": "Login successful"})
+		// Установка или обновление кода (в том числе создание пользователя, если нужно)
+		if err = us.SetVerificationCode(c.Context(), req.Email, code); err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Не удалось сохранить код"})
+		}
+
+		return c.SendStatus(fiber.StatusOK)
+	}
+}
+
+func VerifyLoginCode(us *services.UserService, cfg *config.Config) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		var req struct {
+			Email string `json:"email"`
+			Code  string `json:"code"`
+		}
+		if err := c.BodyParser(&req); err != nil {
+			return fiber.NewError(fiber.StatusBadRequest, "Неверный формат данных")
+		}
+
+		user, err := us.GetUserByEmail(c.Context(), req.Email)
+
+		if err != nil {
+			return fiber.NewError(fiber.StatusBadRequest, "Пользователя с таким email нет")
+		}
+
+		ok, err := us.CheckVerificationCode(c.Context(), req.Email, req.Code)
+		if err != nil {
+			return fiber.NewError(fiber.StatusInternalServerError, "Ошибка при проверке кода")
+		}
+		if !ok {
+			return fiber.NewError(fiber.StatusUnauthorized, "Неверный код")
+		}
+
+		utils.SetCookie(c, user, cfg)
+		return c.JSON(fiber.Map{"message": "Успешная авторизация"})
 	}
 }
 
@@ -79,28 +115,49 @@ func Logout() fiber.Handler {
 	}
 }
 
-func ChangePassword(userService *services.UserService) fiber.Handler {
+func VerifyRegistrationCode(us *services.UserService) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		type request struct {
-			NewPassword string `json:"new_password"`
+		var req struct {
+			Email string `json:"email"`
+			Code  string `json:"code"`
+		}
+		if err := c.BodyParser(&req); err != nil {
+			return fiber.NewError(fiber.StatusBadRequest, "Неверный формат данных")
 		}
 
-		var body request
-		if err := c.BodyParser(&body); err != nil {
-			return fiber.NewError(fiber.StatusBadRequest, "Некорректный формат запроса")
+		user, err := us.GetUserByEmail(c.Context(), req.Email)
+
+		if err != nil {
+			return fiber.NewError(fiber.StatusBadRequest, "Пользователя с таким email нет")
+		}
+		if user.IsVerified {
+			return fiber.NewError(fiber.StatusConflict, "Пользователь уже верифицирован")
 		}
 
-		if body.NewPassword == "" {
-			return fiber.NewError(fiber.StatusBadRequest, "Новый пароль не может быть пустым")
+		ok, err := us.CheckVerificationCode(c.Context(), req.Email, req.Code)
+		if err != nil {
+			return fiber.NewError(fiber.StatusInternalServerError, "Ошибка при проверке кода")
+		}
+		if !ok {
+			return fiber.NewError(fiber.StatusUnauthorized, "Неверный код")
 		}
 
-		userID := c.Locals("userId").(uint)
+		return c.JSON(fiber.Map{"message": "Код совпадает"})
+	}
+}
 
-		if err := userService.ChangePassword(c.Context(), userID, body.NewPassword); err != nil {
-			return fiber.NewError(fiber.StatusInternalServerError, "Не удалось изменить пароль")
+func CompleteRegistration(us *services.UserService, cfg *config.Config) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		var req dto.CompleteRegistrationRequest
+		if err := c.BodyParser(&req); err != nil {
+			return fiber.NewError(fiber.StatusBadRequest, "Неверный формат данных: "+err.Error())
 		}
-
-		return c.JSON(fiber.Map{"message": "Пароль успешно изменён"})
+		user, err := us.CompleteRegistration(c.Context(), req)
+		if err != nil {
+			return fiber.NewError(fiber.StatusInternalServerError, "Ошибка при сохранении данных")
+		}
+		utils.SetCookie(c, user, cfg)
+		return c.SendStatus(fiber.StatusCreated)
 	}
 }
 

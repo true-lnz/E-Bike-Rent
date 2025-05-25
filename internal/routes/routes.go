@@ -16,14 +16,27 @@ func SetupRoutes(app *fiber.App, cfg *config.Config, ctx *context.AppContext) {
 		return c.Next()
 	})
 
+	requireAuth := func() fiber.Handler {
+		return middlewares.RequireAuth(cfg, ctx.UserService, false)
+	}()
+	//requireUser := func() fiber.Handler {
+	//	return middlewares.RequireAuth(cfg, ctx.UserService, true)
+	//}
+
 	//Роуты для апи
-	app.Post("/api/auth/login", handlers.Login(ctx.UserService, cfg))
-	app.Post("/api/auth/register", handlers.Registration(ctx.UserService, cfg))
-	app.Get("/api/auth/logout", middlewares.RequireAuth(cfg, false), handlers.Logout())
-	app.Patch("/api/auth/profile", middlewares.RequireAuth(cfg, false), handlers.ChangeCredentials(ctx.UserService))
-	app.Patch("/api/auth/change-password", middlewares.RequireAuth(cfg, false), handlers.ChangePassword(ctx.UserService))
-	app.Patch("/api/auth/change-credentials", middlewares.RequireAuth(cfg, false), handlers.ChangeCredentials(ctx.UserService))
-	app.Delete("/api/auth/delete-account", middlewares.RequireAuth(cfg, false), handlers.DeleteAccount(ctx.UserService))
+	app.Post("/api/auth/login/send-code", handlers.SendLoginVerificationCode(ctx.UserService, cfg))
+	app.Post("/api/auth/login/verify-code", handlers.VerifyLoginCode(ctx.UserService, cfg))
+
+	app.Post("/api/auth/register/send-code", handlers.SendRegistrationVerificationCode(ctx.UserService, cfg))
+	app.Post("/api/auth/register/verify-code", handlers.VerifyRegistrationCode(ctx.UserService))
+	app.Post("/api/auth/register/complete", handlers.CompleteRegistration(ctx.UserService, cfg))
+
+	app.Get("/api/auth/logout", middlewares.RequireAuth(cfg, ctx.UserService, false), handlers.Logout())
+
+	app.Patch("/api/auth/profile", requireAuth, handlers.ChangeCredentials(ctx.UserService))
+	//app.Patch("/api/auth/change-password", middlewares.RequireAuth(cfg, false), handlers.ChangePassword(ctx.UserService))
+	//app.Patch("/api/auth/change-credentials", middlewares.RequireAuth(cfg, false), handlers.ChangeCredentials(ctx.UserService))
+	//app.Delete("/api/auth/delete-account", middlewares.RequireAuth(cfg, false), handlers.DeleteAccount(ctx.UserService))
 
 	//app.Get("/admin", middlewares.RequireAuth(cfg, false), middlewares.RequireAdmin(ctx.UserService), handlers.AdminPage(cfg, ctx))
 	//

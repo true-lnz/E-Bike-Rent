@@ -1,12 +1,13 @@
 package dto
 
-type RegistrationRequest struct {
-	LastName    string `json:"lastName"`
-	FirstName   string `json:"firstName"`
-	Patronymic  string `json:"patronymic"`
+type CompleteRegistrationRequest struct {
 	Email       string `json:"email"`
-	PhoneNumber string `json:"phoneNumber"`
-	Password    string `json:"password"`
+	LastName    string `json:"last_name"`
+	FirstName   string `json:"first_name"`
+	Patronymic  string `json:"patronymic"`
+	PhoneNumber string `json:"phone_number"`
+	Birthday    string `json:"birthday"`
+	CompanyID   *uint  `json:"company_id"`
 }
 
 type LoginRequest struct {
