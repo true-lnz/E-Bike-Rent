@@ -1,4 +1,5 @@
 import {
+	ActionIcon,
 	Badge,
 	Box,
 	Button,
@@ -11,6 +12,8 @@ import {
 	rem
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { IconInfoCircle } from "@tabler/icons-react";
+import { Link } from "react-router-dom";
 import type { Bike } from "../types/Bike";
 
 interface BikeCardProps {
@@ -18,16 +21,7 @@ interface BikeCardProps {
 }
 
 export default function BikeCard({ bike }: BikeCardProps) {
-	const [opened, { open, close }] = useDisclosure(false);
-
-	const handleClick = () => {
-		if (bike.quantity > 0) {
-			// Пример навигации, если нужно
-			window.location.href = `/bikes/${bike.id}`;
-		} else {
-			open();
-		}
-	};
+	const [opened, { close }] = useDisclosure(false);
 
 	return (
 		<>
@@ -41,7 +35,6 @@ export default function BikeCard({ bike }: BikeCardProps) {
 					flexDirection: "column",
 				}}
 			>
-				{/* Название и бейдж */}
 				<Group justify="space-between" mb="xs">
 					<Box>
 						<Text fw={700} size="lg">
@@ -60,7 +53,6 @@ export default function BikeCard({ bike }: BikeCardProps) {
 					</Badge>
 				</Group>
 
-				{/* Фото */}
 				<Image
 					src={bike.image_url}
 					alt={bike.name}
@@ -69,7 +61,6 @@ export default function BikeCard({ bike }: BikeCardProps) {
 					mx="auto"
 				/>
 
-				{/* Цена и кнопка */}
 				<Box
 					bg="white"
 					p="sm"
@@ -79,18 +70,15 @@ export default function BikeCard({ bike }: BikeCardProps) {
 						boxShadow: "0 0 12px rgba(0,0,0,0.05)",
 					}}
 				>
-					{/* Цена за периоды аренды */}
 					<Box
 						mt="sm"
 						mb="md"
-						display="flex"
 						style={{
 							display: "flex",
 							justifyContent: "space-between",
 							gap: rem(12),
 						}}
 					>
-						{/* Цена за периоды аренды */}
 						<Group justify="space-between" gap="md" wrap="nowrap">
 							<Box>
 								<Text size="xs" c="dimmed">
@@ -117,23 +105,36 @@ export default function BikeCard({ bike }: BikeCardProps) {
 								<Text fw={600}>{(bike.day_price * 30).toLocaleString()} ₽/мес.</Text>
 							</Box>
 						</Group>
-
 					</Box>
 
+					<Group>
+						<Button
+							radius="xl"
+							color="orange.5"
+							size="md"
+							component={Link}
+							to="/"
+							style={{ flex: 1 }}
+						>
+							Забронировать
+						</Button>
 
-					<Button
-						fullWidth
-						radius="xl"
-						color="lime"
-						size="md"
-						onClick={handleClick}
-					>
-						Забронировать
-					</Button>
+						<ActionIcon
+							variant="light"
+							color="gray"
+							radius="xl"
+							size="xl"
+							component={Link}
+							to={`/bikes/${bike.id}`}
+							aria-label="Подробнее"
+						>
+							<IconInfoCircle size={24} />
+						</ActionIcon>
+					</Group>
+
 				</Box>
 			</Card>
 
-			{/* Модалка недоступности */}
 			<Modal
 				opened={opened}
 				onClose={close}

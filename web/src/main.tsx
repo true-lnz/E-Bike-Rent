@@ -7,7 +7,6 @@ import { router } from "./router";
 import '@mantine/core/styles.css';
 import './assets/styles/main.scss';
 
-
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <MantineProvider withCssVariables withGlobalClasses>
