@@ -18,4 +18,5 @@ type Bicycle struct {
 	BrakeSystem     string `json:"brake_system,omitempty"`
 	DayPrice        int    `json:"price,omitempty"`
 	Quantity        int    `json:"quantity,omitempty"`
+	ImageURL        string `json:"image_url,omitempty"`
 }
