@@ -52,7 +52,7 @@ export default function PinCodeForm() {
 		setError(null);
 
 		try {
-			const res = await axios.post("http://localhost:8080/api/auth/login/verify-code", {
+			const res = await axios.post("http://localhost:8080/auth/login/verify-code", {
 				email,
 				code,
 			});
@@ -75,7 +75,7 @@ export default function PinCodeForm() {
 		setError(null);
 
 		try {
-			await axios.post("http://localhost:8080/api/auth/login/send-code", { email });
+			await axios.post("http://localhost:8080/auth/login/send-code", { email });
 		} catch (err) {
 			console.error("Ошибка при повторной отправке кода", err);
 			setError("Не удалось отправить код. Попробуйте позже.");
