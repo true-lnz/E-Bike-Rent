@@ -74,7 +74,7 @@ func ParseFloat(v string) float64 {
 
 func GenerateCode() string {
 	rand.Seed(time.Now().UnixNano())
-	code := fmt.Sprintf("%06d", rand.Intn(1000000))
+	code := fmt.Sprintf("%04d", rand.Intn(10000))
 	fmt.Printf(code)
 	return code
 }
