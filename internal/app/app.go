@@ -7,6 +7,7 @@ import (
 	"E-Bike-Rent/internal/routes"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func App(cfg *config.Config) error {
@@ -19,7 +20,13 @@ func App(cfg *config.Config) error {
 
 	app := fiber.New()
 
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "http://localhost:5173",
+		AllowHeaders: "*",
+	}))
+
 	routes.SetupRoutes(app, cfg, ctx)
+
 	err = app.Listen(":" + cfg.Port)
 	if err != nil {
 		return fmt.Errorf("app listen: %w", err)
