@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   description: API для аренды велосипедов
 servers:
-  - url: http://localhost:8080
+  - url: http://localhost:8080/api
 
 paths:
   /bicycle:
@@ -12,6 +12,50 @@ paths:
       summary: Получить список всех велосипедов
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    max_speed:
+                      type: integer
+                    max_range:
+                      type: integer
+                    max_load:
+                      type: integer
+                    power:
+                      type: integer
+                    charge_time_hours:
+                      type: string
+                    battery:
+                      type: string
+                    suspension:
+                      type: boolean
+                    brakes:
+                      type: string
+                    frame:
+                      type: string
+                    wheel_size:
+                      type: integer
+                      maximum: 255
+                    wheel_type:
+                      type: string
+                    drive:
+                      type: string
+                    brake_system:
+                      type: string
+                    day_price:
+                      type: integer
+                    quantity:
+                      type: integer
+                    image_url:
+                      type: string
           description: Успешный ответ
 
 
@@ -26,6 +70,48 @@ paths:
             type: integer
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  max_speed:
+                    type: integer
+                  max_range:
+                    type: integer
+                  max_load:
+                    type: integer
+                  power:
+                    type: integer
+                  charge_time_hours:
+                    type: string
+                  battery:
+                    type: string
+                  suspension:
+                    type: boolean
+                  brakes:
+                    type: string
+                  frame:
+                    type: string
+                  wheel_size:
+                    type: integer
+                    maximum: 255
+                  wheel_type:
+                    type: string
+                  drive:
+                    type: string
+                  brake_system:
+                    type: string
+                  day_price:
+                    type: integer
+                  quantity:
+                    type: integer
+                  image_url:
+                    type: string
           description: Успешный ответ
 
   /admin/bicycle:
@@ -38,13 +124,86 @@ paths:
             schema:
               type: object
               properties:
-                model:
+                name:
                   type: string
-                price:
-                  type: number
+                max_speed:
+                  type: integer
+                max_range:
+                  type: integer
+                max_load:
+                  type: integer
+                power:
+                  type: integer
+                charge_time_hours:
+                  type: string
+                battery:
+                  type: string
+                suspension:
+                  type: boolean
+                brakes:
+                  type: string
+                frame:
+                  type: string
+                wheel_size:
+                  type: integer
+                  maximum: 255
+                wheel_type:
+                  type: string
+                drive:
+                  type: string
+                brake_system:
+                  type: string
+                day_price:
+                  type: integer
+                quantity:
+                  type: integer
+                image_url:
+                  type: string
       responses:
         '201':
           description: Велосипед создан
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  max_speed:
+                    type: integer
+                  max_range:
+                    type: integer
+                  max_load:
+                    type: integer
+                  power:
+                    type: integer
+                  charge_time_hours:
+                    type: string
+                  battery:
+                    type: string
+                  suspension:
+                    type: boolean
+                  brakes:
+                    type: string
+                  frame:
+                    type: string
+                  wheel_size:
+                    type: integer
+                    maximum: 255
+                  wheel_type:
+                    type: string
+                  drive:
+                    type: string
+                  brake_system:
+                    type: string
+                  day_price:
+                    type: integer
+                  quantity:
+                    type: integer
+                  image_url:
+                    type: string
 
   /admin/bicycle/{id}:
     put:
@@ -62,10 +221,41 @@ paths:
             schema:
               type: object
               properties:
-                model:
+                id:
+                  type: integer
+                name:
                   type: string
-                price:
-                  type: number
+                max_speed:
+                  type: integer
+                max_range:
+                  type: integer
+                max_load:
+                  type: integer
+                power:
+                  type: integer
+                charge_time_hours:
+                  type: string
+                battery:
+                  type: string
+                suspension:
+                  type: boolean
+                brakes:
+                  type: string
+                frame:
+                  type: string
+                wheel_size:
+                  type: integer
+                  maximum: 255
+                drive:
+                  type: string
+                brake_system:
+                  type: string
+                day_price:
+                  type: integer
+                quantity:
+                  type: integer
+                image_url:
+                  type: string
       responses:
         '200':
           description: Успешное обновление
