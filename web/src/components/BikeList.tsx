@@ -18,7 +18,7 @@ export default function BikeListPage() {
   if (loading) return <Loader />;
   
   return (
-    <Container size="lg">
+    <Container id="bikes" size="lg">
       <Title order={1} size={45}>Выбери свою идеальную модель</Title>
       <Title order={1} size={45} mb="xl" c={"orange.5"}>электровелосипеда</Title>
       <SimpleGrid cols={3} spacing="lg">

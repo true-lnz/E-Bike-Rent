@@ -39,7 +39,7 @@ export default function AuthForm() {
 			navigate("/auth/code", { state: { email, mode: "login" } });
 		} catch (err: any) {
 			// Если сервер вернул 404 — пользователь не найден
-			if (axios.isAxiosError(err) && err.response?.status === 404) {
+			if (axios.isAxiosError(err) && err.response?.status === 404 || err.response?.status === 409) {
 				try {
 					// Пробуем зарегистрировать
 					await axios.post("http://localhost:8080/api/auth/register/send-code", { email });
