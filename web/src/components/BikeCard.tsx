@@ -15,6 +15,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import type { Bike } from "../types/Bike";
+import {BASE_IMAGE_URL} from "../constants.ts";
 
 interface BikeCardProps {
 	bike: Bike;
@@ -54,7 +55,7 @@ export default function BikeCard({ bike }: BikeCardProps) {
 				</Group>
 
 				<Image
-					src={bike.image_url}
+					src={`${BASE_IMAGE_URL}${bike.image_url}`}
 					alt={bike.name}
 					h={280}
 					fit="contain"
