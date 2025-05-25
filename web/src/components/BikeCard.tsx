@@ -1,23 +1,147 @@
-import { Button, Card, Stack, Text } from "@mantine/core";
-import { Link } from "react-router-dom";
+import {
+	Badge,
+	Box,
+	Button,
+	Card,
+	Divider,
+	Group,
+	Image,
+	Modal,
+	Text,
+	rem
+} from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import type { Bike } from "../types/Bike";
 
 interface BikeCardProps {
-  bike: Bike;
+	bike: Bike;
 }
 
 export default function BikeCard({ bike }: BikeCardProps) {
-  return (
-    <Card shadow="sm" p="lg" radius="md" withBorder>
-      <Stack gap="xs">
-        <Text fw={700}>{bike.name}</Text>
-        <Text size="sm">Макс. скорость: {bike.max_speed_kmh} км/ч</Text>
-        <Text size="sm">Запас хода: {bike.max_range_km} км</Text>
-        <Text size="sm">Цена в день: {bike.day_price}₽</Text>
-        <Button component={Link} to={`/bikes/${bike.id}`} variant="light" fullWidth>
-          Подробнее
-        </Button>
-      </Stack>
-    </Card>
-  );
+	const [opened, { open, close }] = useDisclosure(false);
+
+	const handleClick = () => {
+		if (bike.quantity > 0) {
+			// Пример навигации, если нужно
+			window.location.href = `/bikes/${bike.id}`;
+		} else {
+			open();
+		}
+	};
+
+	return (
+		<>
+			<Card
+				bg="gray.0"
+				p="lg"
+				radius="lg"
+				style={{
+					position: "relative",
+					display: "flex",
+					flexDirection: "column",
+				}}
+			>
+				{/* Название и бейдж */}
+				<Group justify="space-between" mb="xs">
+					<Box>
+						<Text fw={700} size="lg">
+							{bike.name}
+						</Text>
+						<Text size="sm" c="dimmed">
+							{bike.battery} / {bike.power_w}W
+						</Text>
+					</Box>
+					<Badge
+						color={bike.quantity > 0 ? "lime" : "gray"}
+						variant="filled"
+						radius="xl"
+					>
+						{bike.quantity > 0 ? "В наличии" : "Нет в наличии"}
+					</Badge>
+				</Group>
+
+				{/* Фото */}
+				<Image
+					src={bike.image_url}
+					alt={bike.name}
+					h={280}
+					fit="contain"
+					mx="auto"
+				/>
+
+				{/* Цена и кнопка */}
+				<Box
+					bg="white"
+					p="sm"
+					mt="md"
+					style={{
+						borderRadius: rem(24),
+						boxShadow: "0 0 12px rgba(0,0,0,0.05)",
+					}}
+				>
+					{/* Цена за периоды аренды */}
+					<Box
+						mt="sm"
+						mb="md"
+						display="flex"
+						style={{
+							display: "flex",
+							justifyContent: "space-between",
+							gap: rem(12),
+						}}
+					>
+						{/* Цена за периоды аренды */}
+						<Group justify="space-between" gap="md" wrap="nowrap">
+							<Box>
+								<Text size="xs" c="dimmed">
+									1 неделя
+								</Text>
+								<Text fw={600}>{(bike.day_price * 7).toLocaleString()} ₽</Text>
+							</Box>
+
+							<Divider orientation="vertical" />
+
+							<Box>
+								<Text size="xs" c="dimmed">
+									2 недели
+								</Text>
+								<Text fw={600}>{(bike.day_price * 14).toLocaleString()} ₽</Text>
+							</Box>
+
+							<Divider orientation="vertical" />
+
+							<Box>
+								<Text size="xs" c="dimmed">
+									1 месяц
+								</Text>
+								<Text fw={600}>{(bike.day_price * 30).toLocaleString()} ₽/мес.</Text>
+							</Box>
+						</Group>
+
+					</Box>
+
+
+					<Button
+						fullWidth
+						radius="xl"
+						color="lime"
+						size="md"
+						onClick={handleClick}
+					>
+						Забронировать
+					</Button>
+				</Box>
+			</Card>
+
+			{/* Модалка недоступности */}
+			<Modal
+				opened={opened}
+				onClose={close}
+				title="Велосипед временно недоступен"
+				centered
+			>
+				К сожалению, сейчас этот велосипед недоступен для аренды. Попробуйте позже или выберите другой.
+			</Modal>
+		</>
+	);
 }
