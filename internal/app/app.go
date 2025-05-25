@@ -19,11 +19,6 @@ func App(cfg *config.Config) error {
 
 	app := fiber.New()
 
-	app.Static("/", "./web/dist")
-	app.Get("*", func(c *fiber.Ctx) error {
-		return c.SendFile("./web/dist/index.html")
-	})
-
 	routes.SetupRoutes(app, cfg, ctx)
 	err = app.Listen(":" + cfg.Port)
 	if err != nil {

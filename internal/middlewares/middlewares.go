@@ -2,9 +2,12 @@ package middlewares
 
 import (
 	"E-Bike-Rent/internal/config"
+	"E-Bike-Rent/internal/models"
 	"E-Bike-Rent/internal/services"
 	"E-Bike-Rent/internal/utils"
+	"errors"
 	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
 	"strings"
 )
 
@@ -22,7 +25,7 @@ func RequireAuth(cfg *config.Config, userService *services.UserService, onlyUser
 		}
 		if err == nil {
 			user, err := userService.GetUser(c.Context(), userID)
-			if err != nil {
+			if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 				return fiber.NewError(fiber.StatusUnauthorized, "Missing token")
 			}
 			c.Locals("user", user)
@@ -31,18 +34,13 @@ func RequireAuth(cfg *config.Config, userService *services.UserService, onlyUser
 	}
 }
 
-func RequireAdmin(service *services.UserService) fiber.Handler {
+func RequireAdmin() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		userID := c.Locals("userId").(uint)
-		role, err := service.GetUserRole(c.Context(), userID)
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "Ошибка получения роли"})
-		}
-
+		user := c.Locals("user").(*models.User)
+		role := user.Role
 		if role != "admin" {
 			return c.Status(fiber.StatusMethodNotAllowed).JSON(fiber.Map{"message": "Нет прав"})
 		}
-
 		return c.Next()
 	}
 }

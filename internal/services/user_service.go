@@ -39,34 +39,6 @@ func (s *UserService) RegisterUser(c context.Context, input models.User) (*model
 	return &input, nil
 }
 
-//func (s *UserService) LoginUser(c context.Context, input dto.LoginRequest) (*models.User, error) {
-//	user, err := s.repo.GetUserByEmail(c, input.Email)
-//	if err != nil {
-//		return nil, fmt.Errorf("неверная почта или пароль")
-//	}
-//
-//	//err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password))
-//	if err != nil {
-//		return nil, fmt.Errorf("неверная почта или пароль")
-//	}
-//
-//	return user, nil
-//}
-//
-//func (s *UserService) ChangePassword(c context.Context, userID uint, newPassword string) error {
-//	user, err := s.repo.GetUserById(c, userID)
-//	if err != nil {
-//		return err
-//	}
-//
-//	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
-//	user.Password = string(hashedPassword)
-//	if err != nil {
-//		return fmt.Errorf("внутренняя ошибка сервера: %w", err)
-//	}
-//	return s.repo.Update(c, user)
-//}
-
 func (s *UserService) DeleteUser(c context.Context, userID uint) error {
 	return s.repo.Delete(c, userID)
 }
