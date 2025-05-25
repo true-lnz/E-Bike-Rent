@@ -1,6 +1,7 @@
 export interface Bike {
   id: number;
   name: string;
+	image_url: string;
   weight_kg: number;
   max_speed_kmh: number;
   max_range_km: number;

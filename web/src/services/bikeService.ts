@@ -16,6 +16,7 @@ export const getAllBikes = async (): Promise<Bike[]> => {
     {
       id: 1,
       name: "ElectroSpeed 3000",
+			image_url: "src/assets/images/kugoo-v3-max-1.png",
       weight_kg: 20,
       max_speed_kmh: 45,
       max_range_km: 100,
@@ -36,6 +37,7 @@ export const getAllBikes = async (): Promise<Bike[]> => {
     {
       id: 2,
       name: "UrbanGlide X",
+			image_url: "src/assets/images/kolyan-1.png",
       weight_kg: 18,
       max_speed_kmh: 40,
       max_range_km: 90,

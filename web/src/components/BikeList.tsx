@@ -1,8 +1,8 @@
 import { Container, Loader, SimpleGrid, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
-import BikeCard from "../components/BikeCard";
 import { getAllBikes } from "../services/bikeService";
 import type { Bike } from "../types/Bike";
+import BikeCard from "./BikeCard";
 
 export default function BikeListPage() {
   const [bikes, setBikes] = useState<Bike[]>([]);
@@ -18,8 +18,9 @@ export default function BikeListPage() {
   if (loading) return <Loader />;
   
   return (
-    <Container>
-      <Title order={2} mb="md">Наши электровелосипеды</Title>
+    <Container size="lg">
+      <Title order={1} size={45}>Выбери свою идеальную модель</Title>
+      <Title order={1} size={45} mb="xl" c={"orange.5"}>электровелосипеда</Title>
       <SimpleGrid cols={3} spacing="lg">
         {bikes.map((bike) => (
           <BikeCard key={bike.id} bike={bike} />

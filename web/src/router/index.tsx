@@ -1,9 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
+import BikeListPage from "../components/BikeList";
 import AdminLayout from "../layouts/AdminLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
 import MainLayout from "../layouts/MainLayout";
+import AuthPage from "../pages/Auth/AuthPage";
 import BikeDetailPage from "../pages/BikeDetailPage";
-import BikeListPage from "../pages/BikeListPage";
 import HomePage from "../pages/HomePage";
 
 export const router = createBrowserRouter([
@@ -11,6 +12,7 @@ export const router = createBrowserRouter([
     element: <MainLayout />, // Для большинства страниц
     children: [
       { path: "/", element: <HomePage /> },
+      { path: "/auth", element: <AuthPage /> },
       { path: "/bikes", element: <BikeListPage /> },
       { path: "/bikes/:id", element: <BikeDetailPage /> },
       { path: "*", element: <HomePage /> },
