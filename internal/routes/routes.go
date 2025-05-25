@@ -9,6 +9,8 @@ import (
 )
 
 func SetupRoutes(app *fiber.App, cfg *config.Config, ctx *context.AppContext) {
+	app.Static("/uploads", "./public/uploads")
+
 	app.Use(func(c *fiber.Ctx) error {
 		c.Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
 		c.Set("Pragma", "no-cache")
@@ -54,16 +56,6 @@ func SetupRoutes(app *fiber.App, cfg *config.Config, ctx *context.AppContext) {
 	adminBicycleGroup.Put("/:id", handlers.UpdateBicycle(ctx.BicycleService))
 	adminBicycleGroup.Delete("/:id", handlers.DeleteBicycle(ctx.BicycleService))
 
-	//app.Get("/admin", middlewares.RequireAuth(cfg, false), middlewares.RequireAdmin(ctx.UserService), handlers.AdminPage(cfg, ctx))
-	//
-	//app.Get("/articles/:id", handlers.ArticlePage(cfg, ctx))
-	//
-	//app.Get("/cart", middlewares.RequireAuth(cfg, false), handlers.CartPage(cfg, ctx))
-	//app.Get("/catalog", handlers.CatalogPage(cfg, ctx))
-	//app.Get("/contact", handlers.ContactPage(cfg))
-	//app.Get("/products/:id", middlewares.RequireAuth(cfg, true), handlers.ProductPage(cfg, ctx))
-	//app.Get("/profile", middlewares.RequireAuth(cfg, false), handlers.ProfilePage(cfg, ctx))
-	//app.Get("/blog", middlewares.RequireAuth(cfg, true), handlers.BlogPage(cfg, ctx))
 	app.Static("/", "./web/dist")
 	app.Get("*", func(c *fiber.Ctx) error {
 		return c.SendFile("./web/dist/index.html")
