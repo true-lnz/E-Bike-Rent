@@ -8,21 +8,18 @@ import MainLayout from "../layouts/MainLayout";
 import AdminPage from "../pages/AdminPage";
 import AuthPage from "../pages/Auth/AuthPage";
 import BikeDetailPage from "../pages/BikeDetailPage";
+import ContactPage from "../pages/ContactPage";
 import DashboardPage from "../pages/DashboardPage";
 import HomePage from "../pages/HomePage";
+import MaintenancePage from "../pages/MaintenancePage";
+import MyRentPage from "../pages/MyRentPage";
 
 export const router = createBrowserRouter([
 	{
 		element: <MainLayout />, // Для большинства страниц
 		children: [
 			{ path: "/", element: <HomePage /> },
-			{
-				element: <PrivateRoute />,
-				children: [
-					{ path: "/dashboard", element: <DashboardPage /> },
-					{ path: "/admin", element: <AdminPage /> },
-				],
-			},
+
 			{ path: "/auth", element: <AuthPage /> },
 			{ path: "/auth/code", element: <PinCodeForm /> },
 			{ path: "auth/complete", element: <RegComplete /> },
@@ -34,13 +31,31 @@ export const router = createBrowserRouter([
 	{
 		element: <DashboardLayout />, // Для страниц входа/регистрации
 		children: [
-			// { path: "/auth", element: <Auth /> },
+			{
+				element: <PrivateRoute />,
+				children: [
+					{
+						path: "/dashboard",
+						element: <DashboardPage />,
+						children: [
+							{ path: "maintenances", element: <MaintenancePage /> },
+							{ path: "my-rents", element: <MyRentPage /> },
+							{ path: "contacts", element: <ContactPage /> },
+						],
+					},
+				],
+			},
 		]
 	},
 	{
 		element: <AdminLayout />, // Для админ-раздела
 		children: [
-			// { path: "/admin", element: <AdminDashboard /> },
+			{
+				element: <PrivateRoute />,
+				children: [
+					{ path: "/admin", element: <AdminPage /> },
+				],
+			},
 		]
 	}
 ]);

@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom";
 import Footer from "../components/Footer";
-import Header from "../components/Headers/MainHeader";
+import DashboardHeader from "../components/Headers/DashboardHeader";
 
 export default function DashboardLayout() {
   return (
     <>
-      <Header />
+      <DashboardHeader />
       <main>
         <Outlet />
       </main>

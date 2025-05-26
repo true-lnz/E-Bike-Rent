@@ -1,8 +1,24 @@
 import { Box, Button, Container, Group, Image, rem, Text } from '@mantine/core';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
+import { authService } from '../../services/authService';
 import logo from "./../../assets/images/Logo512x512.png";
 
 export default function DashboardHeader() {
+	const navigate = useNavigate();
+	const { setUser } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+      setUser(null); // очистить auth-контекст
+      navigate("/"); // перенаправить на страницу входа
+    } catch (error) {
+      console.error("Ошибка при выходе:", error);
+      alert("Не удалось выйти. Попробуйте позже.");
+    }
+  };
+
 	return (
 		<Container size="lg" component="header" py="xl" pos="sticky" top={0} style={{ zIndex: 1000 }}>
 			<Box
@@ -30,16 +46,16 @@ export default function DashboardHeader() {
 					</Link>
 
 					<Group gap="xl">
-						<Text component={Link} to="#bikes" fw={500}>
-							Аренда
+						<Text component={Link} to="/bikes" fw={500}>
+							Устройства
 						</Text>
-						<Text component={Link} to="#accessories" fw={500}>
-							Аксессуары
+						<Text component={Link} to="/my-rent" fw={500}>
+							Моя аренда
 						</Text>
-						<Text component={Link} to="#maintenance" fw={500}>
+						<Text component={Link} to="/maintenance" fw={500}>
 							Обслуживание
 						</Text>
-						<Text component={Link} to="#contact" fw={500}>
+						<Text component={Link} to="/contact" fw={500}>
 							Контакты
 						</Text>
 					</Group>
@@ -47,17 +63,13 @@ export default function DashboardHeader() {
 
 				{/* Телефон + кнопка */}
 				<Group wrap="nowrap" gap="xl">
-					<Text fw={700} size="lg">
-						+7 (964) 951-28-10
-					</Text>
 					<Button
-						component={Link}
 						size="md"
-						to="/dashboard"
+						onClick={handleLogout}
 						radius="xl"
 						color="orange.5"
 					>
-						Личный кабинет
+						Выйти
 					</Button>
 				</Group>
 			</Box>
