@@ -1,13 +1,13 @@
 import {
-	Button,
 	Grid,
 	Loader,
 	ScrollArea,
 	Stack,
 	TextInput,
-	Title,
+	Title
 } from "@mantine/core";
 import { useEffect, useState } from "react";
+import { companyService } from "../../services/companyService";
 import type { Company } from "../../types/Company";
 import CompanyCard from "../CompanyCard";
 
@@ -18,8 +18,8 @@ export default function CompanySelect() {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		fetch("/api/companies")
-			.then((res) => res.json())
+		companyService
+			.getAll()
 			.then(setCompanies)
 			.finally(() => setLoading(false));
 	}, []);
@@ -55,10 +55,6 @@ export default function CompanySelect() {
 					</Grid>
 				</ScrollArea>
 			)}
-
-			<Button disabled={!selectedId} radius="xl" fullWidth>
-				Зарегистрироваться
-			</Button>
 		</Stack>
 	);
 }
