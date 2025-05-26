@@ -10,7 +10,7 @@ export default function DashboardPage() {
 
 	return (
 		<>
-			<Text>Вы авторизованы!</Text>;
+			<Text>Вы авторизованы!</Text>
 		</>
 	);
 }

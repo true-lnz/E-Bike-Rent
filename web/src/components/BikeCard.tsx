@@ -12,10 +12,10 @@ import {
 	rem
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconInfoCircle } from "@tabler/icons-react";
+// import { IconInfoCircle } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
+import { BASE_IMAGE_URL } from "../constants.ts";
 import type { Bike } from "../types/Bike";
-import {BASE_IMAGE_URL} from "../constants.ts";
 
 interface BikeCardProps {
 	bike: Bike;
@@ -129,7 +129,7 @@ export default function BikeCard({ bike }: BikeCardProps) {
 							to={`/bikes/${bike.id}`}
 							aria-label="Подробнее"
 						>
-							<IconInfoCircle size={24} />
+							{/* <IconInfoCircle size={24} /> */}
 						</ActionIcon>
 					</Group>
 

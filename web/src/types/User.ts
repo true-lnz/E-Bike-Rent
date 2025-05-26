@@ -1,11 +1,15 @@
+import type { Company } from "./Company";
+
 export interface User {
 	id: number;
-	firstName: string;
-	lastName: string;
+	first_name: string;
+	last_name: string;
 	patronymic: string;
 	email: string;
-	phoneNumber: string;
+	phone_number: string;
 	birthday: string; // "YYYY-MM-DD"
-	isVerified: boolean;
-	companyId?: number;
+	is_verified: boolean;
+	company_id?: number;
+	role: string;
+	company?: Company;
 }

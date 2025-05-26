@@ -13,7 +13,7 @@ export function useAuth() {
 				const res = await axios.get("http://localhost:8080/api/auth/me", {
 					withCredentials: true,
 				});
-				setUser(res.data);
+				setUser(res.data.user);
 			} catch (err) {
 				setUser(null);
 			} finally {
