@@ -9,11 +9,9 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import type { Company } from "../../types/Company";
 import CompanySelect from "./CompanySelect";
 
 export function RegComplete() {
-	const [companies, setCompanies] = useState<Company[]>([]);
 	const [selectedId, setSelectedId] = useState<number | null>(null);
 
 	const [firstName, setFirstName] = useState("");
@@ -22,7 +20,6 @@ export function RegComplete() {
 	const [phone, setPhone] = useState("");
 	const [birthday, setBirthday] = useState<Date | null>(null);
 
-	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
 	const navigate = useNavigate();
@@ -106,7 +103,8 @@ export function RegComplete() {
 				maxDate={new Date()}
 			/>
 
-			<CompanySelect />
+			<CompanySelect selectedId={selectedId} onSelect={setSelectedId} />
+
 
 			{error && (
 				<div style={{ color: "red", textAlign: "center" }}>{error}</div>

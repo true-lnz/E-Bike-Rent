@@ -1,4 +1,5 @@
 import {
+	Button,
 	Grid,
 	Loader,
 	ScrollArea,
@@ -11,9 +12,13 @@ import { companyService } from "../../services/companyService";
 import type { Company } from "../../types/Company";
 import CompanyCard from "../CompanyCard";
 
-export default function CompanySelect() {
+type Props = {
+	selectedId: number | null;
+	onSelect: (id: number | null) => void;
+};
+
+export default function CompanySelect({ selectedId, onSelect }: Props) {
 	const [companies, setCompanies] = useState<Company[]>([]);
-	const [selectedId, setSelectedId] = useState<number | null>(null);
 	const [search, setSearch] = useState("");
 	const [loading, setLoading] = useState(true);
 
@@ -28,6 +33,10 @@ export default function CompanySelect() {
 		c.name.toLowerCase().includes(search.toLowerCase())
 	);
 
+	const handleCardClick = (id: number) => {
+		onSelect(selectedId === id ? null : id); // повторая карточка снимает выбор
+	};
+
 	return (
 		<Stack p="lg" align="stretch" gap="lg">
 			<Title order={3}>Выбери компанию</Title>
@@ -41,19 +50,31 @@ export default function CompanySelect() {
 			{loading ? (
 				<Loader />
 			) : (
-				<ScrollArea h={500}>
-					<Grid gutter="md">
-						{filtered.map((company) => (
-							<Grid.Col span={{ base: 6, sm: 4, md: 3 }} key={company.id}>
-								<CompanyCard
-									company={company}
-									selected={selectedId === company.id}
-									onSelect={setSelectedId}
-								/>
-							</Grid.Col>
-						))}
-					</Grid>
-				</ScrollArea>
+				<>
+					<ScrollArea h={500}>
+						<Grid gutter="md">
+							{filtered.map((company) => (
+								<Grid.Col span={{ base: 6, sm: 4, md: 3 }} key={company.id}>
+									<CompanyCard
+										company={company}
+										selected={selectedId === company.id}
+										onSelect={() => handleCardClick(company.id)}
+									/>
+								</Grid.Col>
+							))}
+						</Grid>
+					</ScrollArea>
+
+					<Button
+						variant={selectedId === null ? "filled" : "outline"}
+						onClick={() => onSelect(null)}
+						color="gray"
+						radius="xl"
+						fullWidth
+					>
+						Без компании
+					</Button>
+				</>
 			)}
 		</Stack>
 	);
