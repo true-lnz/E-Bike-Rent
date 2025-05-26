@@ -109,14 +109,19 @@ func (s *UserService) CheckVerificationCode(c context.Context, email, code strin
 
 func (s *UserService) CompleteRegistration(c context.Context, req dto.CompleteRegistrationRequest) (*models.User, error) {
 	user, err := s.repo.GetUserByEmail(c, req.Email)
+
 	if err != nil {
 		log.Error("ошибка получения пользователя: ", err)
 		return nil, fmt.Errorf("ошибка получения пользователя: %w", err)
+	}
+	if user.IsVerified {
+		return nil, fmt.Errorf("пользователь уже зарегистрирован")
 	}
 	user.FirstName = req.FirstName
 	user.LastName = req.LastName
 	user.Patronymic = req.Patronymic
 	user.PhoneNumber = req.PhoneNumber
+	user.IsVerified = true
 
 	t, err := time.Parse("2006-01-02", req.Birthday)
 	if err != nil {

@@ -32,29 +32,11 @@ export default function AuthForm() {
 		setLoading(true);
 
 		try {
-			// Сначала пробуем логин
-			await axios.post("http://localhost:8080/api/auth/login/send-code", { email });
-
-			// Успешно — переход ко второму шагу логина
-			navigate("/auth/code", { state: { email, mode: "login" } });
+			await axios.post("http://localhost:8080/api/auth/send-code", { email });
+			navigate("/auth/code", { state: { email, mode: "register" } });
 		} catch (err: any) {
-			// Если сервер вернул 404 — пользователь не найден
-			if (axios.isAxiosError(err) && err.response?.status === 404 || err.response?.status === 409) {
-				try {
-					// Пробуем зарегистрировать
-					await axios.post("http://localhost:8080/api/auth/register/send-code", { email });
-
-					// Успешно — переход ко второму шагу регистрации
-					navigate("/auth/code", { state: { email, mode: "register" } });
-					return;
-				} catch (regErr) {
-					console.error(regErr);
-					setError("Не удалось отправить код регистрации. Попробуй позже.");
-				}
-			} else {
-				console.error(err);
-				setError("Не удалось отправить код. Проверь адрес почты или попробуй позже.");
-			}
+			console.error(err);
+			setError("Не удалось отправить код. Проверь адрес почты или попробуй позже.");
 		} finally {
 			setLoading(false);
 		}

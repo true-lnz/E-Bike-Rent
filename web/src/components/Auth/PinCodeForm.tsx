@@ -50,14 +50,14 @@ export default function PinCodeForm() {
 	const handleCodeComplete = async (code: string) => {
 		setLoading(true);
 		setError(null);
-
 		try {
-			const res = await axios.post("http://localhost:8080/api/auth/login/verify-code", {
+			const res = await axios.post("http://localhost:8080/api/auth/verify-code", {
 				email,
 				code,
 			});
 
 			// TODO: сохранить токен, перейти в личный кабинет и т.п.
+			// TODO: если в ответе is_verified == false, то отправить на страницу регистрации
 			console.log("Код подтвержден, пользователь:", res.data);
 			navigate("/dashboard");
 		} catch (err: any) {
@@ -75,7 +75,7 @@ export default function PinCodeForm() {
 		setError(null);
 
 		try {
-			await axios.post("http://localhost:8080/api/auth/login/send-code", { email });
+			await axios.post("http://localhost:8080/api/auth/send-code", { email });
 		} catch (err) {
 			console.error("Ошибка при повторной отправке кода", err);
 			setError("Не удалось отправить код. Попробуйте позже.");

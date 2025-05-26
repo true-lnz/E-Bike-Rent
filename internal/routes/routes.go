@@ -32,15 +32,9 @@ func SetupRoutes(app *fiber.App, cfg *config.Config, ctx *context.AppContext) {
 
 	auth := api.Group("/auth")
 	auth.Get("/logout", requireAuth, handlers.Logout())
-
-	login := auth.Group("/login")
-	login.Post("/send-code", handlers.SendLoginVerificationCode(ctx.UserService, cfg))
-	login.Post("/verify-code", handlers.VerifyLoginCode(ctx.UserService, cfg))
-
-	register := auth.Group("/register")
-	register.Post("/send-code", handlers.SendRegistrationVerificationCode(ctx.UserService, cfg))
-	register.Post("/verify-code", handlers.VerifyRegistrationCode(ctx.UserService))
-	register.Post("/complete", handlers.CompleteRegistration(ctx.UserService, cfg))
+	auth.Post("/send-code", handlers.SendVerificationCode(ctx.UserService, cfg))
+	auth.Post("/verify-code", handlers.VerifyCode(ctx.UserService, cfg))
+	auth.Post("/complete-registration", handlers.CompleteRegistration(ctx.UserService, cfg))
 
 	//app.Patch("/api/auth/profile", requireAuth, handlers.ChangeCredentials(ctx.UserService))
 	//app.Patch("/api/auth/change-password", middlewares.RequireAuth(cfg, false), handlers.ChangePassword(ctx.UserService))

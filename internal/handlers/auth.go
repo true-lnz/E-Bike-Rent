@@ -5,11 +5,13 @@ import (
 	"E-Bike-Rent/internal/dto"
 	"E-Bike-Rent/internal/services"
 	"E-Bike-Rent/internal/utils"
+	"errors"
 	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
 	"time"
 )
 
-func SendRegistrationVerificationCode(us *services.UserService, cfg *config.Config) fiber.Handler {
+func SendVerificationCode(us *services.UserService, cfg *config.Config) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		var req struct {
 			Email string `json:"email"`
@@ -18,19 +20,17 @@ func SendRegistrationVerificationCode(us *services.UserService, cfg *config.Conf
 			return fiber.NewError(fiber.StatusBadRequest, "Неверный формат запроса")
 		}
 
-		user, err := us.GetUserByEmail(c.Context(), req.Email)
-		if err == nil && user.IsVerified {
-			return fiber.NewError(fiber.StatusConflict, "Пользователь с таким email уже существует")
+		_, err := us.GetUserByEmail(c.Context(), req.Email)
+		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+			return fiber.NewError(fiber.StatusConflict, "Ошибка при получении пользователя")
 		}
 
-		// Генерация и отправка кода
 		code := utils.GenerateCode()
 
 		if err = services.SendVerificationCode(req.Email, code, cfg); err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Не удалось отправить код"})
 		}
 
-		// Установка или обновление кода (в том числе создание пользователя, если нужно)
 		if err = us.SetVerificationCode(c.Context(), req.Email, code); err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Не удалось сохранить код"})
 		}
@@ -39,40 +39,7 @@ func SendRegistrationVerificationCode(us *services.UserService, cfg *config.Conf
 	}
 }
 
-func SendLoginVerificationCode(us *services.UserService, cfg *config.Config) fiber.Handler {
-	return func(c *fiber.Ctx) error {
-		var req struct {
-			Email string `json:"email"`
-		}
-		if err := c.BodyParser(&req); err != nil {
-			return fiber.NewError(fiber.StatusBadRequest, "Неверный формат запроса")
-		}
-
-		user, err := us.GetUserByEmail(c.Context(), req.Email)
-		if err != nil {
-			return fiber.NewError(fiber.StatusNotFound, "Пользователь с такой почтой не найден")
-		}
-		if !user.IsVerified {
-			return fiber.NewError(fiber.StatusConflict, "Почта не подтверждена")
-		}
-
-		// Генерация и отправка кода
-		code := utils.GenerateCode()
-
-		if err = services.SendVerificationCode(req.Email, code, cfg); err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Не удалось отправить код"})
-		}
-
-		// Установка или обновление кода (в том числе создание пользователя, если нужно)
-		if err = us.SetVerificationCode(c.Context(), req.Email, code); err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Не удалось сохранить код"})
-		}
-
-		return c.SendStatus(fiber.StatusOK)
-	}
-}
-
-func VerifyLoginCode(us *services.UserService, cfg *config.Config) fiber.Handler {
+func VerifyCode(us *services.UserService, cfg *config.Config) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		var req struct {
 			Email string `json:"email"`
@@ -84,7 +51,7 @@ func VerifyLoginCode(us *services.UserService, cfg *config.Config) fiber.Handler
 
 		user, err := us.GetUserByEmail(c.Context(), req.Email)
 
-		if err != nil {
+		if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
 			return fiber.NewError(fiber.StatusBadRequest, "Пользователя с таким email нет")
 		}
 
@@ -97,7 +64,7 @@ func VerifyLoginCode(us *services.UserService, cfg *config.Config) fiber.Handler
 		}
 
 		utils.SetCookie(c, user, cfg)
-		return c.JSON(fiber.Map{"message": "Успешная авторизация"})
+		return c.JSON(fiber.Map{"message": "Успешная авторизация", "is_verified": user.IsVerified})
 	}
 }
 
@@ -115,37 +82,6 @@ func Logout() fiber.Handler {
 	}
 }
 
-func VerifyRegistrationCode(us *services.UserService) fiber.Handler {
-	return func(c *fiber.Ctx) error {
-		var req struct {
-			Email string `json:"email"`
-			Code  string `json:"code"`
-		}
-		if err := c.BodyParser(&req); err != nil {
-			return fiber.NewError(fiber.StatusBadRequest, "Неверный формат данных")
-		}
-
-		user, err := us.GetUserByEmail(c.Context(), req.Email)
-
-		if err != nil {
-			return fiber.NewError(fiber.StatusBadRequest, "Пользователя с таким email нет")
-		}
-		if user.IsVerified {
-			return fiber.NewError(fiber.StatusConflict, "Пользователь уже верифицирован")
-		}
-
-		ok, err := us.CheckVerificationCode(c.Context(), req.Email, req.Code)
-		if err != nil {
-			return fiber.NewError(fiber.StatusInternalServerError, "Ошибка при проверке кода")
-		}
-		if !ok {
-			return fiber.NewError(fiber.StatusUnauthorized, "Неверный код")
-		}
-
-		return c.JSON(fiber.Map{"message": "Код совпадает"})
-	}
-}
-
 func CompleteRegistration(us *services.UserService, cfg *config.Config) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		var req dto.CompleteRegistrationRequest
@@ -154,7 +90,7 @@ func CompleteRegistration(us *services.UserService, cfg *config.Config) fiber.Ha
 		}
 		user, err := us.CompleteRegistration(c.Context(), req)
 		if err != nil {
-			return fiber.NewError(fiber.StatusInternalServerError, "Ошибка при сохранении данных")
+			return fiber.NewError(fiber.StatusInternalServerError, "Ошибка при сохранении данны: "+err.Error())
 		}
 		utils.SetCookie(c, user, cfg)
 		return c.SendStatus(fiber.StatusCreated)
