@@ -13,9 +13,7 @@ import (
 
 func SendVerificationCode(us *services.UserService, cfg *config.Config) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		var req struct {
-			Email string `json:"email"`
-		}
+		var req dto.SendVerificationCodeRequest
 		if err := c.BodyParser(&req); err != nil {
 			return fiber.NewError(fiber.StatusBadRequest, "Неверный формат запроса")
 		}
@@ -41,10 +39,7 @@ func SendVerificationCode(us *services.UserService, cfg *config.Config) fiber.Ha
 
 func VerifyCode(us *services.UserService, cfg *config.Config) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		var req struct {
-			Email string `json:"email"`
-			Code  string `json:"code"`
-		}
+		var req dto.VerifyCodeRequest
 		if err := c.BodyParser(&req); err != nil {
 			return fiber.NewError(fiber.StatusBadRequest, "Неверный формат данных")
 		}

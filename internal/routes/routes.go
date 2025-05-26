@@ -30,11 +30,11 @@ func SetupRoutes(app *fiber.App, cfg *config.Config, ctx *context.AppContext) {
 	admin := api.Group("/admin")
 	admin.Use(requireAuth, middlewares.RequireAdmin())
 
-	auth := api.Group("/auth")
-	auth.Get("/logout", requireAuth, handlers.Logout())
-	auth.Post("/send-code", handlers.SendVerificationCode(ctx.UserService, cfg))
-	auth.Post("/verify-code", handlers.VerifyCode(ctx.UserService, cfg))
-	auth.Post("/complete-registration", handlers.CompleteRegistration(ctx.UserService, cfg))
+	authGroup := api.Group("/auth")
+	authGroup.Get("/logout", requireAuth, handlers.Logout())
+	authGroup.Post("/send-code", handlers.SendVerificationCode(ctx.UserService, cfg))
+	authGroup.Post("/verify-code", handlers.VerifyCode(ctx.UserService, cfg))
+	authGroup.Post("/complete-registration", handlers.CompleteRegistration(ctx.UserService, cfg))
 
 	//app.Patch("/api/auth/profile", requireAuth, handlers.ChangeCredentials(ctx.UserService))
 	//app.Patch("/api/auth/change-password", middlewares.RequireAuth(cfg, false), handlers.ChangePassword(ctx.UserService))
@@ -49,6 +49,15 @@ func SetupRoutes(app *fiber.App, cfg *config.Config, ctx *context.AppContext) {
 	adminBicycleGroup.Post("/", handlers.CreateBicycle(ctx.BicycleService))
 	adminBicycleGroup.Put("/:id", handlers.UpdateBicycle(ctx.BicycleService))
 	adminBicycleGroup.Delete("/:id", handlers.DeleteBicycle(ctx.BicycleService))
+
+	maintenanceGroup := api.Group("/maintenance").Use(requireAuth)
+	maintenanceGroup.Post("/", handlers.CreateMaintenance(ctx.MaintenanceService))
+	maintenanceGroup.Get("/:id", handlers.GetUsersMaintenanceInfo(ctx.MaintenanceService))
+	maintenanceGroup.Get("/", handlers.GetUsersMaintenances(ctx.MaintenanceService))
+
+	adminMaintenanceGroup := admin.Group("/maintenance")
+	adminMaintenanceGroup.Put("/:id", handlers.UpdateMaintenance(ctx.MaintenanceService))
+	adminMaintenanceGroup.Get("/", handlers.GetAllMaintenances(ctx.MaintenanceService))
 
 	app.Static("/", "./web/dist")
 	app.Get("*", func(c *fiber.Ctx) error {

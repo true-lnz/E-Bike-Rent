@@ -17,7 +17,7 @@ func App(cfg *config.Config) error {
 		return fmt.Errorf("get database connection: %w", err)
 	}
 
-	ctx := context.InitServices(db)
+	ctx := context.InitServices(db, cfg)
 
 	app := fiber.New()
 

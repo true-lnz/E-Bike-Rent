@@ -10,9 +10,13 @@ type CompleteRegistrationRequest struct {
 	CompanyID   *uint  `json:"company_id"`
 }
 
-type LoginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+type SendVerificationCodeRequest struct {
+	Email string `json:"email"`
+}
+
+type VerifyCodeRequest struct {
+	Email string `json:"email"`
+	Code  string `json:"code"`
 }
 
 type ChangeCredentialsRequest struct {
@@ -21,4 +25,16 @@ type ChangeCredentialsRequest struct {
 	NewFirstName   string `json:"new_first_name"`
 	NewPatronymic  string `json:"new_patronymic"`
 	NewEmail       string `json:"new_email"`
+}
+
+type CreateMaintenanceRequest struct {
+	BicycleName string `json:"bicycle_name"`
+}
+
+type UpdateMaintenanceRequest struct {
+	BicycleName   string `json:"bicycle_name"`
+	Status        string `json:"status"`
+	Details       string `json:"details"`
+	Price         int    `json:"price"`
+	EstimatedTime string `json:"estimated_time"`
 }

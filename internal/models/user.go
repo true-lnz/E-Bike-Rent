@@ -9,7 +9,7 @@ type User struct {
 	Patronymic       string        `gorm:"not null" json:"patronymic"`
 	Email            string        `gorm:"unique" json:"email"`
 	PhoneNumber      string        `gorm:"unique" json:"phone_number"`
-	Birthday         time.Time     `gorm:"not null"`
+	Birthday         time.Time     `gorm:"not null" json:"birthday"`
 	Role             string        `gorm:"default:'user'" json:"role"`
 	VerificationCode string        `json:"-"`
 	IsVerified       bool          `json:"is_verified"`

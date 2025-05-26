@@ -12,7 +12,7 @@ type maintenanceRepo struct {
 
 type MaintenanceRepo interface {
 	GetAll(c context.Context) ([]models.Maintenance, error)
-	GetByID(c context.Context, id string) (*models.Maintenance, error)
+	GetByID(c context.Context, id uint) (*models.Maintenance, error)
 	Update(c context.Context, maintenance *models.Maintenance) (*models.Maintenance, error)
 	Create(c context.Context, maintenance *models.Maintenance) (*models.Maintenance, error)
 	GetByUserID(c context.Context, userID uint) ([]models.Maintenance, error)
@@ -24,9 +24,9 @@ func (r *maintenanceRepo) GetAll(c context.Context) ([]models.Maintenance, error
 	return maintenances, err
 }
 
-func (r *maintenanceRepo) GetByID(c context.Context, id string) (*models.Maintenance, error) {
+func (r *maintenanceRepo) GetByID(c context.Context, id uint) (*models.Maintenance, error) {
 	var maintenance models.Maintenance
-	err := r.db.WithContext(c).First(&maintenance, "id = ?", id).Error
+	err := r.db.WithContext(c).Preload("User").First(&maintenance, "id = ?", id).Error
 	return &maintenance, err
 }
 
