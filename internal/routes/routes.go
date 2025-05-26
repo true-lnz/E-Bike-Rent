@@ -35,6 +35,7 @@ func SetupRoutes(app *fiber.App, cfg *config.Config, ctx *context.AppContext) {
 	authGroup.Post("/send-code", handlers.SendVerificationCode(ctx.UserService, cfg))
 	authGroup.Post("/verify-code", handlers.VerifyCode(ctx.UserService, cfg))
 	authGroup.Post("/complete-registration", handlers.CompleteRegistration(ctx.UserService, cfg))
+	authGroup.Get("/me", requireAuth, handlers.GetUser())
 
 	//app.Patch("/api/auth/profile", requireAuth, handlers.ChangeCredentials(ctx.UserService))
 	//app.Patch("/api/auth/change-password", middlewares.RequireAuth(cfg, false), handlers.ChangePassword(ctx.UserService))

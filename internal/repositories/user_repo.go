@@ -22,7 +22,7 @@ type userRepository struct {
 
 func (r userRepository) GetUserById(c context.Context, id uint) (*models.User, error) {
 	var user models.User
-	err := r.db.WithContext(c).Where("id = ?", id).First(&user).Error
+	err := r.db.WithContext(c).Preload("Company").Where("id = ?", id).First(&user).Error
 	if err != nil {
 		return nil, err
 	}
