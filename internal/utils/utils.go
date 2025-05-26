@@ -19,7 +19,7 @@ func SetCookie(c *fiber.Ctx, user *models.User, cfg *config.Config) {
 		Expires:  time.Now().Add(24 * time.Hour),
 		HTTPOnly: true,
 		Secure:   false,
-		SameSite: "Strict",
+		SameSite: "Lax",
 	})
 }
 

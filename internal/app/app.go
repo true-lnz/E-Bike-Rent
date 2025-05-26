@@ -22,9 +22,16 @@ func App(cfg *config.Config) error {
 	app := fiber.New()
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:5173",
-		AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH",
-		AllowHeaders: "*",
+		AllowOriginsFunc: func(origin string) bool {
+			allowedOrigins := map[string]bool{
+				"http://localhost:5173": true,
+				"http://localhost:8080": true,
+			}
+			return allowedOrigins[origin]
+		},
+		AllowMethods:     "GET,POST,HEAD,PUT,DELETE,PATCH",
+		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
+		AllowCredentials: true,
 	}))
 
 	routes.SetupRoutes(app, cfg, ctx)
