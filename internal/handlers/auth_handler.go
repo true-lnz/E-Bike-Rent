@@ -3,6 +3,7 @@ package handlers
 import (
 	"E-Bike-Rent/internal/config"
 	"E-Bike-Rent/internal/dto"
+	"E-Bike-Rent/internal/models"
 	"E-Bike-Rent/internal/services"
 	"E-Bike-Rent/internal/utils"
 	"errors"
@@ -85,7 +86,7 @@ func CompleteRegistration(us *services.UserService, cfg *config.Config) fiber.Ha
 		}
 		user, err := us.CompleteRegistration(c.Context(), req)
 		if err != nil {
-			return fiber.NewError(fiber.StatusInternalServerError, "Ошибка при сохранении данны: "+err.Error())
+			return fiber.NewError(fiber.StatusInternalServerError, "Ошибка при сохранении данных: "+err.Error())
 		}
 		utils.SetCookie(c, user, cfg)
 		return c.SendStatus(fiber.StatusCreated)
@@ -131,5 +132,11 @@ func ChangeCredentials(userService *services.UserService) fiber.Handler {
 		}
 
 		return c.JSON(fiber.Map{"message": "номер телефона успешно изменен"})
+	}
+}
+
+func GetUser() fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		return c.JSON(fiber.Map{"user": c.Locals("user").(*models.User)})
 	}
 }
