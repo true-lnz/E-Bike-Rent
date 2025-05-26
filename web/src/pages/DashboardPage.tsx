@@ -1,10 +1,16 @@
 // src/pages/DashboardPage.jsx
-import BikeList from "../components/BikeList";
+import { Loader, Text } from "@mantine/core";
+import { useAuth } from "../hooks/useAuth";
 
 export default function DashboardPage() {
+	const { user, isAuthenticated, loading } = useAuth();
+
+	if (loading) return <Loader />;
+	if (!isAuthenticated) return <Text>Вы не авторизованы</Text>;
+
 	return (
 		<>
-			<BikeList />
+			<Text>Вы авторизованы!</Text>;
 		</>
 	);
 }
