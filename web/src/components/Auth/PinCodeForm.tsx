@@ -47,7 +47,7 @@ export default function PinCodeForm() {
                     email,
                     code,
                 },
-                // {withCredentials: true}
+                {withCredentials: true}
             );
 
             // TODO: сохранить токен, перейти в личный кабинет и т.п.
