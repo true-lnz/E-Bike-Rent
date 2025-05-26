@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import PinCodeForm from "../components/Auth/PinCodeForm";
-import RegComplete from "../components/Auth/RegComplete";
+import { RegComplete } from "../components/Auth/RegComplete";
 import AdminLayout from "../layouts/AdminLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
 import MainLayout from "../layouts/MainLayout";
@@ -16,8 +16,7 @@ export const router = createBrowserRouter([
 
       { path: "/auth", element: <AuthPage /> },
 			{ path: "/auth/code", element: <PinCodeForm /> },
-			{ path: "auth/reg/complete", element: <RegComplete /> },
-
+			{ path: "auth/complete", element: <RegComplete /> },
       { path: "/bikes/:id", element: <BikeDetailPage /> },
       { path: "*", element: <HomePage /> },
     ]

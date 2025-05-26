@@ -1,7 +1,7 @@
-import {Button, Card, Center, PinInput, rem, Stack, Text, Title,} from "@mantine/core";
+import { Button, Card, Center, PinInput, rem, Stack, Text, Title, } from "@mantine/core";
 import axios from "axios";
-import {useEffect, useState} from "react";
-import {useLocation, useNavigate} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function PinCodeForm() {
     const [timer, setTimer] = useState(60);
@@ -50,14 +50,12 @@ export default function PinCodeForm() {
                 {withCredentials: true}
             );
 
-            // TODO: сохранить токен, перейти в личный кабинет и т.п.
-            if (res.data.is_verified) {
-                // 🔒 Пользователь верифицирован — вход в личный кабинет
-                navigate("/dashboard"); // или navigate("/dashboard")
-            } else {
-                // TODO: если в ответе is_verified == false, то отправить на страницу регистрации
-                return
-            }
+				if (res.data.is_verified) {
+					navigate("/dashboard");
+				} else {
+					navigate("/auth/complete", { state: { email } });
+				}
+
             console.log("Код подтвержден, пользователь:", res.data);
         } catch (err: any) {
             console.error(err);
