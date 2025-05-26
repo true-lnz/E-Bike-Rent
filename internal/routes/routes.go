@@ -41,6 +41,9 @@ func SetupRoutes(app *fiber.App, cfg *config.Config, ctx *context.AppContext) {
 	//app.Patch("/api/auth/change-credentials", middlewares.RequireAuth(cfg, false), handlers.ChangeCredentials(ctx.UserService))
 	//app.Delete("/api/auth/delete-account", middlewares.RequireAuth(cfg, false), handlers.DeleteAccount(ctx.UserService))
 
+	companyGroup := api.Group("/company")
+	companyGroup.Get("/", handlers.GetAllCompanies(ctx.CompanyService))
+
 	bicyclesGroup := api.Group("/bicycle")
 	bicyclesGroup.Get("/", requireUser, handlers.GetAllBicycles(ctx.BicycleService))
 	bicyclesGroup.Get("/:id", requireUser, handlers.GetBicycleInformation(ctx.BicycleService))

@@ -11,6 +11,7 @@ type AppContext struct {
 	UserService        *services.UserService
 	BicycleService     *services.BicycleService
 	MaintenanceService *services.MaintenanceService
+	CompanyService     *services.CompanyService
 }
 
 func InitServices(db *gorm.DB, cfg *config.Config) *AppContext {
@@ -23,9 +24,13 @@ func InitServices(db *gorm.DB, cfg *config.Config) *AppContext {
 	maintenanceRepo := repositories.NewMaintenanceRepo(db)
 	maintenanceService := services.NewMaintenanceService(maintenanceRepo, cfg)
 
+	companyRepo := repositories.NewCompanyRepository(db)
+	companyService := services.NewCompanyService(companyRepo)
+
 	return &AppContext{
 		UserService:        userService,
 		BicycleService:     bicycleService,
 		MaintenanceService: maintenanceService,
+		CompanyService:     companyService,
 	}
 }
