@@ -4,8 +4,10 @@ import { RegComplete } from "../components/Auth/RegComplete";
 import AdminLayout from "../layouts/AdminLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
 import MainLayout from "../layouts/MainLayout";
+import AdminPage from "../pages/AdminPage";
 import AuthPage from "../pages/Auth/AuthPage";
 import BikeDetailPage from "../pages/BikeDetailPage";
+import DashboardPage from "../pages/DashboardPage";
 import HomePage from "../pages/HomePage";
 
 export const router = createBrowserRouter([
@@ -13,6 +15,8 @@ export const router = createBrowserRouter([
     element: <MainLayout />, // Для большинства страниц
     children: [
       { path: "/", element: <HomePage /> },
+      { path: "/dashboard", element: <DashboardPage /> },
+      { path: "/admin", element: <AdminPage /> },
 
       { path: "/auth", element: <AuthPage /> },
 			{ path: "/auth/code", element: <PinCodeForm /> },
