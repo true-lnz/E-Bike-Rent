@@ -1,21 +1,44 @@
 package services
 
 import (
+	"E-Bike-Rent/internal/dto"
 	"E-Bike-Rent/internal/models"
 	"E-Bike-Rent/internal/repositories"
 	"context"
+	"fmt"
 )
 
 type BicycleService struct {
-	repo repositories.BicycleRepo
+	repo     repositories.BicycleRepo
+	rentRepo repositories.RentRepository
 }
 
-func NewBicycleService(repo repositories.BicycleRepo) *BicycleService {
-	return &BicycleService{repo: repo}
+func NewBicycleService(repo repositories.BicycleRepo, rentRepo repositories.RentRepository) *BicycleService {
+	return &BicycleService{repo: repo, rentRepo: rentRepo}
 }
+func (s *BicycleService) GetAll(c context.Context) (*dto.BicyclesResponse, error) {
+	bicycles, err := s.repo.GetAll(c)
 
-func (s BicycleService) GetAll(c context.Context) ([]models.Bicycle, error) {
-	return s.repo.GetAll(c)
+	if err != nil {
+		return nil, fmt.Errorf("не удалось получить велосипеды: %w", err)
+	}
+
+	result := make([]dto.BicycleItem, len(bicycles))
+	for i, bicycle := range bicycles {
+		rentCount, err := s.rentRepo.CountInRent(c, bicycle.ID)
+		if err != nil {
+			return nil, err
+		}
+		result[i] = dto.BicycleItem{
+			Bicycle:           bicycle,
+			AvailableQuantity: bicycle.Quantity - rentCount,
+		}
+	}
+
+	return &dto.BicyclesResponse{
+		Items: result,
+		Total: len(result),
+	}, nil
 }
 
 func (s BicycleService) GetInformation(c context.Context, id uint) (*models.Bicycle, error) {

@@ -10,6 +10,7 @@ import (
 func GetAllBicycles(bicycleService *services.BicycleService) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		all, err := bicycleService.GetAll(c.Context())
+
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 		}

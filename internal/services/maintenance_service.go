@@ -25,6 +25,7 @@ func (s *MaintenanceService) CreateMaintenance(c context.Context, req dto.Create
 	maintenance := &models.Maintenance{
 		UserID:      userID,
 		BicycleName: req.BicycleName,
+		Details:     req.Details,
 		CreatedAt:   time.Now(),
 	}
 	created, err := s.repo.Create(c, maintenance)
@@ -72,7 +73,7 @@ func (s *MaintenanceService) UpdateMaintenance(c context.Context, request *dto.U
 	existingMaintenance.Status = request.Status
 	existingMaintenance.EstimatedTime = t
 	existingMaintenance.BicycleName = request.BicycleName
-	existingMaintenance.Details = request.Details
+	existingMaintenance.AdminMessage = request.AdminMessage
 	existingMaintenance.Price = request.Price
 	updatedMaintenance, err := s.repo.Update(c, existingMaintenance)
 	if err != nil {

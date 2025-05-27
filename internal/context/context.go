@@ -18,8 +18,10 @@ func InitServices(db *gorm.DB, cfg *config.Config) *AppContext {
 	userRepo := repositories.NewUserRepository(db)
 	userService := services.NewUserService(userRepo)
 
+	rentRepo := repositories.NewRentRepository(db)
+
 	bicycleRepo := repositories.NewBicycleRepo(db)
-	bicycleService := services.NewBicycleService(bicycleRepo)
+	bicycleService := services.NewBicycleService(bicycleRepo, rentRepo)
 
 	maintenanceRepo := repositories.NewMaintenanceRepo(db)
 	maintenanceService := services.NewMaintenanceService(maintenanceRepo, cfg)

@@ -29,12 +29,13 @@ type ChangeCredentialsRequest struct {
 
 type CreateMaintenanceRequest struct {
 	BicycleName string `json:"bicycle_name"`
+	Details     string `json:"details"`
 }
 
 type UpdateMaintenanceRequest struct {
 	BicycleName   string `json:"bicycle_name"`
 	Status        string `json:"status"`
-	Details       string `json:"details"`
+	AdminMessage  string `json:"admin_message"`
 	Price         int    `json:"price"`
 	EstimatedTime string `json:"estimated_time"`
 }
