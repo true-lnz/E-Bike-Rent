@@ -98,7 +98,7 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 						<Table.Tbody>
 							{data.map((item) => {
 								const createdAt = dayjs(item.created_at).format("DD.MM.YYYY");
-								const est = dayjs(item.estimated_time);
+								const est = dayjs(item.finish_date);
 								const now = dayjs();
 								const diffDays = est.diff(now, "day");
 

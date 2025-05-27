@@ -20,7 +20,7 @@ export default function DashboardHeader() {
   };
 
 	return (
-		<Container size="lg" component="header" py="xl" pos="sticky" top={0} style={{ zIndex: 1000 }}>
+		<Container size="lg" component="header" py="xl" pos="sticky" top={0} style={{ zIndex: 100 }}>
 			<Box
 				bg="gray.1"
 				px="xl"
@@ -46,16 +46,16 @@ export default function DashboardHeader() {
 					</Link>
 
 					<Group gap="xl">
-						<Text component={Link} to="dashboard/bikes" fw={500}>
+						<Text component={Link} to="bikes" fw={500}>
 							Устройства
 						</Text>
-						<Text component={Link} to="dashboard/my-rent" fw={500}>
+						<Text component={Link} to="my-rent" fw={500}>
 							Моя аренда
 						</Text>
-						<Text component={Link} to="dashboard/maintenances" fw={500}>
+						<Text component={Link} to="maintenances" fw={500}>
 							Обслуживание
 						</Text>
-						<Text component={Link} to="dashboard/contact" fw={500}>
+						<Text component={Link} to="contact" fw={500}>
 							Контакты
 						</Text>
 					</Group>

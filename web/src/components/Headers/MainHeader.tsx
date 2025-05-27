@@ -4,7 +4,7 @@ import logo from "./../../assets/images/Logo512x512.png";
 
 export default function Header() {
 	return (
-		<Container size="lg" component="header" py="xl" pos="sticky" top={0} style={{ zIndex: 1000 }}>
+		<Container size="lg" component="header" py="xl" pos="sticky" top={0} style={{ zIndex: 100 }}>
 			<Box
 				bg="gray.1"
 				px="xl"

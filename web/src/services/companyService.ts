@@ -1,6 +1,5 @@
 import type { Company } from "../types/company";
 
-// 🔧 Шаблонные данные
 const mockCompanies: Company[] = [
   {
     id: 1,
@@ -25,14 +24,11 @@ const mockCompanies: Company[] = [
 ];
 
 export const companyService = {
-  /**
-   * Получение списка компаний
-   */
   async getAll(): Promise<Company[]> {
     // Здесь в будущем можно сделать fetch/axios
     // return fetch("/api/companies").then((res) => res.json());
     return new Promise((resolve) => {
-      setTimeout(() => resolve(mockCompanies), 500); // Эмуляция задержки
+      setTimeout(() => resolve(mockCompanies), 500);
     });
   },
 };
