@@ -15,21 +15,24 @@ dayjs.extend(relativeTime);
 
 const statusColors: Record<string, string> = {
 	"заявка в обработке": "gray.2",
-	"в процессе": "yellow.1",
-	"готово": "green.1",
+	"ремонтируется": "green.1",
+	"готово к выдаче": "green.1",
 	"отменено": "red.1",
+	"завершен": "green.1",
 };
 
 const getTextColor = (status: string): string => {
 	switch (status) {
-		case "готово":
+		case "готово к выдаче":
 			return "green";
-		case "в процессе":
-			return "orange";
+		case "ремонтируется":
+			return "green";
 		case "заявка в обработке":
 			return "gray";
 		case "отменено":
 			return "red";
+		case "завершен":
+			return "green";
 		default:
 			return "black.5";
 	}
@@ -39,7 +42,7 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 	if (loading) {
 		return (
 			<Container size="lg" py="xl">
-				<Title order={2} mb="md">Заявки на обслуживание</Title>
+				<Title order={1} mb="md">Заявки на обслуживание</Title>
 				<Paper radius="lg" withBorder>
 					<Center style={{ minHeight: 100 }}>
 						<Text color="dimmed" size="lg">Загрузка...</Text>
@@ -52,7 +55,7 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 	if (!data || data.length === 0) {
 		return (
 			<Container size="lg" py="xl">
-				<Title order={2} mb="md">Заявки на обслуживание</Title>
+				<Title order={1} mb="md">Заявки на обслуживание</Title>
 				<Paper radius="lg" withBorder>
 					<Center style={{ minHeight: 100 }}>
 						<Text color="dimmed" size="lg">Нет заявок на обслуживание</Text>
@@ -77,7 +80,7 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 
 	return (
 		<Container size="lg" py="xl">
-			<Title order={2} mb="md">
+			<Title order={1} mb="md">
 				Заявки на обслуживание
 			</Title>
 
@@ -86,8 +89,10 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 					<Table striped highlightOnHover withColumnBorders>
 						<Table.Thead>
 							<Table.Tr>
-								<Table.Th>Дата принятия</Table.Th>
+								<Table.Th>ID</Table.Th>
+								<Table.Th>Дата заявки</Table.Th>
 								<Table.Th>Ваше устройство</Table.Th>
+								<Table.Th>Дата принятия</Table.Th>
 								<Table.Th>Время ремонта</Table.Th>
 								<Table.Th>Примерная сумма</Table.Th>
 								<Table.Th>Статус</Table.Th>
@@ -97,19 +102,42 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 
 						<Table.Tbody>
 							{data.map((item) => {
-								const createdAt = dayjs(item.created_at).format("DD.MM.YYYY");
-								const est = dayjs(item.finish_date);
-								const now = dayjs();
-								const diffDays = est.diff(now, "day");
+								const formatDate = (dateStr: string) => {
+									if (
+										!dateStr ||
+										dateStr === "0001-01-01T00:00:00Z" ||
+										!dayjs(dateStr).isValid()
+									) {
+										return "—";
+									}
+									return dayjs(dateStr).format("DD.MM.YYYY");
+								};
+
+								const createdAt = formatDate(item.created_at);
+								const startDate = formatDate(item.start_date);
+								const finishDate = formatDate(item.finish_date);
+
+								let repairDuration = "—";
+								if (
+									dayjs(item.start_date).isValid() &&
+									dayjs(item.finish_date).isValid() &&
+									item.start_date !== "0001-01-01T00:00:00Z" &&
+									item.finish_date !== "0001-01-01T00:00:00Z"
+								) {
+									const start = dayjs(item.start_date);
+									const end = dayjs(item.finish_date);
+									const days = end.diff(start, "day");
+									repairDuration = `до ${end.format("DD.MM.YYYY")} (${days} дн.)`;
+								}
 
 								return (
 									<Table.Tr key={item.id}>
+										<Table.Td>{item.id}</Table.Td>
 										<Table.Td>{createdAt}</Table.Td>
-										<Table.Td>{item.bicycle_name}</Table.Td>
-										<Table.Td>
-											{est.format("DD.MM.YYYY")} ({diffDays} дн.)
-										</Table.Td>
-										<Table.Td>{item.price} ₽</Table.Td>
+										<Table.Td>{item.bicycle_name || "—"}</Table.Td>
+										<Table.Td>{startDate}</Table.Td>
+										<Table.Td>{repairDuration}</Table.Td>
+										<Table.Td>{item.price ? `${item.price} ₽` : "—"}</Table.Td>
 										<Table.Td>
 											<Badge
 												size="lg"
@@ -139,6 +167,7 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 								);
 							})}
 						</Table.Tbody>
+
 					</Table>
 				</Paper>
 			</ScrollArea>

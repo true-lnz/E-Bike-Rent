@@ -1,46 +1,58 @@
-import { Button, Card, Flex, Stack, Text } from "@mantine/core";
+import { Button, Card, Grid, rem, Stack, Text } from "@mantine/core";
+import { IconBike, IconPlus } from "@tabler/icons-react";
+import type { ReactNode } from "react";
 
 export function MaintenanceCard({
   title,
   description,
   onApplyClick,
+  icon = <IconBike size={120} color="black" />,
+  background = "#fda65b",
+  textColor = "white"
 }: {
   title: string;
   description: string;
   onApplyClick: () => void;
+  icon?: ReactNode;
+  background?: string;
+  textColor?: string;
 }) {
   return (
     <Card
       shadow="md"
-      padding="lg"
+      padding="xl"
       radius="xl"
-      withBorder
-      h="100%"
-      style={{ display: "flex", flexDirection: "column" }}
+      bg={background}
+      style={{ height: "100%", display: "flex", flexDirection: "column" }}
     >
-      <Flex justify="space-between" align="flex-start" mb="md" style={{ flexGrow: 1 }}>
-        <Stack gap="xs" w="80%">
-          <Text size="lg" fw={600}>
-            {title}
-          </Text>
-          <Text c="dimmed" size="sm">
-            {description}
-          </Text>
-        </Stack>
+      <Text fz={rem(24)} fw={700} c={textColor} mb="md">
+        {title}
+      </Text>
 
-        {/* <IconWrench size={32} color="#228be6" /> */}
-      </Flex>
+      <Grid grow mt="auto" align="end">
+        <Grid.Col span={8}>
+          <Stack gap="sm">
+            <Text c={textColor} size="md">
+              {description}
+            </Text>
+            <Button
+              onClick={onApplyClick}
+              variant="white"
+              color="dark"
+              radius="xl"
+							size="md"
+              leftSection={<IconPlus size={18} />}
+              w="fit-content"
+            >
+              Оставить заявку
+            </Button>
+          </Stack>
+        </Grid.Col>
 
-      <Button
-        mt="auto"
-        onClick={onApplyClick}
-        color="gray.2"
-        c="dark"
-        radius="xl"
-        // leftSection={<IconPlus size={18} />}
-      >
-        Оставить заявку
-      </Button>
+        <Grid.Col span={4} style={{ textAlign: "right" }}>
+          {icon}
+        </Grid.Col>
+      </Grid>
     </Card>
   );
 }
