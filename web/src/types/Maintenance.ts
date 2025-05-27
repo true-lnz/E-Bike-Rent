@@ -8,3 +8,9 @@ export type Maintenance = {
   price: number;
   estimated_time: string;   // ISO-строка (например: "2024-06-01T00:00:00Z")
 };
+
+export interface CreateMaintenanceRequest {
+  bicycle_name: string;
+  // details: string;
+	// todo РЕАЛИЗОВАТЬ ОТПРАВКУ ДЕТАЛЕЙ ЗАЯВКИ
+}

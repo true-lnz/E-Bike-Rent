@@ -1,5 +1,5 @@
 import { Card, Image, Stack, Text } from "@mantine/core";
-import type { Company } from "../types/Company";
+import type { Company } from "../types/company";
 
 interface CompanyCardProps {
   company: Company;

@@ -2,7 +2,7 @@ import { Button, Container, Loader, Text, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getAllBikes } from "../services/bikeService"; // Пока мок
-import type { Bike } from "../types/Bike";
+import type { Bike } from "../types/bike";
 
 export default function BikeDetailPage() {
   const { id } = useParams<{ id: string }>();

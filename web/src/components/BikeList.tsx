@@ -1,7 +1,7 @@
 import { Container, Loader, SimpleGrid, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { getAllBikes } from "../services/bikeService";
-import type { Bike } from "../types/Bike";
+import type { Bike } from "../types/bike";
 import BikeCard from "./BikeCard";
 
 export default function BikeListPage() {

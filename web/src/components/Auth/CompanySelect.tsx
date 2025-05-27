@@ -9,7 +9,7 @@ import {
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { companyService } from "../../services/companyService";
-import type { Company } from "../../types/Company";
+import type { Company } from "../../types/company";
 import CompanyCard from "../CompanyCard";
 
 type Props = {

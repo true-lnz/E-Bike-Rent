@@ -14,7 +14,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useEffect, useState } from "react";
 import { maintenanceService } from "../../services/maintenanceService";
-import type { Maintenance } from "../../types/Maintenance";
+import type { Maintenance } from "../../types/maintenance";
 
 dayjs.extend(relativeTime);
 

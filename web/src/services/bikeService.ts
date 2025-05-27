@@ -1,5 +1,5 @@
-import type { Bike } from "../types/Bike";
 import axios from "axios";
+import type { Bike } from "../types/bike";
 
 // const API_URL = "https://your-api-url.com"; // Заменишь на своё
 

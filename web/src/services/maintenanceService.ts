@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Maintenance } from "../types/Maintenance";
+import type { CreateMaintenanceRequest, Maintenance } from "../types/maintenance";
 
 export const maintenanceService = {
   async getUserMaintenances(): Promise<Maintenance[]> {
@@ -7,6 +7,17 @@ export const maintenanceService = {
       withCredentials: true,
     });
 
-    return response.data.maintenances; // ⬅️ вот так правильно
+    return response.data.maintenances;
+  },
+	async createMaintenance(data: CreateMaintenanceRequest): Promise<Maintenance> {
+    const response = await axios.post(
+      "http://localhost:8080/api/maintenance/",
+      data,
+      {
+        withCredentials: true,
+      }
+    );
+
+    return response.data.maintenance;
   },
 };

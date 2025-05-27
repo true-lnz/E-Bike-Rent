@@ -2,7 +2,7 @@
 import { MaintenanceHistory } from "../components/Maintenance/MaintenanceHistory";
 import { MaintenanceList } from "../components/Maintenance/MaintenanceList";
 // import { MaintenanceList } from "../components/Maintenance/MaintenanceList";
-import type { Maintenance } from "../types/Maintenance";
+import type { Maintenance } from "../types/maintenance";
 
 const mockData: Maintenance[] = [
 	{
