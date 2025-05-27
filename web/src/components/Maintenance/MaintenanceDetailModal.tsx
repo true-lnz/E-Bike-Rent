@@ -31,11 +31,11 @@ type Props = {
 };
 
 const STATUS_CONFIG = {
-	"заявка в обработке": { icon: <IconHourglass size={16} />, color: "blue" },
-	"отказано": { icon: <IconX size={16} />, color: "red" },
-	"ремонтируется": { icon: <IconTools size={16} />, color: "orange" },
-	"готов к выдаче": { icon: <IconPackage size={16} />, color: "violet" },
-	"завершен": { icon: <IconCheck size={16} />, color: "teal" },
+	"заявка в обработке": { icon: <IconHourglass />, color: "blue" },
+	"отказано": { icon: <IconX />, color: "red" },
+	"ремонтируется": { icon: <IconTools />, color: "orange" },
+	"готов к выдаче": { icon: <IconPackage />, color: "violet" },
+	"завершен": { icon: <IconCheck />, color: "teal" },
 } as const;
 
 const TIMELINE_ORDER = [
@@ -65,7 +65,7 @@ export function MaintenanceDetailModal({
 	const isRejected = maintenance.status === "отказано";
 	const statusData =
 		STATUS_CONFIG[maintenance.status as keyof typeof STATUS_CONFIG] || {
-			icon: <IconClock size={16} />,
+			icon: <IconClock size={24} />,
 			color: "gray",
 		};
 
@@ -85,13 +85,13 @@ export function MaintenanceDetailModal({
 						{!isRejected ? (
 							<Timeline
 								active={getStatusIndex(maintenance.status)}
-								bulletSize={28}
+								bulletSize={36}
 								lineWidth={2}
 								color="blue"
 							>
 								<Timeline.Item
 									title="Заявка создана"
-									bullet={<IconClock size={16} />}
+									bullet={<IconClock size={20} />}
 								>
 									<Text size="xs" c="dimmed">
 										{formatDate(maintenance.created_at)}
@@ -100,7 +100,7 @@ export function MaintenanceDetailModal({
 
 								<Timeline.Item
 									title="В работе"
-									bullet={<IconTools size={16} />}
+									bullet={<IconTools size={20} />}
 								>
 									<Text size="xs" c="dimmed">
 										{formatDate(maintenance.start_date)}
@@ -109,7 +109,7 @@ export function MaintenanceDetailModal({
 
 								<Timeline.Item
 									title="Готов к выдаче"
-									bullet={<IconPackage size={16} />}
+									bullet={<IconPackage size={20} />}
 								>
 									<Text size="xs" c="dimmed">
 										{maintenance.status === "готов к выдаче" || maintenance.status === "завершен"
@@ -120,7 +120,7 @@ export function MaintenanceDetailModal({
 
 								<Timeline.Item
 									title="Завершен"
-									bullet={<IconCheck size={16} />}
+									bullet={<IconCheck size={20} />}
 								>
 									<Text size="xs" c="dimmed">
 										{maintenance.status === "завершен"
@@ -133,13 +133,13 @@ export function MaintenanceDetailModal({
 							<Timeline active={1} bulletSize={28} lineWidth={2} color="red">
 								<Timeline.Item
 									title="Заявка создана"
-									bullet={<IconClock size={16} />}
+									bullet={<IconClock size={20} />}
 								>
 									<Text size="xs" c="dimmed">
 										{formatDate(maintenance.created_at)}
 									</Text>
 								</Timeline.Item>
-								<Timeline.Item title="Отказано" bullet={<IconX size={16} />}>
+								<Timeline.Item title="Отказано" bullet={<IconX size={20} />}>
 									<Text size="xs" c="dimmed">
 										{formatDate(maintenance.start_date || maintenance.created_at)}
 									</Text>

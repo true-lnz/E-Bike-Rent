@@ -1,5 +1,5 @@
 // components/Maintenance/MaintenanceList.tsx
-import { Container, Grid } from "@mantine/core";
+import { Container, Grid, Title } from "@mantine/core";
 import { useState } from "react";
 import { maintenanceService } from "../../services/maintenanceService";
 import { MaintenanceCard } from "./MaintenanceCard";
@@ -56,6 +56,10 @@ export function MaintenanceList({ onCreated }: MaintenanceListProps) {
 
 	return (
 		<Container size="lg" py="xl">
+			<Title order={1} mb="md">
+				Обслуживание и ремонт
+			</Title>
+
 			<Grid gutter="xl" grow>
 				{mockServices.map((service, idx) => (
 					<Grid.Col span={{ base: 12, sm: 6 }} key={idx}>
