@@ -48,6 +48,11 @@ func SetupRoutes(app *fiber.App, cfg *config.Config, ctx *context.AppContext) {
 	accessoryGroup := api.Group("/accessory").Use(requireUser)
 	accessoryGroup.Get("/", handlers.GetAllAccessories(ctx.AccessoryService))
 
+	adminAccessoryGroup := admin.Group("/accessory")
+	adminAccessoryGroup.Post("/", handlers.CreateAccessory(ctx.AccessoryService))
+	adminAccessoryGroup.Delete("/:id", handlers.DeleteAccessory(ctx.AccessoryService))
+	adminAccessoryGroup.Put("/:id", handlers.UpdateAccessory(ctx.AccessoryService))
+
 	bicyclesGroup := api.Group("/bicycle").Use(requireUser)
 	bicyclesGroup.Get("/", handlers.GetAllBicycles(ctx.BicycleService))
 	bicyclesGroup.Get("/:id", handlers.GetBicycleInformation(ctx.BicycleService))

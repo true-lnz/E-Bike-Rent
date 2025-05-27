@@ -13,6 +13,9 @@ type accessoryRepository struct {
 type AccessoryRepository interface {
 	GetAll(c context.Context) ([]models.Accessory, error)
 	CountInRent(c context.Context, accessoryID uint) (int, error)
+	Create(c context.Context, accessory *models.Accessory) (*models.Accessory, error)
+	Update(c context.Context, accessory *models.Accessory) (*models.Accessory, error)
+	Delete(c context.Context, accessoryID uint) error
 }
 
 func NewAccessoryRepository(db *gorm.DB) AccessoryRepository {
@@ -23,6 +26,20 @@ func (r *accessoryRepository) GetAll(c context.Context) ([]models.Accessory, err
 	var accessories []models.Accessory
 	err := r.db.WithContext(c).Find(&accessories).Error
 	return accessories, err
+}
+
+func (r *accessoryRepository) Create(c context.Context, accessory *models.Accessory) (*models.Accessory, error) {
+	err := r.db.WithContext(c).Create(accessory).Error
+	return accessory, err
+}
+
+func (r *accessoryRepository) Update(c context.Context, accessory *models.Accessory) (*models.Accessory, error) {
+	err := r.db.WithContext(c).Save(accessory).Error
+	return accessory, err
+}
+
+func (r *accessoryRepository) Delete(c context.Context, accessoryID uint) error {
+	return r.db.WithContext(c).Delete(&models.Accessory{}, accessoryID).Error
 }
 
 func (r *accessoryRepository) CountInRent(c context.Context, accessoryID uint) (int, error) {

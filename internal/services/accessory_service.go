@@ -2,6 +2,7 @@ package services
 
 import (
 	"E-Bike-Rent/internal/dto"
+	"E-Bike-Rent/internal/models"
 	"E-Bike-Rent/internal/repositories"
 	"context"
 	"fmt"
@@ -39,4 +40,16 @@ func (s *AccessoryService) GetAll(c context.Context) (*dto.AccessoryResponse, er
 		Items: result,
 		Total: len(result),
 	}, nil
+}
+
+func (s *AccessoryService) Delete(c context.Context, accessoryID uint) error {
+	return s.repo.Delete(c, accessoryID)
+}
+
+func (s *AccessoryService) Create(c context.Context, accessory *models.Accessory) (*models.Accessory, error) {
+	return s.repo.Create(c, accessory)
+}
+
+func (s *AccessoryService) Update(c context.Context, accessory *models.Accessory) (*models.Accessory, error) {
+	return s.repo.Update(c, accessory)
 }

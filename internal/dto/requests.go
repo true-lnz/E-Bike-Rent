@@ -33,9 +33,9 @@ type CreateMaintenanceRequest struct {
 }
 
 type UpdateMaintenanceRequest struct {
-	BicycleName   string `json:"bicycle_name"`
-	Status        string `json:"status"`
-	AdminMessage  string `json:"admin_message"`
-	Price         int    `json:"price"`
-	EstimatedTime string `json:"estimated_time"`
+	BicycleName  string `json:"bicycle_name"`
+	Status       string `json:"status"`
+	AdminMessage string `json:"admin_message"`
+	Price        int    `json:"price"`
+	FinishDate   string `json:"finish_date"`
 }

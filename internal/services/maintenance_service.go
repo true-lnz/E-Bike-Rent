@@ -66,27 +66,33 @@ func (s *MaintenanceService) UpdateMaintenance(c context.Context, request *dto.U
 		return nil, fmt.Errorf("ошибка при получении записи: %w", err)
 	}
 
-	t, err := time.Parse("2006-01-02", request.EstimatedTime)
+	t, err := time.Parse("2006-01-02", request.FinishDate)
 
 	lastStatus := existingMaintenance.Status
 
 	existingMaintenance.Status = request.Status
-	existingMaintenance.EstimatedTime = t
+	existingMaintenance.FinishDate = t
 	existingMaintenance.BicycleName = request.BicycleName
 	existingMaintenance.AdminMessage = request.AdminMessage
 	existingMaintenance.Price = request.Price
-	updatedMaintenance, err := s.repo.Update(c, existingMaintenance)
-	if err != nil {
-		return nil, fmt.Errorf("не удалось обновить запись: %w", err)
-	}
 
 	if lastStatus != request.Status {
 		err = SendMaintenanceStatusUpdate(existingMaintenance.User.Email, existingMaintenance.BicycleName, request.Status, s.cfg)
+		if request.Status == "в работе" {
+			now := time.Now()
+			existingMaintenance.StartDate = time.Date(
+				now.Year(), now.Month(), now.Day(),
+				0, 0, 0, 0, time.UTC,
+			)
+		}
 		if err != nil {
 			return nil, fmt.Errorf("ошибка при отправке уведомления: %w", err)
 		}
 	}
-
+	updatedMaintenance, err := s.repo.Update(c, existingMaintenance)
+	if err != nil {
+		return nil, fmt.Errorf("не удалось обновить запись: %w", err)
+	}
 	return updatedMaintenance, nil
 }
 
