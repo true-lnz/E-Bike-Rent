@@ -5,6 +5,9 @@ import AdminMaintenanceRequests from "../components/AdminMaintenanceRequests";
 import AdminRentRequests from "../components/AdminRentRequest";
 import PinCodeForm from "../components/Auth/PinCodeForm";
 import { RegComplete } from "../components/Auth/RegComplete";
+import BikeList from "../components/BikeList";
+import Maintenance from "../components/Maintenance/Maintenance";
+import MyRent from "../components/MyRent";
 import PrivateRoute from "../components/PrivateRoute";
 import AdminLayout from "../layouts/AdminLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -13,8 +16,6 @@ import AuthPage from "../pages/Auth/AuthPage";
 import BikeDetailPage from "../pages/BikeDetailPage";
 import ContactPage from "../pages/ContactPage";
 import HomePage from "../pages/HomePage";
-import MaintenancePage from "../pages/MaintenancePage";
-import MyRentPage from "../pages/MyRentPage";
 
 export const router = createBrowserRouter([
 	{
@@ -39,8 +40,9 @@ export const router = createBrowserRouter([
 				element: <DashboardLayout />,
 				children: [
 					{ index: true, element: <Navigate to="maintenances" replace /> }, // Дефолтный редирект
-					{ path: "maintenances", element: <MaintenancePage /> },
-					{ path: "my-rents", element: <MyRentPage /> },
+					{ path: "bikes", element: <BikeList /> }, // todo ТУТ КОГДА НИБУДЬ БУДЕТ ПАРАМЕТР ОТОБРАЖЕНИЯ
+					{ path: "maintenances", element: <Maintenance /> },
+					{ path: "my-rents", element: <MyRent /> },
 					{ path: "contacts", element: <ContactPage /> },
 				],
 			},

@@ -49,7 +49,7 @@ export default function DashboardHeader() {
 						<Text component={Link} to="bikes" fw={500}>
 							Устройства
 						</Text>
-						<Text component={Link} to="my-rent" fw={500}>
+						<Text component={Link} to="my-rents" fw={500}>
 							Моя аренда
 						</Text>
 						<Text component={Link} to="maintenances" fw={500}>
