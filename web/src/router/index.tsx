@@ -13,7 +13,7 @@ import AdminLayout from "../layouts/AdminLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
 import MainLayout from "../layouts/MainLayout";
 import AuthPage from "../pages/Auth/AuthPage";
-import BikeDetailPage from "../pages/BikeDetailPage";
+import { BikeDetailPage } from "../pages/BikeDetailPage";
 import ContactPage from "../pages/ContactPage";
 import HomePage from "../pages/HomePage";
 
