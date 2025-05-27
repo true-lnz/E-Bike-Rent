@@ -1,4 +1,5 @@
-import { Badge, Button, Center, Container, Group, Paper, ScrollArea, Table, Text, Title } from "@mantine/core";
+import { ActionIcon, Badge, Button, Center, Container, Group, Paper, ScrollArea, Table, Text, Title, Tooltip } from "@mantine/core";
+import { IconPhone } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useState } from "react";
@@ -94,7 +95,7 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 								<Table.Th>Ваше устройство</Table.Th>
 								<Table.Th>Дата принятия</Table.Th>
 								<Table.Th>Время ремонта</Table.Th>
-								<Table.Th>Примерная сумма</Table.Th>
+								<Table.Th>Стоимость</Table.Th>
 								<Table.Th>Статус</Table.Th>
 								<Table.Th>Действия</Table.Th>
 							</Table.Tr>
@@ -134,7 +135,21 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 									<Table.Tr key={item.id}>
 										<Table.Td>{item.id}</Table.Td>
 										<Table.Td>{createdAt}</Table.Td>
-										<Table.Td>{item.bicycle_name || "—"}</Table.Td>
+										<Table.Td>
+											<Tooltip label={item.bicycle_name || "—"}>
+												<Text
+													style={{
+														maxWidth: 180,
+														whiteSpace: "nowrap",
+														overflow: "hidden",
+														textOverflow: "ellipsis",
+														display: "block",
+													}}
+												>
+													{item.bicycle_name || "—"}
+												</Text>
+											</Tooltip>
+										</Table.Td>
 										<Table.Td>{startDate}</Table.Td>
 										<Table.Td>{repairDuration}</Table.Td>
 										<Table.Td>{item.price ? `${item.price} ₽` : "—"}</Table.Td>
@@ -158,9 +173,9 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 												>
 													Детализация
 												</Button>
-												<Button size="sm" radius="md" color="blue.7">
-													Связаться
-												</Button>
+												<ActionIcon size="lg" radius="md" color="blue.7">
+													<IconPhone size={20} />
+												</ActionIcon>
 											</Group>
 										</Table.Td>
 									</Table.Tr>
