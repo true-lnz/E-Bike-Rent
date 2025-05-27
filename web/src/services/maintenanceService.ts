@@ -20,4 +20,14 @@ export const maintenanceService = {
 
     return response.data.maintenance;
   },
+  async getMaintenanceById(id: number): Promise<Maintenance> {
+    const response = await axios.get(
+      `http://localhost:8080/api/maintenance/${id}`,
+      {
+        withCredentials: true,
+      }
+    );
+
+    return response.data.maintenance;
+  },
 };

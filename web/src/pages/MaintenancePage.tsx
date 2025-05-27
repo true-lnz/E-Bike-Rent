@@ -1,48 +1,30 @@
-// src/pages/MaintenancePage.jsx
+import { useEffect, useState } from "react";
 import { MaintenanceHistory } from "../components/Maintenance/MaintenanceHistory";
 import { MaintenanceList } from "../components/Maintenance/MaintenanceList";
-// import { MaintenanceList } from "../components/Maintenance/MaintenanceList";
+import { maintenanceService } from "../services/maintenanceService";
 import type { Maintenance } from "../types/maintenance";
 
-const mockData: Maintenance[] = [
-	{
-		id: 1,
-		user_id: 123,
-		bicycle_name: "Merida Big.Nine",
-		status: "в процессе",
-		details: "замена цепи",
-		created_at: "2025-05-24T10:00:00Z",
-		price: 2500,
-		estimated_time: "2025-06-02T10:00:00Z",
-	},
-	{
-		id: 2,
-		user_id: 123,
-		bicycle_name: "Merida Big.Nine",
-		status: "отменено",
-		details: "замена цепи",
-		created_at: "2025-05-24T10:00:00Z",
-		price: 2500,
-		estimated_time: "2025-06-02T10:00:00Z",
-	},
-	{
-		id: 3,
-		user_id: 123,
-		bicycle_name: "Merida Big.Nine",
-		status: "готово",
-		details: "замена цепи",
-		created_at: "2025-05-24T10:00:00Z",
-		price: 2500,
-		estimated_time: "2025-06-02T10:00:00Z",
-	},
-];
-
 export default function MaintenancePage() {
-	return (
-		<>
-			<MaintenanceHistory />
-			<MaintenanceList />
-		</>
+  const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
+  const [loading, setLoading] = useState(true);
 
-	);
+  const fetchMaintenances = () => {
+    setLoading(true);
+    maintenanceService
+      .getUserMaintenances()
+      .then(setMaintenances)
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchMaintenances();
+  }, []);
+
+  return (
+    <>
+      <MaintenanceHistory data={maintenances} loading={loading} />
+      <MaintenanceList onCreated={fetchMaintenances} />
+    </>
+  );
 }

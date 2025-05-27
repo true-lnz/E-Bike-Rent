@@ -1,20 +1,15 @@
-import {
-	Badge,
-	Button,
-	Center,
-	Container,
-	Group,
-	Paper,
-	ScrollArea,
-	Table,
-	Text,
-	Title,
-} from "@mantine/core";
+import { Badge, Button, Center, Container, Group, Paper, ScrollArea, Table, Text, Title } from "@mantine/core";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { maintenanceService } from "../../services/maintenanceService";
 import type { Maintenance } from "../../types/maintenance";
+import { MaintenanceDetailModal } from "./MaintenanceDetailModal"; // импорт
+
+type MaintenanceHistoryProps = {
+	data: Maintenance[];
+	loading: boolean;
+};
 
 dayjs.extend(relativeTime);
 
@@ -40,42 +35,45 @@ const getTextColor = (status: string): string => {
 	}
 };
 
-export function MaintenanceHistory() {
-
-	const [data, setData] = useState<Maintenance[]>([]);
-	const [loading, setLoading] = useState(true);
-
-useEffect(() => {
-	maintenanceService
-		.getUserMaintenances()
-		.then((res) => {
-			console.log("API Response:", res);
-			setData(res); // при необходимости замени на res.data.data
-		})
-		.catch((err) => {
-			console.error("Ошибка при загрузке заявок:", err);
-		})
-		.finally(() => setLoading(false));
-}, []);
-
-
-	if (loading || !data || data.length === 0) {
+export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
+	if (loading) {
 		return (
 			<Container size="lg" py="xl">
-				<Title order={2} mb="md">
-					Заявки на обслуживание
-				</Title>
+				<Title order={2} mb="md">Заявки на обслуживание</Title>
 				<Paper radius="lg" withBorder>
 					<Center style={{ minHeight: 100 }}>
-						<Text color="dimmed" size="lg">
-							Нет заявок на обслуживание
-						</Text>
+						<Text color="dimmed" size="lg">Загрузка...</Text>
 					</Center>
 				</Paper>
-
 			</Container>
 		);
 	}
+
+	if (!data || data.length === 0) {
+		return (
+			<Container size="lg" py="xl">
+				<Title order={2} mb="md">Заявки на обслуживание</Title>
+				<Paper radius="lg" withBorder>
+					<Center style={{ minHeight: 100 }}>
+						<Text color="dimmed" size="lg">Нет заявок на обслуживание</Text>
+					</Center>
+				</Paper>
+			</Container>
+		);
+	}
+
+	const [modalOpened, setModalOpened] = useState(false);
+	const [selectedMaintenance, setSelectedMaintenance] = useState<Maintenance | null>(null);
+
+	const openDetailModal = async (id: number) => {
+		try {
+			const result = await maintenanceService.getMaintenanceById(id);
+			setSelectedMaintenance(result);
+			setModalOpened(true);
+		} catch (err) {
+			console.error("Ошибка при загрузке деталей:", err);
+		}
+	};
 
 	return (
 		<Container size="lg" py="xl">
@@ -128,6 +126,7 @@ useEffect(() => {
 													radius="md"
 													size="sm"
 													color="blue.7"
+													onClick={() => openDetailModal(item.id)}
 												>
 													Детализация
 												</Button>
@@ -143,6 +142,14 @@ useEffect(() => {
 					</Table>
 				</Paper>
 			</ScrollArea>
+
+			{/* Модальное окно детализации */}
+			<MaintenanceDetailModal
+				opened={modalOpened}
+				onClose={() => setModalOpened(false)}
+				maintenance={selectedMaintenance}
+			/>
+
 		</Container>
 	);
 }
