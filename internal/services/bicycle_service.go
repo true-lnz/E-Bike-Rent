@@ -16,6 +16,7 @@ type BicycleService struct {
 func NewBicycleService(repo repositories.BicycleRepo, rentRepo repositories.RentRepository) *BicycleService {
 	return &BicycleService{repo: repo, rentRepo: rentRepo}
 }
+
 func (s *BicycleService) GetAll(c context.Context) (*dto.BicyclesResponse, error) {
 	bicycles, err := s.repo.GetAll(c)
 
@@ -27,7 +28,7 @@ func (s *BicycleService) GetAll(c context.Context) (*dto.BicyclesResponse, error
 	for i, bicycle := range bicycles {
 		rentCount, err := s.rentRepo.CountInRent(c, bicycle.ID)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("не удалось посчитать: %w", err)
 		}
 		result[i] = dto.BicycleItem{
 			Bicycle:           bicycle,

@@ -29,6 +29,14 @@ func (r *rentRepository) CountInRent(c context.Context, bicycleID uint) (int, er
 	return int(total), err
 }
 
+func (r *rentRepository) GetByAccessoryId(c context.Context, bicycleID uint) (int, error) {
+	var total int64
+	err := r.db.WithContext(c).
+		Where("", bicycleID, "в обработке", "арендован", "аренда продлена").
+		Model(&models.Rent{}).
+		Count(&total).Error
+	return int(total), err
+}
 func (r *rentRepository) GetAll(c context.Context) ([]models.Rent, error) {
 	var rents []models.Rent
 	err := r.db.WithContext(c).Find(&rents).Error

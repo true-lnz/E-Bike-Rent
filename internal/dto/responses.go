@@ -11,3 +11,13 @@ type BicycleItem struct {
 	models.Bicycle
 	AvailableQuantity int `json:"available_quantity"`
 }
+
+type AccessoryResponse struct {
+	Items []AccessoryItem `json:"items"`
+	Total int             `json:"total"`
+}
+
+type AccessoryItem struct {
+	models.Accessory
+	AvailableQuantity int `json:"available_quantity"`
+}
