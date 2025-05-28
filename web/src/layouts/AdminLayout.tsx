@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, ScrollRestoration } from "react-router-dom";
 import AdminHeader from "../components/Headers/AdminHeader";
 
 export default function AdminLayout() {
@@ -8,6 +8,7 @@ export default function AdminLayout() {
       <main>
         <Outlet />
       </main>
+			<ScrollRestoration />
     </>
   );
 }

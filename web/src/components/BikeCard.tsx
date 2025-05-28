@@ -114,7 +114,7 @@ export default function BikeCard({ bike }: BikeCardProps) {
 							color="orange.5"
 							size="md"
 							component={Link}
-							to="/"
+							to={`/bikes/${bike.id}`}
 							style={{ flex: 1 }}
 						>
 							Забронировать
@@ -125,8 +125,7 @@ export default function BikeCard({ bike }: BikeCardProps) {
 							color="gray"
 							radius="xl"
 							size="xl"
-							component={Link}
-							to={`/bikes/${bike.id}`}
+							// onClick={}
 							aria-label="Подробнее"
 						>
 							<IconInfoCircle size={24} />

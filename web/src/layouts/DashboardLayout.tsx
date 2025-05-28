@@ -1,5 +1,5 @@
 import { LoadingOverlay, Text } from "@mantine/core";
-import { Outlet } from "react-router-dom";
+import { Outlet, ScrollRestoration } from "react-router-dom";
 import Footer from "../components/Footer";
 import DashboardHeader from "../components/Headers/DashboardHeader";
 import { useAuth } from "../hooks/useAuth";
@@ -11,13 +11,14 @@ export default function DashboardLayout() {
 	if (!isAuthenticated)
 		return <Text>Вы не авторизованы</Text>;
 
-  return (
-    <>
-      <DashboardHeader />
-      <main>
+	return (
+		<>
+			<DashboardHeader />
+			<main>
 				<Outlet />
-      </main>
+			</main>
 			<Footer />
-    </>
-  );
+			<ScrollRestoration />
+		</>
+	);
 }

@@ -6,22 +6,25 @@ import {
 	Container,
 	Group,
 	Image,
-	Loader,
 	SegmentedControl,
+	Skeleton,
 	Stack,
 	Table,
 	Text,
 	Title
 } from "@mantine/core";
+import { IconArrowLeft, IconMoodSad } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getBikeById } from "../services/bikeService";
 import type { Bike } from "../types/bike";
 
 export function BikeDetailPage() {
 	const { id } = useParams<{ id: string }>();
+	const navigator = useNavigate();
 	const [bike, setBike] = useState<Bike | null>(null);
 	const [loading, setLoading] = useState(true);
+	const [imageLoaded, setImageLoaded] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [rentalPeriod, setRentalPeriod] = useState("7");
 	const [expanded, setExpanded] = useState(true);
@@ -58,15 +61,37 @@ export function BikeDetailPage() {
 
 	if (loading) {
 		return (
-			<Center style={{ height: "100vh" }}>
-				<Loader size="lg" />
-			</Center>
+			<Container size="lg" py="xl">
+				<Skeleton height={40} width={300} mb="xl" />
+
+				<Group align="start" justify="space-between" gap="xl" wrap="nowrap">
+					{/* Скелетон для изображения */}
+					<Card withBorder radius="xl" w={380} h={380}>
+						<Skeleton height={380} radius="md" />
+					</Card>
+
+					{/* Скелетон для контента */}
+					<Stack style={{ flex: 1 }}>
+						<Skeleton height={30} width={350} mb="md" />
+						<Skeleton height={40} width={200} mt="xl" mb="xl" />
+						<Skeleton height={50} width={225} mb="xl" />
+
+						<Skeleton height={20} width={150} mb="md" />
+						{[...Array(10)].map((_, i) => (
+							<Group key={i} justify="space-between" w="100%">
+								<Skeleton height={16} width="40%" />
+								<Skeleton height={16} width="30%" />
+							</Group>
+						))}
+					</Stack>
+				</Group>
+			</Container>
 		);
 	}
 
 	if (error) {
 		return (
-			<Center style={{ height: "100vh" }}>
+			<Center style={{ height: "70vh" }}>
 				<Text color="red">{error}</Text>
 			</Center>
 		);
@@ -74,8 +99,21 @@ export function BikeDetailPage() {
 
 	if (!bike) {
 		return (
-			<Center style={{ height: "100vh" }}>
-				<Text>Велосипед не найден</Text>
+			<Center style={{ height: "70vh" }}>
+				<Stack align="center" gap="md">
+					<IconMoodSad size={80} stroke={1.5} color="var(--mantine-color-gray-5)" />
+					<Title order={1}>Велосипед не найден</Title>
+					<Text c="dimmed">К сожалению, мы не смогли найти запрашиваемый велосипед</Text>
+					<Button
+						variant="light"
+						onClick={() => navigator(-1)}
+						mt="md"
+						radius="xl"
+						leftSection={<IconArrowLeft size={18} />}
+					>
+						Вернуться назад
+					</Button>
+				</Stack>
 			</Center>
 		);
 	}
@@ -98,14 +136,17 @@ export function BikeDetailPage() {
 			<Title order={1} mb="xl">{bike.name}</Title>
 
 			<Group align="start" justify="space-between" gap="xl" wrap="nowrap">
-				<Card withBorder radius="xl" >
+				<Card withBorder radius="xl">
+					{!imageLoaded && <Skeleton height={380} width={380} radius="md" />}
 					<Image
-						src={"http://localhost:8080/uploads/kolyan-1.png"} /*  + bike.image_url} */
+						src={"http://localhost:8080/uploads/" + bike.image_url}
 						alt={bike.name}
 						width={380}
 						height={380}
 						fit="contain"
 						radius="md"
+						style={{ display: imageLoaded ? "block" : "none" }}
+						onLoad={() => setImageLoaded(true)}
 					/>
 				</Card>
 
@@ -162,9 +203,7 @@ export function BikeDetailPage() {
 						</Text>
 
 						<Collapse in={expanded}>
-							<Table
-								withRowBorders
-							>
+							<Table withRowBorders>
 								<Table.Tbody>
 									{rows.map((row) => (
 										<Table.Tr key={row.label}>
@@ -175,7 +214,6 @@ export function BikeDetailPage() {
 								</Table.Tbody>
 							</Table>
 						</Collapse>
-
 					</div>
 				</Stack>
 			</Group>
