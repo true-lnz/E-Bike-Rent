@@ -3,6 +3,7 @@ package models
 type Bicycle struct {
 	ID              uint   `gorm:"PrimaryKey" json:"id,omitempty"`
 	Name            string `json:"name,omitempty"`
+	Weight          int    `json:"weight,omitempty"`
 	MaxSpeed        int    `json:"max_speed,omitempty"`
 	MaxRange        int    `json:"max_range,omitempty"`
 	MaxLoad         int    `json:"max_load,omitempty"`
