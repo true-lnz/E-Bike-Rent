@@ -7,5 +7,10 @@ export default defineConfig({
     alias: {
       '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs',
     },
-  }
+  },
+  server: {
+    host: '127.0.0.1',
+    port: 5173,
+  },
+
 })
