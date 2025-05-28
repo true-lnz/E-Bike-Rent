@@ -1,12 +1,13 @@
 // src/services/authService.ts
 import axios from "axios";
+import { BASE_URL } from "../constants";
 
 export const authService = {
 	
   async logout(): Promise<void> {
     try {
       await axios.post(
-        "http://localhost:8080/api/auth/logout",
+        BASE_URL + "api/auth/logout",
         {},
         { withCredentials: true }
       );

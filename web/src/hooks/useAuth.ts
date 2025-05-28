@@ -1,6 +1,7 @@
 // hooks/useAuth.ts
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { BASE_URL } from "../constants";
 import type { User } from "../types/user";
 
 export function useAuth() {
@@ -10,7 +11,7 @@ export function useAuth() {
 	useEffect(() => {
 		const checkAuth = async () => {
 			try {
-				const res = await axios.get("http://localhost:8080/api/auth/me", {
+				const res = await axios.get(BASE_URL + "api/auth/me", {
 					withCredentials: true,
 				});
 				setUser(res.data.user);

@@ -9,6 +9,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../constants";
 import CompanySelect from "./CompanySelect";
 
 export function RegComplete() {
@@ -36,7 +37,7 @@ export function RegComplete() {
 		setError(null);
 		try {
 			await axios.post(
-				"http://localhost:8080/api/auth/complete-registration",
+				BASE_URL+ "api/auth/complete-registration",
 				{
 					email,
 					first_name: firstName,
