@@ -5,5 +5,5 @@ export type ModalOptions = {
   onCancel?: () => void;
   confirmText?: string;
   cancelText?: string;
-  withCancel?: boolean;
+  withCancel?: boolean; //sdsdsd
 };

@@ -11,6 +11,7 @@ import {
 import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../constants";
 import { validateEmail } from "../../utils/validateEmail";
 
 export default function AuthForm() {
@@ -32,7 +33,7 @@ export default function AuthForm() {
 		setLoading(true);
 
 		try {
-			await axios.post("http://localhost:8080/api/auth/send-code", { email });
+			await axios.post(BASE_URL+"api/auth/send-code", { email });
 			navigate("/auth/code", { state: { email, mode: "register" } });
 		} catch (err: any) {
 			console.error(err);

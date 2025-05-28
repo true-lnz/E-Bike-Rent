@@ -1,7 +1,7 @@
 // hooks/useAuth.ts
 import axios from "axios";
 import { useEffect, useState } from "react";
-import type { User } from "../types/user"; // определи тип User
+import type { User } from "../types/user";
 
 export function useAuth() {
 	const [user, setUser] = useState<User | null>(null);

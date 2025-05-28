@@ -7,7 +7,7 @@ export interface User {
 	patronymic: string;
 	email: string;
 	phone_number: string;
-	birthday: string; // "YYYY-MM-DD"
+	birthday: string; // "YYYY-MM-DD" sdsdsdsd
 	is_verified: boolean;
 	company_id?: number;
 	role: string;

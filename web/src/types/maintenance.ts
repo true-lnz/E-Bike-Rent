@@ -8,7 +8,7 @@ export type Maintenance = {
   created_at: string;
   price: number;
   start_date: string;
-  finish_date: string;
+  finish_date: string; //sdsdsd
 };
 
 export interface CreateMaintenanceRequest {

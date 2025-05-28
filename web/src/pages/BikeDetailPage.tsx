@@ -16,6 +16,7 @@ import {
 import { IconArrowLeft, IconMoodSad } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { BASE_IMAGE_URL } from "../constants";
 import { getBikeById } from "../services/bikeService";
 import type { Bike } from "../types/bike";
 
@@ -139,7 +140,7 @@ export function BikeDetailPage() {
 				<Card withBorder radius="xl">
 					{!imageLoaded && <Skeleton height={380} width={380} radius="md" />}
 					<Image
-						src={"http://localhost:8080/uploads/" + bike.image_url}
+						src={BASE_IMAGE_URL + bike.image_url}
 						alt={bike.name}
 						width={380}
 						height={380}

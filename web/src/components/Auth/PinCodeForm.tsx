@@ -2,6 +2,7 @@ import { Button, Card, Center, PinInput, rem, Stack, Text, Title, } from "@manti
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../constants";
 
 export default function PinCodeForm() {
     const [timer, setTimer] = useState(60);
@@ -42,7 +43,7 @@ export default function PinCodeForm() {
         setLoading(true);
         setError(null);
         try {
-            const res = await axios.post("http://localhost:8080/api/auth/verify-code",
+            const res = await axios.post(BASE_URL + "api/auth/verify-code",
                 {
                     email,
                     code,
@@ -72,7 +73,7 @@ export default function PinCodeForm() {
         setError(null);
 
         try {
-            await axios.post("http://localhost:8080/api/auth/send-code", {email});
+            await axios.post(BASE_URL + "api/auth/send-code", {email});
         } catch (err) {
             console.error("Ошибка при повторной отправке кода", err);
             setError("Не удалось отправить код. Попробуйте позже.");
