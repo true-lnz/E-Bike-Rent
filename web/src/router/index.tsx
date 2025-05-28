@@ -48,7 +48,7 @@ export const router = createBrowserRouter([
 					{ path: "bikes", element: <BikeList onlyAvailableByDefault={true} /> }, // todo ТУТ КОГДА НИБУДЬ БУДЕТ ПАРАМЕТР ОТОБРАЖЕНИЯ
 					{ path: "maintenances", element: <Maintenance /> },
 					{ path: "my-rents", element: <MyRent /> },
-					{ path: "contacts", element: <ContactPage /> },
+					{ path: "contact", element: <ContactPage /> },
 				],
 			},
 
