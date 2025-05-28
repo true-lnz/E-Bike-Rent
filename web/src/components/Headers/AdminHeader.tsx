@@ -1,8 +1,10 @@
-import { Box, Button, Container, Group, Image, rem, Text } from '@mantine/core';
+import { Box, Button, Container, Group, Image, rem } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import logo from "./../../assets/images/Logo512x512.png";
+import { NavLink } from './NavLink';
 
 export default function AdminHeader() {
+
 	return (
 		<Container size="lg" component="header" py="xl" style={{ zIndex: 100 }}>
 			<Box
@@ -30,18 +32,10 @@ export default function AdminHeader() {
 					</Link>
 
 					<Group gap="xl">
-						<Text component={Link} to="rent-requests" fw={500}>
-							Заявки на аренду
-						</Text>
-						<Text component={Link} to="maintenance-requests" fw={500}>
-							Заявки на обслуживание
-						</Text>
-						<Text component={Link} to="all-bikes" fw={500}>
-							Все велосипеды
-						</Text>
-						<Text component={Link} to="all-accessories" fw={500}>
-							Все аксессуары
-						</Text>
+						<NavLink to="rent-requests">Заявки на аренду</NavLink>
+						<NavLink to="maintenance-requests">Заявки на обслуживание</NavLink>
+						<NavLink to="all-bikes">Все велосипеды</NavLink>
+						<NavLink to="all-accessories">Все аксессуары</NavLink>
 					</Group>
 				</Group>
 
