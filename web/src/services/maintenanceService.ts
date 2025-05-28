@@ -23,7 +23,7 @@ export const maintenanceService = {
   },
   async getMaintenanceById(id: number): Promise<Maintenance> {
     const response = await axios.get(
-      BASE_URL + 'api/maintenance/' + {id},
+      BASE_URL + `api/maintenance/${id}`,
       {
         withCredentials: true,
       }

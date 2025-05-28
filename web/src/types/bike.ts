@@ -6,7 +6,7 @@ export interface Bike {
   max_speed: number;
   max_range: number;
   max_load: number;
-  power: number; //sdsdsd
+  power: number;
   charge_time_hours: number;
   battery: string;
   suspension: boolean;
