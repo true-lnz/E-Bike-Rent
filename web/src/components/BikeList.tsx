@@ -6,14 +6,19 @@ import BikeCard from "./BikeCard";
 
 export default function BikeListPage() {
   const [bikes, setBikes] = useState<Bike[]>([]);
+  const [total, setTotal] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getAllBikes()
-      .then(setBikes)
+      .then(([bikes, total]) => {
+        setBikes(bikes);
+        setTotal(total);
+      })
       .catch((error) => console.error("Ошибка загрузки:", error))
       .finally(() => setLoading(false));
   }, []);
+
 
   if (loading) return <Loader />;
   

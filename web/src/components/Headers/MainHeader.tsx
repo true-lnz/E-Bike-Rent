@@ -41,10 +41,10 @@ export default function Header() {
 							<Image src={logo} alt="FulGaz" w={64} h={64} radius="sm" />
 						</Link>
 						<Group gap="xl">
-							<NavLink to="#bikes">Аренда</NavLink>
-							<NavLink to="#accessories">Аксессуары</NavLink>
-							<NavLink to="#maintenance">Обслуживание</NavLink>
-							<NavLink to="#contact">Контакты</NavLink>
+							<NavLink to="/#bikes">Аренда</NavLink>
+							<NavLink to="/#accessories">Аксессуары</NavLink>
+							<NavLink to="/#maintenance">Обслуживание</NavLink>
+							<NavLink to="/#contact">Контакты</NavLink>
 						</Group>
 					</Group>
 
