@@ -16,6 +16,7 @@ import AuthPage from "../pages/Auth/AuthPage";
 import { BikeDetailPage } from "../pages/BikeDetailPage";
 import ContactPage from "../pages/ContactPage";
 import HomePage from "../pages/HomePage";
+import PolicyPage from "../pages/PolicyPage";
 
 export const router = createBrowserRouter([
 	{
@@ -26,7 +27,11 @@ export const router = createBrowserRouter([
 			{ path: "/auth", element: <AuthPage /> },
 			{ path: "/auth/code", element: <PinCodeForm /> },
 			{ path: "auth/complete", element: <RegComplete /> },
+
 			{ path: "/bikes/:id", element: <BikeDetailPage /> },
+
+			{ path: "/policy", element: <PolicyPage /> },
+
 			{ path: "*", element: <HomePage /> },
 		]
 	},
