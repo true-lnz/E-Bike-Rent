@@ -6,6 +6,7 @@ import (
 	"E-Bike-Rent/internal/database"
 	"E-Bike-Rent/internal/routes"
 	"fmt"
+	"log"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -23,9 +24,12 @@ func App(cfg *config.Config) error {
 
 	app.Use(cors.New(cors.Config{
 		AllowOriginsFunc: func(origin string) bool {
+			log.Println("Origin:", origin)
 			allowedOrigins := map[string]bool{
 				"http://localhost:5173": true,
 				"http://localhost:8080": true,
+				"http://127.0.0.1:5173": true,
+				"http://127.0.0.1:8080": true,
 			}
 			return allowedOrigins[origin]
 		},
