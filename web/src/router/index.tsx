@@ -44,8 +44,8 @@ export const router = createBrowserRouter([
 				path: "/dashboard",
 				element: <DashboardLayout />,
 				children: [
-					{ index: true, element: <Navigate to="maintenances" replace /> }, // Дефолтный редирект
-					{ path: "bikes", element: <BikeList /> }, // todo ТУТ КОГДА НИБУДЬ БУДЕТ ПАРАМЕТР ОТОБРАЖЕНИЯ
+					{ index: true, element: <Navigate to="bikes" replace /> }, // Дефолтный редирект
+					{ path: "bikes", element: <BikeList onlyAvailableByDefault={true} /> }, // todo ТУТ КОГДА НИБУДЬ БУДЕТ ПАРАМЕТР ОТОБРАЖЕНИЯ
 					{ path: "maintenances", element: <Maintenance /> },
 					{ path: "my-rents", element: <MyRent /> },
 					{ path: "contacts", element: <ContactPage /> },

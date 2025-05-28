@@ -18,4 +18,5 @@ export interface Bike {
   brake_system: string;
   day_price: number;
   quantity: number;
+	available_quantity: number;
 }
