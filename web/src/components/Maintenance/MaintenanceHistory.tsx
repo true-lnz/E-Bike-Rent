@@ -16,21 +16,21 @@ dayjs.extend(relativeTime);
 
 const statusColors: Record<string, string> = {
 	"заявка в обработке": "gray.2",
-	"ремонтируется": "green.1",
-	"готово к выдаче": "green.1",
-	"отменено": "red.1",
+	"ремонтируется": "orange.1",
+	"готов к выдаче": "green.1",
+	"отказано": "red.1",
 	"завершен": "green.1",
 };
 
 const getTextColor = (status: string): string => {
 	switch (status) {
-		case "готово к выдаче":
+		case "готов к выдаче":
 			return "green";
 		case "ремонтируется":
-			return "green";
+			return "orange";
 		case "заявка в обработке":
 			return "gray";
-		case "отменено":
+		case "отказано":
 			return "red";
 		case "завершен":
 			return "green";
