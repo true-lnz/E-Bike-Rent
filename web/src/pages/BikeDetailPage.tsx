@@ -32,7 +32,6 @@ export function BikeDetailPage() {
 
 	useEffect(() => {
 		if (!id) return;
-
 		setLoading(true);
 		setError(null);
 
@@ -45,14 +44,10 @@ export function BikeDetailPage() {
 	const calculatePrice = () => {
 		if (!bike) return 0;
 		switch (rentalPeriod) {
-			case "7":
-				return bike.day_price * 7;
-			case "14":
-				return bike.day_price * 14;
-			case "30":
-				return bike.day_price * 30;
-			default:
-				return bike.day_price;
+			case "7": return bike.day_price * 7;
+			case "14": return bike.day_price * 14;
+			case "30": return bike.day_price * 30;
+			default: return bike.day_price;
 		}
 	};
 
@@ -64,19 +59,14 @@ export function BikeDetailPage() {
 		return (
 			<Container size="lg" py="xl">
 				<Skeleton height={40} width={300} mb="xl" />
-
 				<Group align="start" justify="space-between" gap="xl" wrap="nowrap">
-					{/* Скелетон для изображения */}
 					<Card withBorder radius="xl" w={380} h={380}>
 						<Skeleton height={380} radius="md" />
 					</Card>
-
-					{/* Скелетон для контента */}
 					<Stack style={{ flex: 1 }}>
 						<Skeleton height={30} width={350} mb="md" />
 						<Skeleton height={40} width={200} mt="xl" mb="xl" />
 						<Skeleton height={50} width={225} mb="xl" />
-
 						<Skeleton height={20} width={150} mb="md" />
 						{[...Array(10)].map((_, i) => (
 							<Group key={i} justify="space-between" w="100%">
@@ -121,21 +111,24 @@ export function BikeDetailPage() {
 
 	const rows = [
 		{ label: "Макс. скорость", value: `до ${bike.max_speed} км/ч` },
-		{ label: "Пробег", value: `до ${bike.max_range} км` },
-		{ label: "Мощность", value: `${bike.power} Вт` },
-		{ label: "Батарея", value: bike.battery },
-		{ label: "Зарядка", value: `${bike.charge_time_hours} часов` },
-		{ label: "Нагрузка", value: `${bike.max_load} кг` },
-		{ label: "Ёмкость", value: `${bike.power / 12} Ah` },
-		{ label: "Тормоза", value: bike.brake_system },
-		{ label: "Шины", value: `${bike.wheel_size}×${bike.wheel_type}` },
+		{ label: "Запас хода", value: `до ${bike.max_range} км` },
+		{ label: "Мощность двигателя", value: `${bike.power} Вт` },
+		{ label: "Тип батареи", value: bike.battery },
+		{ label: "Время зарядки", value: `${bike.charge_time_hours} ч` },
+		{ label: "Макс. нагрузка", value: `${bike.max_load} кг` },
 		{ label: "Вес", value: `${bike.weight} кг` },
+		{ label: "Тормозная система", value: bike.brake_system },
+		{ label: "Тип тормозов", value: bike.brakes },
+		{ label: "Размер колеса", value: `${bike.wheel_size}″` },
+		{ label: "Тип колеса", value: bike.wheel_type },
+		{ label: "Привод", value: bike.drive },
+		{ label: "Подвеска", value: bike.suspension ? "Есть" : "Нет" },
+		{ label: "Рама", value: bike.frame },
 	];
 
 	return (
 		<Container size="lg" py="xl">
 			<Title order={1} mb="xl">{bike.name}</Title>
-
 			<Group align="start" justify="space-between" gap="xl" wrap="nowrap">
 				<Card withBorder radius="xl">
 					{!imageLoaded && <Skeleton height={380} width={380} radius="md" />}
@@ -192,15 +185,7 @@ export function BikeDetailPage() {
 							mb="xs"
 							mt="md"
 						>
-							{expanded ? (
-								<Group gap={4} wrap="nowrap">
-									Скрыть характеристики
-								</Group>
-							) : (
-								<Group gap={4} wrap="nowrap">
-									Все характеристики
-								</Group>
-							)}
+							{expanded ? "Скрыть характеристики" : "Все характеристики"}
 						</Text>
 
 						<Collapse in={expanded}>
