@@ -116,7 +116,6 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 
 								const createdAt = formatDate(item.created_at);
 								const startDate = formatDate(item.start_date);
-								const finishDate = formatDate(item.finish_date);
 
 								let repairDuration = "—";
 								if (

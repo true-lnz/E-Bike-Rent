@@ -4,10 +4,10 @@ import { Outlet } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
 export default function DashboardPage() {
-	const { user, isAuthenticated, loading } = useAuth();
+	const { isAuthenticated, loading } = useAuth();
 
 	if (loading) return <Loader />;
-	if (!isAuthenticated) 
+	if (!isAuthenticated)
 		return <Text>Вы не авторизованы</Text>;
 
 	return (

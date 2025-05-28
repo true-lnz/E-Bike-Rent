@@ -8,7 +8,7 @@ import {
 	Textarea,
 	TextInput,
 } from "@mantine/core";
-import { IconSquareCheck } from "@tabler/icons-react";
+import { IconExclamationCircle, IconSquareCheck } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 
 type Props = {

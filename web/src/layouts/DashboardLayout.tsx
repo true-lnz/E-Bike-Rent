@@ -5,7 +5,7 @@ import DashboardHeader from "../components/Headers/DashboardHeader";
 import { useAuth } from "../hooks/useAuth";
 
 export default function DashboardLayout() {
-	const { user, isAuthenticated, loading } = useAuth();
+	const { isAuthenticated, loading } = useAuth();
 
 	if (loading) return <LoadingOverlay />;
 	if (!isAuthenticated)
