@@ -71,6 +71,14 @@ func SetupRoutes(app *fiber.App, cfg *config.Config, ctx *context.AppContext) {
 	adminMaintenanceGroup.Put("/:id", handlers.UpdateMaintenance(ctx.MaintenanceService))
 	adminMaintenanceGroup.Get("/", handlers.GetAllMaintenances(ctx.MaintenanceService))
 
+	rentGroup := api.Group("/rent").Use(requireAuth)
+	rentGroup.Post("/", handlers.RentBicycle(ctx.RentService))
+	rentGroup.Get("/", handlers.GetUsersRents(ctx.RentService))
+
+	adminRentGroup := admin.Group("/rent")
+	adminRentGroup.Get("/", handlers.GetAllRents(ctx.RentService))
+	adminRentGroup.Put("/:id", handlers.UpdateRent(ctx.RentService))
+
 	app.Static("/", "./web/dist")
 	app.Get("*", func(c *fiber.Ctx) error {
 		return c.SendFile("./web/dist/index.html")

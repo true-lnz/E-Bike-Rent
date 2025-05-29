@@ -26,7 +26,6 @@ func CreateMaintenance(maintenanceService *services.MaintenanceService) fiber.Ha
 func GetUsersMaintenanceInfo(maintenanceService *services.MaintenanceService) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		maintenanceID := utils.ParseUint(c.Params("id"))
-
 		maintenance, err := maintenanceService.GetMaintenance(c.Context(), maintenanceID)
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})

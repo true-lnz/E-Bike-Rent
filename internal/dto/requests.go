@@ -1,5 +1,7 @@
 package dto
 
+import "time"
+
 type CompleteRegistrationRequest struct {
 	Email       string `json:"email"`
 	LastName    string `json:"last_name"`
@@ -38,4 +40,19 @@ type UpdateMaintenanceRequest struct {
 	AdminMessage string `json:"admin_message"`
 	Price        int    `json:"price"`
 	FinishDate   string `json:"finish_date"`
+}
+
+type CreateRentRequest struct {
+	RentalDays  int    `json:"rental_days"`
+	BicycleID   uint   `json:"bicycle_id,omitempty"`
+	Accessories []uint `json:"accessories"`
+}
+
+type UpdateRentRequest struct {
+	StartDate      *time.Time `json:"start_date,omitempty"`
+	ExpireDate     *time.Time `json:"expire_date"`
+	Status         *string    `json:"status"`
+	RentPrice      *int       `json:"rent_price"`
+	AccessoryPrice *int       `json:"accessory_price"`
+	Accessories    *[]uint    `json:"accessories"`
 }

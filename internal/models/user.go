@@ -14,7 +14,7 @@ type User struct {
 	VerificationCode string        `json:"-"`
 	IsVerified       bool          `json:"is_verified"`
 	CompanyID        uint          `json:"company_id"`
-	Company          Company       `gorm:"foreignKey:CompanyID" json:"company"`
-	Maintenances     []Maintenance `gorm:"foreignKey:UserID" json:"maintenances"`
-	Rents            []Rent        `gorm:"foreignKey:UserID" json:"rents"`
+	Company          *Company      `gorm:"foreignKey:CompanyID" json:"company,omitempty"`
+	Maintenances     []Maintenance `gorm:"foreignKey:UserID" json:"maintenances,omitempty"`
+	Rents            []Rent        `gorm:"foreignKey:UserID" json:"rents,omitempty"`
 }
