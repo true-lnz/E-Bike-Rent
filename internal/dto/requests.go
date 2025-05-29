@@ -56,3 +56,8 @@ type UpdateRentRequest struct {
 	AccessoryPrice *int       `json:"accessory_price"`
 	Accessories    *[]uint    `json:"accessories"`
 }
+
+type FeedbackRequest struct {
+	PhoneNumber string `json:"phone_number,omitempty"`
+	Text        string `json:"text,omitempty"`
+}

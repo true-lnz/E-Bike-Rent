@@ -2,6 +2,7 @@ package services
 
 import (
 	"E-Bike-Rent/internal/config"
+	"E-Bike-Rent/internal/dto"
 	"fmt"
 
 	"gopkg.in/gomail.v2"
@@ -125,6 +126,60 @@ func SendMaintenanceStatusUpdate(to string, bicycleName string, newStatus string
 	`, bicycleName, newStatus)
 
 	m.SetBody("text/html", body)
+	d := gomail.NewDialer(cfg.SMTP.Host, cfg.SMTP.Port, cfg.SMTP.User, cfg.SMTP.Password)
+	return d.DialAndSend(m)
+}
+
+func SendFeedbackLetter(request dto.FeedbackRequest, cfg *config.Config) error {
+	m := gomail.NewMessage()
+	m.SetAddressHeader("From", cfg.SMTP.User, cfg.SMTP.From)
+	m.SetHeader("To", cfg.SMTP.User)
+	m.SetHeader("Subject", "📩 Новый вопрос от пользователя")
+
+	body := fmt.Sprintf(`
+		<!DOCTYPE html>
+		<html lang="ru">
+		<head>
+			<meta charset="UTF-8">
+			<style>
+				body {
+					font-family: Arial, sans-serif;
+					background-color: #f4f4f4;
+					padding: 20px;
+					color: #333;
+				}
+				.container {
+					background-color: #fff;
+					border-radius: 8px;
+					box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+					padding: 20px;
+					max-width: 500px;
+					margin: auto;
+				}
+				.label {
+					font-weight: bold;
+				}
+				.footer {
+					margin-top: 30px;
+					font-size: 12px;
+					color: #888;
+				}
+			</style>
+		</head>
+		<body>
+			<div class="container">
+				<h2>Поступил новый вопрос</h2>
+				<p><span class="label">Номер телефона:</span> %s</p>
+				<p><span class="label">Сообщение:</span></p>
+				<p style="white-space: pre-wrap;">%s</p>
+				<div class="footer">Это письмо сформировано автоматически</div>
+			</div>
+		</body>
+		</html>
+	`, request.PhoneNumber, request.Text)
+
+	m.SetBody("text/html", body)
+
 	d := gomail.NewDialer(cfg.SMTP.Host, cfg.SMTP.Port, cfg.SMTP.User, cfg.SMTP.Password)
 	return d.DialAndSend(m)
 }

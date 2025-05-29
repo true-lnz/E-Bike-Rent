@@ -79,6 +79,9 @@ func SetupRoutes(app *fiber.App, cfg *config.Config, ctx *context.AppContext) {
 	adminRentGroup.Get("/", handlers.GetAllRents(ctx.RentService))
 	adminRentGroup.Put("/:id", handlers.UpdateRent(ctx.RentService))
 
+	feedBackGroup := api.Group("/feedback")
+	feedBackGroup.Post("/", handlers.SendFeedback(cfg))
+
 	app.Static("/", "./web/dist")
 	app.Get("*", func(c *fiber.Ctx) error {
 		return c.SendFile("./web/dist/index.html")
