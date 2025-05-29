@@ -19,7 +19,7 @@ export default function Header() {
 	return (
 		<>
 			{/* Шапка */}
-			<Container size="lg" my="xl" component="header" pos="sticky" top="0"
+			<Container size="lg" mt="xl" component="header" pos="sticky" top="0"
 				style={{
 					zIndex: 102,
 				}}>
