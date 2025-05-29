@@ -3,7 +3,7 @@ import logo from "../assets/images/Logo512x512.png";
 
 export default function ContactCard() {
 	return (
-		<Container size="xxl" p={0}>
+		<Container id="contact" size="xxl" p={0}>
 			<Center>
 				<Box
 				pos="relative"

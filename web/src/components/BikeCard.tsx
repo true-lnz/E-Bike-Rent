@@ -46,11 +46,12 @@ export default function BikeCard({ bike }: BikeCardProps) {
             </Text>
           </Box>
           <Badge
-            color={bike.quantity > 0 ? "lime" : "gray"}
-            variant="filled"
+            color="blue.7"
+						size="lg"
+            variant="light"
             radius="xl"
           >
-            {bike.quantity > 0 ? "В наличии" : "Нет в наличии"}
+            до {bike.max_range} км
           </Badge>
         </Group>
 

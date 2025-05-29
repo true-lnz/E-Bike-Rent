@@ -55,7 +55,7 @@ export function MaintenanceList({ onCreated }: MaintenanceListProps) {
 	};
 
 	return (
-		<Container size="lg" py="xl">
+		<Container id="maintenance" size="lg" py="xl">
 			<Title order={1} mb="md">
 				Обслуживание и ремонт
 			</Title>

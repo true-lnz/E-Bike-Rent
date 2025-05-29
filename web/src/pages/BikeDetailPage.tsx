@@ -131,17 +131,20 @@ export function BikeDetailPage() {
 			<Title order={1} mb="xl">{bike.name}</Title>
 			<Group align="start" justify="space-between" gap="xl" wrap="nowrap">
 				<Card withBorder radius="xl">
-					{!imageLoaded && <Skeleton height={380} width={380} radius="md" />}
-					<Image
-						src={BASE_IMAGE_URL + bike.image_url}
-						alt={bike.name}
-						width={380}
-						height={380}
-						fit="contain"
-						radius="md"
-						style={{ display: imageLoaded ? "block" : "none" }}
-						onLoad={() => setImageLoaded(true)}
-					/>
+					<Center>
+						{!imageLoaded && <Skeleton height={380} width={380} radius="md" />}
+						<Image
+							src={BASE_IMAGE_URL + bike.image_url}
+							alt={bike.name}
+							w={450}
+							h={450}
+							fit="contain"
+							radius="md"
+							style={{ display: imageLoaded ? "block" : "none" }}
+							onLoad={() => setImageLoaded(true)}
+						/>
+					</Center>
+
 				</Card>
 
 				<Stack style={{ flex: 1 }} justify="space-between">
@@ -163,7 +166,7 @@ export function BikeDetailPage() {
 						/>
 
 						<Text fz={32} fw={700} mt="xl" mb="sm">
-							{calculatePrice().toLocaleString()} ₽ / {rentalPeriod === "30" ? "месяц" : "неделя"}
+							{calculatePrice().toLocaleString()} ₽ / {rentalPeriod === "30" ? "месяц" : (rentalPeriod === "14" ? "2 недели" : "неделя")}
 						</Text>
 
 						<Button
