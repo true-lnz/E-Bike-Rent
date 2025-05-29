@@ -7,6 +7,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"math/rand"
+	"mime/multipart"
+	"path/filepath"
 	"strconv"
 	"time"
 )
@@ -32,6 +34,16 @@ func GenerateJWT(user *models.User, cfg *config.Config) (string, error) {
 
 	tokenString, _ := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(cfg.JWTSecret))
 	return tokenString, nil
+}
+
+func SaveImage(c *fiber.Ctx, file *multipart.FileHeader) (string, error) {
+	var filename string
+	filename = strconv.FormatInt(time.Now().UnixNano(), 10) + filepath.Ext(file.Filename)
+	savePath := "./public/uploads/" + filename
+	if err := c.SaveFile(file, savePath); err != nil {
+		return "", fmt.Errorf("ошибка при сохранении файла: %w", err)
+	}
+	return filename, nil
 }
 
 func ParseAndValidateJWT(tokenString string, cfg *config.Config) (uint, error) {

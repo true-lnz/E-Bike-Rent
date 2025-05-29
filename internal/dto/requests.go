@@ -61,3 +61,9 @@ type FeedbackRequest struct {
 	PhoneNumber string `json:"phone_number,omitempty"`
 	Text        string `json:"text,omitempty"`
 }
+
+type CreateUpdateAccessoryRequest struct {
+	Name     *string `json:"name"`
+	Quantity *int    `json:"quantity"`
+	Price    *int    `json:"price"`
+}

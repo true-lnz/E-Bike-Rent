@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"E-Bike-Rent/internal/dto"
 	"E-Bike-Rent/internal/models"
 	"E-Bike-Rent/internal/services"
 	"E-Bike-Rent/internal/utils"
@@ -31,28 +32,50 @@ func DeleteAccessory(accessoryService *services.AccessoryService) fiber.Handler 
 
 func UpdateAccessory(accessoryService *services.AccessoryService) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		var req models.Accessory
+		accessoryID := utils.ParseUint(c.Params("id"))
+		var req dto.CreateUpdateAccessoryRequest
 		if err := c.BodyParser(&req); err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 		}
-		accessoryID := utils.ParseUint(c.Params("id"))
-		req.ID = accessoryID
-		updated, err := accessoryService.Update(c.Context(), &req)
+		updated, err := accessoryService.Update(c, &req, accessoryID)
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 		}
+		return c.Status(fiber.StatusCreated).JSON(fiber.Map{"accessory": updated})
 
-		return c.JSON(updated)
 	}
 }
 
 func CreateAccessory(accessoryService *services.AccessoryService) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		var req models.Accessory
+		var req dto.CreateUpdateAccessoryRequest
 		if err := c.BodyParser(&req); err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 		}
-		created, err := accessoryService.Create(c.Context(), &req)
+
+		file, err := c.FormFile("image")
+		var filename string
+		if err == nil && file != nil {
+			filename, err = utils.SaveImage(c, file)
+			if err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+			}
+		}
+
+		newAccessory := &models.Accessory{
+			ImageURL: filename,
+		}
+		if req.Name != nil {
+			newAccessory.Name = *req.Name
+		}
+		if req.Quantity != nil {
+			newAccessory.Quantity = *req.Quantity
+		}
+		if req.Price != nil {
+			newAccessory.Price = *req.Price
+		}
+		created, err := accessoryService.Create(c.Context(), newAccessory)
+
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 		}
