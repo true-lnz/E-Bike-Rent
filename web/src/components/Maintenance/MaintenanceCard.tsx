@@ -1,58 +1,95 @@
-import { Button, Card, Grid, rem, Stack, Text } from "@mantine/core";
-import { IconBike, IconPlus } from "@tabler/icons-react";
+import { Box, Button, Card, Image, rem, Text } from "@mantine/core";
+import { IconPlus } from "@tabler/icons-react";
 import type { ReactNode } from "react";
 
 export function MaintenanceCard({
-  title,
-  description,
-  onApplyClick,
-  icon = <IconBike size={120} color="black" />,
-  background = "#fda65b",
-  textColor = "white"
+	title,
+	description,
+	onApplyClick,
+	icon = "",
+	background = "#fff",
+	textColor = "black",
+	btnVariant = "light"
 }: {
-  title: string;
-  description: string;
-  onApplyClick: () => void;
-  icon?: ReactNode;
-  background?: string;
-  textColor?: string;
+	title: string;
+	description: string;
+	onApplyClick: () => void;
+	icon?: string | ReactNode;
+	background?: string;
+	textColor?: string;
+	btnVariant?: string;
 }) {
-  return (
-    <Card
-      shadow="md"
-      padding="xl"
-      radius="xl"
-      bg={background}
-      style={{ height: "100%", display: "flex", flexDirection: "column" }}
-    >
-      <Text fz={rem(24)} fw={700} c={textColor} mb="md">
-        {title}
-      </Text>
+	const renderIcon = () => {
+		if (!icon) return null;
 
-      <Grid grow mt="auto" align="end">
-        <Grid.Col span={8}>
-          <Stack gap="sm">
-            <Text c={textColor} size="md">
-              {description}
-            </Text>
-            <Button
-              onClick={onApplyClick}
-              variant="white"
-              color="dark"
-              radius="xl"
-							size="md"
-              leftSection={<IconPlus size={18} />}
-              w="fit-content"
-            >
-              Оставить заявку
-            </Button>
-          </Stack>
-        </Grid.Col>
+		if (typeof icon === 'string') {
+			return <Image src={icon} width={150} alt={title} />;
+		}
 
-        <Grid.Col span={4} style={{ textAlign: "right" }}>
-          {icon}
-        </Grid.Col>
-      </Grid>
-    </Card>
-  );
+		return icon;
+	};
+
+	return (
+		<Card
+			shadow="md"
+			p="xl"
+			radius="xl"
+			bg={background}
+			pos="relative" // Для абсолютного позиционирования иконки
+			style={{
+				height: "100%",
+				display: "flex",
+				flexDirection: "column",
+				overflow: "hidden" // Чтобы иконка не выходила за границы
+			}}
+		>
+			{/* Абсолютно позиционированная иконка */}
+			<Box
+				pos="absolute"
+				right={30}
+				bottom={30}
+				w={170}
+				style={{
+					zIndex: 1,
+				}}
+			>
+				{renderIcon()}
+			</Box>
+
+			<Text fz={rem(32)} maw="90%" fw={700} c={textColor} mb="md" lh={1.2}>
+				{title}
+			</Text>
+
+			{/* Контентная часть (2/3 ширины) */}
+			<Box
+				style={{
+					flex: 1,
+					display: "flex",
+					flexDirection: "column",
+					width: "66%",
+					zIndex: 2,
+					position: "relative"
+				}}
+			>
+				<Text c={textColor} size="md" mb="auto">
+					{description}
+				</Text>
+
+				{/* Кнопка всегда внизу */}
+				<Button
+					onClick={onApplyClick}
+					variant={btnVariant}
+					color="dark"
+					radius="xl"
+					size="md"
+					leftSection={<IconPlus size={18} />}
+					w="fit-content"
+					mt="lg"
+					style={{ alignSelf: "flex-start" }}
+				>
+					Оставить заявку
+				</Button>
+			</Box>
+		</Card>
+	);
 }
