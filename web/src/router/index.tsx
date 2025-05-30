@@ -1,11 +1,11 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import AdminAllAccessories from "../components/AdminAllAccessories";
-import AdminAllBikes from "../components/AdminAllBikes";
-import AdminMaintenanceRequests from "../components/AdminMaintenanceRequests";
-import AdminRentRequests from "../components/AdminRentRequest";
+import AdminAllAccessories from "../components/Admin/AdminAllAccessories";
+import AdminAllBikes from "../components/Admin/AdminAllBikes";
+import AdminMaintenanceRequests from "../components/Admin/AdminMaintenanceRequests";
+import AdminRentRequests from "../components/Admin/AdminRentRequest";
 import PinCodeForm from "../components/Auth/PinCodeForm";
 import { RegComplete } from "../components/Auth/RegComplete";
-import BikeList from "../components/BikeList";
+import BikeList from "../components/Bikes/BikeList";
 import Maintenance from "../components/Maintenance/Maintenance";
 import MyRent from "../components/MyRent";
 import PrivateRoute from "../components/PrivateRoute";

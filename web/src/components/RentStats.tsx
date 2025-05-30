@@ -6,17 +6,22 @@ export default function RentStats() {
 	return (
 		<Container size="lg" my={100}>
 			<Card bg="gray.0" radius="xl" p="xl">
-				<Group justify="space-around">
+				<Group justify="space-around" align="flex-start">
 					{[
-						{ value: 12, label: 'какая-то статистика' },
-						{ value: 12, label: 'какая-то статистика' },
-						{ value: 3, label: 'какая-то статистика' },
+						{ value: "300+", label: 'пользователей уже арендовали наши велосипеды' },
+						{ value: "1.5ч", label: 'среднее время ремонта' },
+						{ value: "25%", label: 'скидка при долгосрочной аренде' },
 					].map((stat, index) => (
 						<Center key={index} style={{ flexDirection: 'column' }}>
-							<Text fz={80} fw={700} c="orange">
+							<Text
+								fz={80}
+								fw={700}
+								variant="gradient"
+								gradient={{ from: 'orange.5', to: 'blue', deg: 90 }}
+							>
 								{stat.value}
 							</Text>
-							<Text size="lg">{stat.label}</Text>
+							<Text size="lg" ta="center" w={300}>{stat.label}</Text>
 						</Center>
 					))}
 				</Group>

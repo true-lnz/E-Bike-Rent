@@ -10,25 +10,25 @@ import {
 	Title
 } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { getAllAccessories } from "../services/accessoryService";
-import type { Accessory } from "../types/accessory";
-import AccessoryCard from "./AccessoryCard";
+import { getAllBikes } from "../../services/bikeService";
+import type { Bike } from "../../types/bike";
+import BikeCard from "./BikeCard";
 
-interface AccessoriesListPageProps {
+interface BikeListPageProps {
 	onlyAvailableByDefault?: boolean;
 }
 
-export default function AccessoriesList({
+export default function BikeListPage({
 	onlyAvailableByDefault = false,
-}: AccessoriesListPageProps) {
-	const [accessories, setAccessories] = useState<Accessory[]>([]);
+}: BikeListPageProps) {
+	const [bikes, setBikes] = useState<Bike[]>([]);
 	const [loading, setLoading] = useState(true);
 	const onlyAvailable = onlyAvailableByDefault;
 
 	useEffect(() => {
-		getAllAccessories()
-			.then(([fetchedAccessories]) => {
-				setAccessories(fetchedAccessories);
+		getAllBikes()
+			.then(([fetchedBikes]) => {
+				setBikes(fetchedBikes);
 			})
 			.catch((error) => console.error("Ошибка загрузки:", error))
 			.finally(() => setLoading(false));
@@ -36,30 +36,30 @@ export default function AccessoriesList({
 
 	if (loading) return <LoadingOverlay visible={true} zIndex={101} />;
 
-	const visibleAccessories = onlyAvailable
-		? accessories.filter((accessories) => accessories.available_quantity > 0)
-		: accessories;
+	const visibleBikes = onlyAvailable
+		? bikes.filter((bike) => bike.available_quantity > 0)
+		: bikes;
 
-	const noVisibleAccessories = false; /* visibleAccessories.length === 0; */
+	const noVisibleBikes = visibleBikes.length === 0;
 
 	return (
-		<Container id="accessories" size="lg" py="100">
+		<Container id="bikes" size="lg" pt="xl">
 			{onlyAvailable ? (
 				<Title order={1} size={45} mb="xl">
-					Доступно акссесуары
+					Доступно к аренде
 				</Title>
 			) : (
 				<Stack mb="xl">
 					<Title order={1} size={45} lh={0.5}>
-						Добавь в свою подписку
+						Выбери свою идеальную модель
 					</Title>
 					<Title order={1} size={45} c="orange.5">
-						акссесуары
+						электровелосипеда
 					</Title>
 				</Stack>
 			)}
 
-			{noVisibleAccessories ? (
+			{noVisibleBikes ? (
 				<Card withBorder radius="lg" p="xl">
 					<Center>
 						<Stack align="center" gap="md">
@@ -74,9 +74,9 @@ export default function AccessoriesList({
 					</Center>
 				</Card>
 			) : (
-				<SimpleGrid cols={5} spacing="sm">
-					{visibleAccessories.map((accessories) => (
-						<AccessoryCard key={accessories.id} accessory={accessories} />
+				<SimpleGrid cols={3} spacing="lg">
+					{visibleBikes.map((bike) => (
+						<BikeCard key={bike.id} bike={bike} />
 					))}
 				</SimpleGrid>
 			)}

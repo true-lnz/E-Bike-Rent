@@ -10,8 +10,8 @@ import {
 	Text,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
-import { BASE_IMAGE_URL } from "../constants";
-import type { Bike } from "../types/bike";
+import { BASE_IMAGE_URL } from "../../constants";
+import type { Bike } from "../../types/bike";
 
 interface BikeDetailsModalProps {
 	bike: Bike;

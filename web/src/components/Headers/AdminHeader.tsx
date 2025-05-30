@@ -1,4 +1,4 @@
-import { Box, Button, Container, Group, Image, rem } from '@mantine/core';
+import { Badge, Box, Button, Container, Group, Image, rem } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import logo from "./../../assets/images/Logo512x512.png";
 import { NavLink } from './NavLink';
@@ -31,7 +31,7 @@ export default function AdminHeader() {
 						/>
 					</Link>
 
-					<Group gap="xl">
+					<Group gap="md">
 						<NavLink to="rent-requests">Заявки на аренду</NavLink>
 						<NavLink to="maintenance-requests">Заявки на обслуживание</NavLink>
 						<NavLink to="all-bikes">Все велосипеды</NavLink>
@@ -40,7 +40,8 @@ export default function AdminHeader() {
 				</Group>
 
 				{/* Телефон + кнопка */}
-				<Group wrap="nowrap" gap="xl">
+				<Group wrap="nowrap" gap="sm">
+					<Badge variant="outline">Админ-панель</Badge>
 					<Button
 						component={Link}
 						size="md"

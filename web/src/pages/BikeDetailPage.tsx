@@ -16,6 +16,7 @@ import {
 import { IconArrowLeft, IconMoodSad } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import AccessoryMiniCardList from "../components/Accessory/AccessorySelectCardList";
 import { BASE_IMAGE_URL } from "../constants";
 import { getBikeById } from "../services/bikeService";
 import type { Bike } from "../types/bike";
@@ -179,6 +180,11 @@ export function BikeDetailPage() {
 						>
 							Оставить заявку
 						</Button>
+
+						<Stack my="xl">
+							<Text fw={600}>Выберите акксессуары к заказу</Text>
+							<AccessoryMiniCardList />
+						</Stack>
 
 						<Text
 							size="md"

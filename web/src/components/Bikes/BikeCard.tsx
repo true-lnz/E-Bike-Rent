@@ -13,8 +13,8 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
-import { BASE_IMAGE_URL } from "../constants.ts";
-import type { Bike } from "../types/bike.ts";
+import { BASE_IMAGE_URL } from "../../constants.ts";
+import type { Bike } from "../../types/bike.ts";
 import BikeDetailsModal from "./BikeDetailsModal.tsx";
 
 interface BikeCardProps {

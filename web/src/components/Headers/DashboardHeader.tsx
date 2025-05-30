@@ -1,4 +1,4 @@
-import { Box, Button, Container, Group, Image, rem } from '@mantine/core';
+import { Avatar, Box, Button, Container, Group, Image, rem } from '@mantine/core';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { authService } from '../../services/authService';
@@ -6,6 +6,7 @@ import logo from "./../../assets/images/Logo512x512.png";
 import { NavLink } from './NavLink';
 
 export default function DashboardHeader() {
+	const { user, } = useAuth();
 	const navigate = useNavigate();
 	const { setUser } = useAuth();
 
@@ -19,6 +20,8 @@ export default function DashboardHeader() {
 			alert("Не удалось выйти. Попробуйте позже.");
 		}
 	};
+
+	const fullName = `${user?.first_name} ${user?.last_name}`;
 
 	return (
 		<Container size="lg" component="header" py="xl" style={{ zIndex: 100 }}>
@@ -55,7 +58,8 @@ export default function DashboardHeader() {
 				</Group>
 
 				{/* Телефон + кнопка */}
-				<Group wrap="nowrap" gap="xl">
+				<Group wrap="nowrap" gap="sm">
+					<Avatar size={45} name={fullName} radius="xl"></Avatar>
 					<Button
 						size="md"
 						onClick={handleLogout}
