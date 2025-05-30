@@ -31,7 +31,7 @@ export function MaintenanceCard({
 
 	return (
 		<Card
-			shadow="md"
+			shadow="sm"
 			p="xl"
 			radius="xl"
 			bg={background}
@@ -40,7 +40,7 @@ export function MaintenanceCard({
 				height: "100%",
 				display: "flex",
 				flexDirection: "column",
-				overflow: "hidden" // Чтобы иконка не выходила за границы
+				overflow: "hidden"
 			}}
 		>
 			{/* Абсолютно позиционированная иконка */}
