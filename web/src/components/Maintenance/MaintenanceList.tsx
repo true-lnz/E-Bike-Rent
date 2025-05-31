@@ -1,12 +1,14 @@
 // components/Maintenance/MaintenanceList.tsx
-import { Container, Grid, Title } from "@mantine/core";
+import { Button, Container, Grid, Group, Modal, Text, Title } from "@mantine/core";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import battery from "../../assets/icons/battery.png";
 import bike from "../../assets/icons/bike.png";
 import lightning from "../../assets/icons/lightning.png";
 import settings from "../../assets/icons/settings.png";
 import wash from "../../assets/icons/wash.png";
 import whench from "../../assets/icons/whench.png";
+import { useAuth } from "../../hooks/useAuth";
 import { maintenanceService } from "../../services/maintenanceService";
 import { MaintenanceCard } from "./MaintenanceCard";
 import { MaintenanceModal } from "./MaintenanceModal";
@@ -55,10 +57,17 @@ type MaintenanceListProps = {
 };
 
 export function MaintenanceList({ onCreated }: MaintenanceListProps) {
+	const { isAuthenticated } = useAuth();
+	const navigate = useNavigate();
 	const [opened, setOpened] = useState(false);
+	const [authModalOpened, setAuthModalOpened] = useState(false);
 	const [selectedTitle, setSelectedTitle] = useState("");
 
 	const handleApply = (title: string) => {
+		if (!isAuthenticated) {
+			setAuthModalOpened(true);
+			return;
+		}
 		setSelectedTitle(title);
 		setOpened(true);
 	};
@@ -67,9 +76,15 @@ export function MaintenanceList({ onCreated }: MaintenanceListProps) {
 		try {
 			await maintenanceService.createMaintenance(form);
 			onCreated();
+			setOpened(false);
 		} catch (err) {
 			console.error(err);
 		}
+	};
+
+	const handleAuthRedirect = () => {
+		setAuthModalOpened(false);
+		navigate("/auth");
 	};
 
 	return (
@@ -94,13 +109,42 @@ export function MaintenanceList({ onCreated }: MaintenanceListProps) {
 				))}
 			</Grid>
 
+			{/* Модальное окно для авторизованных пользователей */}
 			<MaintenanceModal
 				opened={opened}
 				onClose={() => setOpened(false)}
 				onCreate={handleCreate}
 				defaultTitle={selectedTitle}
 			/>
+
+			{/* Модальное окно для неавторизованных пользователей */}
+			<Modal
+				opened={authModalOpened}
+				onClose={() => setAuthModalOpened(false)}
+				title="Требуется авторизация"
+				radius="lg"
+				centered
+			>
+				<Text mb="md">
+					Для оформления заявки на обслуживание необходимо войти в систему или зарегистрироваться.
+				</Text>
+				<Group justify="center">
+					<Button
+						variant="outline"
+						radius="md"
+						onClick={() => setAuthModalOpened(false)}
+					>
+						Отмена
+					</Button>
+					<Button
+						color="orange.5"
+						radius="md"
+						onClick={handleAuthRedirect}
+					>
+						Войти / Зарегистрироваться
+					</Button>
+				</Group>
+			</Modal>
 		</Container>
 	);
 }
-
