@@ -1,4 +1,4 @@
-import { Box, Button, Container, Group, Image, rem, Text } from '@mantine/core';
+import { Anchor, Box, Button, Container, Group, Image, rem, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { NavLink } from '../Headers/NavLink';
@@ -50,7 +50,9 @@ export default function Header() {
 
 					{/* Телефон + кнопка */}
 					<Group wrap="nowrap" gap="xl">
-						<Text fw={700} size="lg">+7 (964) 951-28-10</Text>
+						<Anchor href="tel:+79649512810" underline="never" color="black">
+							<Text fw={700} size="lg">+7 (964) 951-28-10</Text>
+						</Anchor>
 						<Button component={Link} size="md" to="/dashboard" radius="xl" color="orange.5">
 							Личный кабинет
 						</Button>
