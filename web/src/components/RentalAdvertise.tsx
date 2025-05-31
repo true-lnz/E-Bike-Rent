@@ -29,7 +29,7 @@ export default function RentalAdvertise() {
 							<Title fz={45} mt="sm">
 								Долгосрочная аренда
 							</Title>
-							<Title fz={45} c="cyan.7">от 3 месяцев</Title>
+							<Title fz={45} c="blue.7">от 3 месяцев</Title>
 							<Text mt="md" c="dimmed">
 								Платите в 2 раза меньше, чем за бензин и ремонт — и успевайте больше заказов без
 								усталости. Ваш надежный транспорт всегда под рукой!

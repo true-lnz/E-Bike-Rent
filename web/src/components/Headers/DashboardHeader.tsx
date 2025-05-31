@@ -1,5 +1,6 @@
-import { Avatar, Box, Button, Container, Group, Image, rem } from '@mantine/core';
+import { Avatar, Box, Button, Container, Divider, Group, HoverCard, Image, rem, Stack, Text, Title } from '@mantine/core';
 import { Link, useNavigate } from 'react-router-dom';
+import { BASE_IMAGE_URL } from '../../constants';
 import { useAuth } from '../../hooks/useAuth';
 import { authService } from '../../services/authService';
 import logo from "./../../assets/images/Logo512x512.png";
@@ -59,7 +60,65 @@ export default function DashboardHeader() {
 
 				{/* Телефон + кнопка */}
 				<Group wrap="nowrap" gap="sm">
-					<Avatar size={45} name={fullName} radius="xl"></Avatar>
+
+<HoverCard width={280} shadow="md" radius="lg" withArrow openDelay={100} closeDelay={400}>
+      <HoverCard.Target>
+        <Avatar size={45} name={fullName} radius="xl" />
+      </HoverCard.Target>
+
+      <HoverCard.Dropdown>
+        <Stack gap="xs">
+          <Title order={4}>{fullName}</Title>
+          <Text size="sm" color="dimmed" lineClamp={2}>
+            {user?.email}
+          </Text>
+          <Text size="sm" color="dimmed">
+            Телефон: {user?.phone_number}
+          </Text>
+          <Text size="sm" color="dimmed">
+            Дата рождения: {user?.birthday}
+          </Text>
+
+          {user?.company && (
+            <>
+              <Divider my="xs" />
+              <Group gap="sm" align="center">
+                <Box
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 6,
+                    overflow: "hidden",
+                    boxShadow: "0 0 5px rgba(0,0,0,0.1)",
+                    flexShrink: 0,
+                  }}
+                >
+                  <Image
+                    src={BASE_IMAGE_URL + user?.company.image_url}
+                    alt={user?.company.name}
+                    width={40}
+                    height={40}
+                    fit="cover"
+                  />
+                </Box>
+                <Text size="sm" fw={500}>
+                  {user?.company.name}
+                </Text>
+              </Group>
+            </>
+          )}
+
+          <Divider my="sm" />
+          <Text size="xs" color={user?.is_verified ? "teal" : "red"}>
+            {user?.is_verified ? "Потвержденный аккаунт" : "Пользователь не подтверждён"}
+          </Text>
+          <Text size="xs" color="dimmed">
+            Роль: {user?.role === 'user' ? "пользователь" : "администратор"}
+          </Text>
+        </Stack>
+      </HoverCard.Dropdown>
+    </HoverCard>
+
 					<Button
 						size="md"
 						onClick={handleLogout}

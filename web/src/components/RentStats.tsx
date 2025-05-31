@@ -16,8 +16,7 @@ export default function RentStats() {
 							<Text
 								fz={80}
 								fw={700}
-								variant="gradient"
-								gradient={{ from: 'orange.5', to: 'blue', deg: 90 }}
+								c="blue.7"
 							>
 								{stat.value}
 							</Text>

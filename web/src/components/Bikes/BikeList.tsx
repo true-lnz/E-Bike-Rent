@@ -43,7 +43,7 @@ export default function BikeListPage({
 	const noVisibleBikes = visibleBikes.length === 0;
 
 	return (
-		<Container id="bikes" size="lg" pt="xl">
+		<Container id="bikes" size="lg" py="xl">
 			{onlyAvailable ? (
 				<Title order={1} size={45} mb="xl">
 					Доступно к аренде

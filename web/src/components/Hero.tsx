@@ -77,8 +77,8 @@ export default function HeroWithStats() {
 					right={0}
 					w="680"
 					h="680"
+					bg="blue.7"
 					style={{
-						backgroundColor: '#1976d2',
 						borderRadius: rem(100),
 						transform: 'rotate(-12deg)',
 						transformOrigin: 'top right',
