@@ -22,7 +22,7 @@ export default function Header() {
     { path: '/#maintenance', label: 'Обслуживание', hash: '#maintenance' },
     { path: '/#contact', label: 'Контакты', hash: '#contact' },
   ];
-
+	
   // Определяем активный пункт на основе текущего URL
   const getActiveNav = () => {
     // Если есть хэш в URL, ищем соответствующий пункт меню
@@ -89,7 +89,7 @@ export default function Header() {
           </Link>
           <Group gap="xl">
             {navItems.map((item) => (
-              <NavLink 
+              <NavLink
                 key={item.path}
                 to={item.path}
                 active={activeNav === item.path}

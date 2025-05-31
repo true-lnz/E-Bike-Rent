@@ -3,14 +3,14 @@ import Footer from "../components/Footer";
 import Header from "../components/Headers/MainHeader";
 
 export default function MainLayout() {
-  return (
-    <>
-      <Header />
-      <main>
-        <Outlet />
-      </main>
+	return (
+		<>
+			<Header />
+			<main>
+				<Outlet />
+			</main>
 			<Footer />
 			<ScrollRestoration />
-    </>
-  );
+		</>
+	);
 }

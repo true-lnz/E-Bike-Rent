@@ -1,9 +1,9 @@
 // src/components/AdminAllAccessories.jsx
 
+import AdminAccessoriesList from "./AdminAccessoriesList";
+
 export default function AdminAllAccessories() {
 	return (
-		<>
-			<h1>Тут all accessories</h1>
-		</>
+		<AdminAccessoriesList></AdminAccessoriesList>
 	);
 }

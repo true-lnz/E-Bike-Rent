@@ -1,9 +1,8 @@
-// src/components/AdminAllBikes.jsx
+import AdminBikesList from "./AdminBikesList";
 
 export default function AdminAllBikes() {
+
 	return (
-		<>
-			<h1>Тут all bikes</h1>
-		</>
+			<AdminBikesList></AdminBikesList>
 	);
 }
