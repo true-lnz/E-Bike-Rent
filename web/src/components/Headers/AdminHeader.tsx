@@ -1,9 +1,29 @@
 import { Badge, Box, Button, Container, Group, Image, rem } from '@mantine/core';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import logo from "./../../assets/images/Logo512x512.png";
 import { NavLink } from './NavLink';
 
+type NavItem = {
+	path: string;
+	label: string;
+};
+
 export default function AdminHeader() {
+	const location = useLocation();
+
+	// Пункты меню администратора
+	const navItems: NavItem[] = [
+		{ path: 'rent-requests', label: 'Заявки на аренду' },
+		{ path: 'maintenance-requests', label: 'Заявки на обслуживание' },
+		{ path: 'all-bikes', label: 'Все велосипеды' },
+		{ path: 'all-accessories', label: 'Все аксессуары' },
+	];
+
+	// Определяем активный пункт на основе URL
+	const getActiveNav = () => {
+		const currentPath = location.pathname.split('/').pop() || '';
+		return navItems.find(item => item.path === currentPath)?.path || '';
+	};
 
 	return (
 		<Container size="lg" component="header" py="xl" style={{ zIndex: 100 }}>
@@ -19,8 +39,7 @@ export default function AdminHeader() {
 				}}
 			>
 				{/* Логотип + навигация */}
-
-				<Group wrap="nowrap" gap="xl" >
+				<Group wrap="nowrap" gap="xl">
 					<Link to="/">
 						<Image
 							src={logo}
@@ -32,14 +51,19 @@ export default function AdminHeader() {
 					</Link>
 
 					<Group gap="md">
-						<NavLink to="rent-requests">Заявки на аренду</NavLink>
-						<NavLink to="maintenance-requests">Заявки на обслуживание</NavLink>
-						<NavLink to="all-bikes">Все велосипеды</NavLink>
-						<NavLink to="all-accessories">Все аксессуары</NavLink>
+						{navItems.map((item) => (
+							<NavLink
+								key={item.path}
+								to={item.path}
+								active={getActiveNav() === item.path}
+							>
+								{item.label}
+							</NavLink>
+						))}
 					</Group>
 				</Group>
 
-				{/* Телефон + кнопка */}
+				{/* Бейдж + кнопка */}
 				<Group wrap="nowrap" gap="sm">
 					<Badge variant="outline">Админ-панель</Badge>
 					<Button

@@ -1,5 +1,6 @@
 import { Avatar, Box, Button, Container, Divider, Group, HoverCard, Image, rem, Stack, Text, Title } from '@mantine/core';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { BASE_IMAGE_URL } from '../../constants';
 import { useAuth } from '../../hooks/useAuth';
 import { authService } from '../../services/authService';
@@ -7,19 +8,41 @@ import { formatBirthday } from '../../utils/formatDate';
 import logo from "./../../assets/images/Logo512x512.png";
 import { NavLink } from './NavLink';
 
+type NavItem = {
+	path: string;
+	label: string;
+};
+
 export default function DashboardHeader() {
-	const { user, } = useAuth();
+	const { user, setUser } = useAuth();
 	const navigate = useNavigate();
-	const { setUser } = useAuth();
+	const location = useLocation();
+	const [activeNav, setActiveNav] = useState<string | null>(null);
+
+	const navItems: NavItem[] = [
+		{ path: 'bikes', label: 'Устройства' },
+		{ path: 'my-rents', label: 'Моя аренда' },
+		{ path: 'maintenances', label: 'Обслуживание' },
+		{ path: 'contact', label: 'Контакты' },
+	];
+
+	// Определяем активный пункт на основе URL
+	useEffect(() => {
+		const currentPath = location.pathname.split('/').pop() || 'bikes';
+		setActiveNav(currentPath);
+	}, [location.pathname]);
+
+	const handleNavClick = (path: string) => {
+		setActiveNav(path);
+	};
 
 	const handleLogout = async () => {
 		try {
 			await authService.logout();
-			setUser(null); // очистить auth-контекст
-			navigate("/"); // перенаправить на страницу входа
+			setUser(null);
+			navigate("/login");
 		} catch (error) {
 			console.error("Ошибка при выходе:", error);
-			alert("Не удалось выйти. Попробуйте позже.");
 		}
 	};
 
@@ -38,42 +61,37 @@ export default function DashboardHeader() {
 					alignItems: 'center',
 				}}
 			>
-				{/* Логотип + навигация */}
-
-				<Group wrap="nowrap" gap="xl" >
+				<Group wrap="nowrap" gap="xl">
 					<Link to="/">
-						<Image
-							src={logo}
-							alt="FulGaz"
-							w={64}
-							h={64}
-							radius="sm"
-						/>
+						<Image src={logo} alt="FulGaz" w={64} h={64} radius="sm" />
 					</Link>
 
 					<Group gap="xl">
-						<NavLink to="bikes">Устройства</NavLink>
-						<NavLink to="my-rents">Моя аренда</NavLink>
-						<NavLink to="maintenances">Обслуживание</NavLink>
-						<NavLink to="contact">Контакты</NavLink>
+						{navItems.map((item) => (
+							<NavLink
+								key={item.path}
+								to={item.path}
+								active={activeNav === item.path}
+								onClick={() => handleNavClick(item.path)}
+							>
+								{item.label}
+							</NavLink>
+						))}
 					</Group>
 				</Group>
 
-				{/* Телефон + кнопка */}
 				<Group wrap="nowrap" gap="sm">
-
 					<HoverCard width={280} shadow="md" radius="lg" withArrow openDelay={100} closeDelay={400}>
 						<HoverCard.Target>
 							<Avatar size={45} name={fullName} radius="xl" />
 						</HoverCard.Target>
-
 						<HoverCard.Dropdown>
 							<Stack gap="xs">
 								<Title order={4}>{fullName}</Title>
-								<Text size="sm" color="dimmed" lineClamp={2}>
+								<Text size="sm" c="dimmed" lineClamp={2}>
 									{user?.email}
 								</Text>
-								<Text size="sm" color="dimmed">
+								<Text size="sm" c="dimmed">
 									Телефон: {user?.phone_number}
 								</Text>
 								<Text size="sm" c="dimmed">
@@ -110,26 +128,21 @@ export default function DashboardHeader() {
 								)}
 
 								<Divider my="sm" />
-								<Text size="xs" color={user?.is_verified ? "teal" : "red"}>
-									{user?.is_verified ? "Потвержденный аккаунт" : "Пользователь не подтверждён"}
+								<Text size="xs" c={user?.is_verified ? "teal" : "red"}>
+									{user?.is_verified ? "Подтвержденный аккаунт" : "Пользователь не подтверждён"}
 								</Text>
-								<Text size="xs" color="dimmed">
+								<Text size="xs" c="dimmed">
 									Роль: {user?.role === 'user' ? "пользователь" : "администратор"}
 								</Text>
 							</Stack>
 						</HoverCard.Dropdown>
 					</HoverCard>
 
-					<Button
-						size="md"
-						onClick={handleLogout}
-						radius="xl"
-						color="orange.5"
-					>
+					<Button size="md" onClick={handleLogout} radius="xl" color="orange.5">
 						Выйти
 					</Button>
 				</Group>
 			</Box>
-		</Container >
+		</Container>
 	);
 }
