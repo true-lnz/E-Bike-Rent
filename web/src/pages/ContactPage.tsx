@@ -1,4 +1,5 @@
 import {
+	Anchor,
 	Box,
 	Button,
 	Card,
@@ -82,13 +83,13 @@ export default function ContactPage() {
 		}
 	};
 
-const handlePhoneChange = (value: string) => {
-  setFormData((prev) => ({ ...prev, phone: value }));
-};
+	const handlePhoneChange = (value: string) => {
+		setFormData((prev) => ({ ...prev, phone: value }));
+	};
 
-const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-  setFormData((prev) => ({ ...prev, message: e.target.value }));
-};
+	const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+		setFormData((prev) => ({ ...prev, message: e.target.value }));
+	};
 
 	return (
 		<Container size="lg" py="xl">
@@ -136,21 +137,21 @@ const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 							<Stack gap={4} mt="xs">
 								<Group gap="xs">
 									<IconMail size={18} />
-									<Text size="md">
-										<b>Почта:</b> fulgaz@gmail.com
-									</Text>
+									<Anchor href="mailto:fulgaz@gmail.com" underline="never" c="white">
+										<Text size="md"><b>Почта:</b> fulgaz@gmail.com</Text>
+									</Anchor>
 								</Group>
 								<Group gap="xs">
 									<IconMail size={18} />
-									<Text size="md">
-										<b>Тех. поддержка:</b> help-fulgaz@gmail.com
-									</Text>
+									<Anchor href="mailto:help-fulgaz@gmail.com" underline="never" c="white">
+										<Text size="md"><b>Тех. поддержка:</b> help-fulgaz@gmail.com</Text>
+									</Anchor>
 								</Group>
 								<Group gap="xs">
 									<IconPhone size={18} />
-									<Text size="md">
-										<b>Телефон:</b> +7 (964) 951-28-10
-									</Text>
+									<Anchor href="tel:+79649512810" underline="never" c="white">
+										<Text size="md"><b>Телефон:</b> +7 (964) 951-28-10</Text>
+									</Anchor>
 								</Group>
 							</Stack>
 						</Stack>

@@ -1,4 +1,4 @@
-import { Box, Button, Center, Container, Group, Image, rem, Stack, Text, Title } from "@mantine/core";
+import { Anchor, Box, Button, Center, Container, Group, Image, rem, Stack, Text, Title } from "@mantine/core";
 import { IconBrandTelegram } from "@tabler/icons-react";
 import logo from "../assets/images/Logo512x512.png";
 
@@ -66,12 +66,12 @@ export default function ContactCard() {
 							</Text>
 
 							<Box my="xl">
-								<Text size="lg" fz="xl" c="dimmed">
-									fulgaz@yandex.ru
-								</Text>
-								<Text size="lg" fz="xl" fw={700} c="dimmed">
-									+7 (964) 951-28-10
-								</Text>
+								<Anchor href="mailto:fulgaz@yandex.ru" underline="never"  c="dimmed">
+									<Text size="lg" fz="xl">fulgaz@yandex.ru</Text>
+								</Anchor>
+								<Anchor href="tel:+79649512810" underline="never" c="dimmed">
+									<Text size="lg" fz="xl">+7 (964) 951-28-10</Text>
+								</Anchor>
 							</Box>
 
 
