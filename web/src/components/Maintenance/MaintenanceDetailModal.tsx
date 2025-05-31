@@ -214,7 +214,8 @@ export function MaintenanceDetailModal({
 								fullWidth
 								color="blue.7"
 								radius="md"
-								onClick={() => alert("Функционал связи с мастером в разработке")}
+								component="a"
+								href="tel:+79649512810"
 							>
 								Связаться с мастером
 							</Button>
