@@ -26,7 +26,7 @@ export default function AdminHeader() {
 	};
 
 	return (
-		<Container size="lg" component="header" py="xl" style={{ zIndex: 100 }}>
+		<Container size="lg" component="header" py="xl" px="14" style={{ zIndex: 100 }}>
 			<Box
 				bg="gray.1"
 				px="xl"

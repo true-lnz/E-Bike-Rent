@@ -69,7 +69,7 @@ export default function Header() {
   }, []);
 
   return (
-    <Container size="lg" mt="xl" component="header" pos="sticky" top="0" style={{ zIndex: 102 }}>
+    <Container size="lg" mt="xl" px="14" component="header" pos="sticky" top="0" style={{ zIndex: 102 }}>
       <Box
         px="xl"
         py="md"

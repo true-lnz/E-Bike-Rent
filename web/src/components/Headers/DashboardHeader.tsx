@@ -49,7 +49,7 @@ export default function DashboardHeader() {
 	const fullName = `${user?.first_name} ${user?.last_name}`;
 
 	return (
-		<Container size="lg" component="header" py="xl" style={{ zIndex: 100 }}>
+		<Container size="lg" component="header" px="14" py="xl" style={{ zIndex: 100 }}>
 			<Box
 				bg="gray.1"
 				px="xl"
