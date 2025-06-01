@@ -34,7 +34,7 @@ export default function RentalAdvertise() {
 								Платите в 2 раза меньше, чем за бензин и ремонт — и успевайте больше заказов без
 								усталости. Ваш надежный транспорт всегда под рукой!
 							</Text>
-							<Button mt="lg" size="md" radius="xl" color='gray' variant='light'>
+							<Button mt="lg" size="md" radius="xl" color='gray' variant='light' component='a' href='#bikes'>
 								Оставить заявку
 							</Button>
 						</Box>
@@ -72,7 +72,7 @@ export default function RentalAdvertise() {
 							Идеально для теста или подработки: платите только за дни использования, а мы обеспечим
 							исправный байк и быструю поддержку 24/7!
 						</Text>
-						<Button mt="lg" size="md" radius="xl" color='gray' variant='light'>
+						<Button mt="lg" size="md" radius="xl" color='gray' variant='light' component='a' href='#bikes'>
 							Забронировать на неделю
 						</Button>
 					</Box>

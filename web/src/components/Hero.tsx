@@ -35,6 +35,8 @@ export default function HeroWithStats() {
 								size="xl"
 								radius="xl"
 								w={250}
+								component='a'
+								href='#bikes'
 								leftSection={<IconPlus size={24} />}
 							>
 								Оставить заявку
