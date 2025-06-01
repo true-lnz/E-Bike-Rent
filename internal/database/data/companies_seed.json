@@ -1,0 +1,78 @@
+[
+  {
+    "name": "Доставка 24",
+    "image_url": "23.png"
+  },
+  {
+    "name": "bb",
+    "image_url": "bb.png"
+  },
+  {
+    "name": "Дакс",
+    "image_url": "daks-min.png"
+  },
+  {
+    "name": "Додо",
+    "image_url": "dodo.png"
+  },
+  {
+    "name": "X5 Group",
+    "image_url": "kh5.png"
+  },
+  {
+    "name": "Купер",
+    "image_url": "kuper.png"
+  },
+  {
+    "name": "Яндекс ПРО",
+    "image_url": "logo_yandex_pro.png"
+  },
+  {
+    "name": "",
+    "image_url": "losos.png"
+  },
+  {
+    "name": "Магнит",
+    "image_url": "magnit.png"
+  },
+  {
+    "name": "",
+    "image_url": "milti.png"
+  },
+  {
+    "name": "Ozon",
+    "image_url": "ozon.png"
+  },
+  {
+    "name": "ТопGo",
+    "image_url": "topgo.png"
+  },
+  {
+    "name": "WhiteCabs",
+    "image_url": "white_cabs.png"
+  },
+  {
+    "name": "Wildberries",
+    "image_url": "wildberries.png"
+  },
+  {
+    "name": "Яндекс.Еда" ,
+    "image_url": "y1.png"
+  },
+  {
+    "name": "Яндекс.Лавка",
+    "image_url": "y2.png"
+  },
+  {
+    "name": "Самокат",
+    "image_url": "y3.png"
+  },
+  {
+    "name": "Яндекс ",
+    "image_url": "yd.png"
+  },
+  {
+    "name": "Жизнь Март",
+    "image_url": "zh-mart.png"
+  }
+]
