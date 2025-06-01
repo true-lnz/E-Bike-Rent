@@ -19,8 +19,8 @@ export interface Rent {
 }
 
 export interface CreateRentRequest {
-  rentalDays: number;
-  bicycleID?: number;
+  rental_days: number;
+  bicycle_id?: number;
   accessories: number[];
 }
 

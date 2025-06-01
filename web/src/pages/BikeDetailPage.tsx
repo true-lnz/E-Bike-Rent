@@ -11,14 +11,18 @@ import {
 	Stack,
 	Table,
 	Text,
-	Title
+	Title,
+	Tooltip
 } from "@mantine/core";
+import { modals } from '@mantine/modals';
+import { showNotification } from '@mantine/notifications';
 import { IconArrowLeft, IconMoodSad } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AccessoryMiniCardList from "../components/Accessory/AccessorySelectCardList";
 import { BASE_IMAGE_URL } from "../constants";
 import { getBikeById } from "../services/bikeService";
+import { createRent } from "../services/rentService";
 import type { Bike } from "../types/bike";
 
 export function BikeDetailPage() {
@@ -28,8 +32,11 @@ export function BikeDetailPage() {
 	const [loading, setLoading] = useState(true);
 	const [imageLoaded, setImageLoaded] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-	const [rentalPeriod, setRentalPeriod] = useState("7");
+	const [rentalPeriod, setRentalPeriod] = useState<string>("7");
 	const [expanded, setExpanded] = useState(true);
+
+	// Новый state для выбранных аксессуаров — массив ID аксессуаров
+	const [selectedAccessories, setSelectedAccessories] = useState<number[]>([]);
 
 	useEffect(() => {
 		if (!id) return;
@@ -44,16 +51,73 @@ export function BikeDetailPage() {
 
 	const calculatePrice = () => {
 		if (!bike) return 0;
-		switch (rentalPeriod) {
-			case "7": return bike.day_price * 7;
-			case "14": return bike.day_price * 14;
-			case "30": return bike.day_price * 30;
-			default: return bike.day_price;
-		}
+		const days = Number(rentalPeriod);
+		return bike.day_price * days;
 	};
 
 	const handleOrderClick = () => {
-		alert("Заказ оформлен!");
+		if (!bike) return;
+
+		modals.openConfirmModal({
+			title: 'Подтвердите бронирование',
+			centered: true,
+			radius: "lg",
+			children: (
+				<Text size="sm">
+					Вы уверены, что хотите арендовать <strong>{bike.name}</strong> на срок: {getRentalLabel(rentalPeriod)}?
+				</Text>
+			),
+			labels: { confirm: 'Подтвердить', cancel: 'Отмена' },
+			confirmProps: { color: 'orange.5', radius: "md" },
+			onConfirm: async () => {
+				try {
+					await createRent({
+						bicycle_id: bike.id,
+						rental_days: Number(rentalPeriod),
+						accessories: selectedAccessories,
+					});
+
+					modals.open({
+						title: 'Заявка успешно отправлена',
+						centered: true,
+						radius: "lg",
+						children: (
+							<Stack gap="sm">
+								<Text>
+									С вами свяжутся по номеру телефона, указанному при регистрации.
+								</Text>
+								<Button
+									fullWidth
+									color="orange.5"
+									radius="xl"
+									onClick={() => {
+										modals.closeAll();
+										navigator('/dashboard/my-rents');
+									}}
+								>
+									Перейти в личный кабинет
+								</Button>
+							</Stack>
+						),
+					});
+				} catch (error: any) {
+					showNotification({
+						title: 'Ошибка бронирования',
+						message: error?.response?.data?.message || 'Что-то пошло не так. Попробуйте позже.',
+						color: 'red',
+					});
+				}
+			},
+		});
+	};
+
+	const getRentalLabel = (period: string) => {
+		switch (period) {
+			case '30': return '1 месяц';
+			case '14': return '2 недели';
+			case '7': return '1 неделя';
+			default: return `${period} дней`;
+		}
 	};
 
 	if (loading) {
@@ -145,7 +209,6 @@ export function BikeDetailPage() {
 							onLoad={() => setImageLoaded(true)}
 						/>
 					</Center>
-
 				</Card>
 
 				<Stack style={{ flex: 1 }} justify="space-between">
@@ -170,20 +233,34 @@ export function BikeDetailPage() {
 							{calculatePrice().toLocaleString()} ₽ / {rentalPeriod === "30" ? "месяц" : (rentalPeriod === "14" ? "2 недели" : "неделя")}
 						</Text>
 
-						<Button
-							color="orange"
-							radius="xl"
-							size="lg"
-							w={225}
-							onClick={handleOrderClick}
-							mb="sm"
-						>
-							Оставить заявку
-						</Button>
+          <Tooltip
+            label={bike.available_quantity === 0 ? "Данный велосипед сейчас недоступен для аренды" : ""}
+            disabled={bike.available_quantity !== 0}
+            withArrow
+          >
+            <div>
+              {/* Оборачиваем кнопку в div, чтобы tooltip работал корректно с disabled кнопкой */}
+              <Button
+                color="orange"
+                radius="xl"
+                size="lg"
+                w={225}
+                onClick={handleOrderClick}
+                mb="sm"
+                disabled={bike.available_quantity === 0} // кнопка disabled если нет в наличии
+              >
+                Оставить заявку
+              </Button>
+            </div>
+          </Tooltip>
 
 						<Stack my="xl">
 							<Text fw={600}>Выберите акксессуары к заказу</Text>
-							<AccessoryMiniCardList />
+							{/* Передаём выбранные аксессуары и функцию для обновления в дочерний компонент */}
+							<AccessoryMiniCardList
+								selectedAccessories={selectedAccessories}
+								onChangeSelected={setSelectedAccessories}
+							/>
 						</Stack>
 
 						<Text
