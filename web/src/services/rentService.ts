@@ -29,7 +29,7 @@ export async function getUserRents(): Promise<Rent[]> {
 // Получение всех аренд (для администратора)
 export async function getAllRents(): Promise<Rent[]> {
   const res = await axios.get<{ rents: Rent[] }>(
-    `${BASE_URL}api/rent/all`, // путь должен быть прописан на сервере
+    `${BASE_URL}api/admin/rent`,
     { withCredentials: true }
   );
   return res.data.rents;
@@ -38,7 +38,7 @@ export async function getAllRents(): Promise<Rent[]> {
 // Обновление аренды по ID
 export async function updateRent(id: number, data: UpdateRentRequest): Promise<Rent> {
   const res = await axios.put<{ rent: Rent }>(
-    `${BASE_URL}/api/rent/${id}`,
+    `${BASE_URL}api/admin/rent/${id}`,
     data,
     { withCredentials: true }
   );

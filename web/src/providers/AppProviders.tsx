@@ -9,7 +9,10 @@ import { ModalProvider } from '../contexts/ModalContext';
 export function AppProviders({ children }: { children: React.ReactNode }) {
 	return (
 		<MantineProvider withGlobalClasses withCssVariables>
-			<Notifications position="top-right" />
+			<Notifications
+				position="top-right"
+				zIndex={9999}
+			/>
 			{/* <AuthProvider> */}
 			<ModalsProvider>
 				<ModalProvider>

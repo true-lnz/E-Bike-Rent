@@ -5,7 +5,7 @@ import type { User } from "../types/user";
 
 export const sendFeedback = async (data: FeedbackRequest): Promise<FeedbackResponse> => {
 	try {
-		const response = await axios.post<FeedbackResponse>(BASE_URL + '/api/feedback', {
+		const response = await axios.post<FeedbackResponse>(BASE_URL + 'api/feedback', {
 			phone_number: data.phoneNumber,
 			text: data.text
 		}, {

@@ -19,7 +19,7 @@ import { showNotification } from '@mantine/notifications';
 import { IconArrowLeft, IconMoodSad } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import AccessoryMiniCardList from "../components/Accessory/AccessorySelectCardList";
+import AccessorySelectCardList from "../components/Accessory/AccessorySelectCardList";
 import { BASE_IMAGE_URL } from "../constants";
 import { getBikeById } from "../services/bikeService";
 import { createRent } from "../services/rentService";
@@ -257,7 +257,7 @@ export function BikeDetailPage() {
 						<Stack my="xl">
 							<Text fw={600}>Выберите акксессуары к заказу</Text>
 							{/* Передаём выбранные аксессуары и функцию для обновления в дочерний компонент */}
-							<AccessoryMiniCardList
+							<AccessorySelectCardList
 								selectedAccessories={selectedAccessories}
 								onChangeSelected={setSelectedAccessories}
 							/>
