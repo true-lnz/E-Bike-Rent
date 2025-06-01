@@ -21,7 +21,7 @@ func (b *bicycleRepo) GetByID(c context.Context, id uint) (*models.Bicycle, erro
 	var bicycle models.Bicycle
 	err := b.db.WithContext(c).First(&bicycle, "id = ?", id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, nil
+		return nil, err
 	}
 	return &bicycle, err
 }
