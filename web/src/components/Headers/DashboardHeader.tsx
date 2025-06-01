@@ -40,7 +40,7 @@ export default function DashboardHeader() {
 		try {
 			await authService.logout();
 			setUser(null);
-			navigate("/login");
+			navigate("/");
 		} catch (error) {
 			console.error("Ошибка при выходе:", error);
 		}

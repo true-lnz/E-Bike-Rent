@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AccessorySelectCardList from "../components/Accessory/AccessorySelectCardList";
 import { BASE_IMAGE_URL } from "../constants";
+import { useAuth } from "../hooks/useAuth";
 import { getBikeById } from "../services/bikeService";
 import { createRent } from "../services/rentService";
 import type { Bike } from "../types/bike";
@@ -33,6 +34,7 @@ export function BikeDetailPage() {
 	const [error, setError] = useState<string | null>(null);
 	const [rentalPeriod, setRentalPeriod] = useState<string>("7");
 	const [expanded, setExpanded] = useState(true);
+	const { user } = useAuth();
 
 	// Новый state для выбранных аксессуаров — массив ID аксессуаров
 	const [selectedAccessories, setSelectedAccessories] = useState<number[]>([]);
@@ -241,10 +243,15 @@ export function BikeDetailPage() {
 						<Text fz={32} fw={700} mt="xl" mb="sm">
 							{calculatePrice().toLocaleString()} ₽ / {rentalPeriod === "30" ? "месяц" : (rentalPeriod === "14" ? "2 недели" : "неделя")}
 						</Text>
-
 						<Tooltip
-							label={bike.available_quantity === 0 ? "Данный велосипед сейчас недоступен для аренды" : ""}
-							disabled={bike.available_quantity !== 0}
+							label={
+								user === null
+									? "Необходимо авторизоваться для аренды"  // Приоритет №1
+									: bike.available_quantity === 0
+										? "Данный велосипед сейчас недоступен для аренды"  // Приоритет №2
+										: ""  // Пустая строка (но disabled не даст показать Tooltip)
+							}
+							disabled={user !== null && bike.available_quantity > 0}  // Скрываем подсказку, если всё ок
 							withArrow
 						>
 							<div>
@@ -256,7 +263,7 @@ export function BikeDetailPage() {
 									w={225}
 									onClick={handleOrderClick}
 									mb="sm"
-									disabled={bike.available_quantity === 0} // кнопка disabled если нет в наличии
+									disabled={bike.available_quantity === 0 || !user || !user?.is_verified} // кнопка disabled если нет в наличии
 								>
 									Оставить заявку
 								</Button>
