@@ -1,8 +1,10 @@
-import { Box, Button, Container, Stack, Text, Title } from '@mantine/core';
+import { Box, Button, Container, Image, Stack, Text, Title } from '@mantine/core';
+import vel2Img from "./../assets/images/kolyan-2.png";
+import vel1Img from "./../assets/images/liming-v8-1.png";
 
 export default function RentalAdvertise() {
 	return (
-		<Container size="xxl" px="0" py="xl" style={{overflow: 'hidden'}}>
+		<Container size="xxl" px="0" py="xl" style={{ overflow: 'hidden' }}>
 			<Stack gap={60}>
 				{/* Block 1 */}
 				<Box
@@ -21,7 +23,10 @@ export default function RentalAdvertise() {
 							transform: 'rotate(45deg)',
 							zIndex: 0,
 						}}
-					/>
+					>
+						<Image w={1000} src={vel2Img} style={{ transform: "translateX(-150px) translateY(-100px)  rotate(-55deg)" }}></Image>
+
+						</Box>
 
 					<Container size="md">
 						<Box pos="relative" maw={500} mt={80}>
@@ -60,7 +65,9 @@ export default function RentalAdvertise() {
 							transform: 'rotate(-45deg)',
 							zIndex: 0,
 						}}
-					/>
+					>
+						<Image w={700} src={vel1Img} style={{ transform: "translateX(550px) translateY(550px)  rotate(55deg) scale(-1, 1)" }}></Image>
+					</Box>
 
 					<Box pos="relative" maw={520} ml="auto" mr="auto" pb={40}>
 						<Text size="xl">⚡ Попробуйте — и убедитесь сами!</Text>

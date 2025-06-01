@@ -6,12 +6,14 @@ import {
 	Center,
 	Container,
 	Group,
+	Image,
 	rem,
 	Stack,
 	Title
 } from '@mantine/core';
 import { IconBrandTelegram, IconBrandVk, IconPlus } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
+import heroImg from "./../assets/images/kugoo-v3-max-1.png";
 import RentStats from './RentStats';
 
 export default function HeroWithStats() {
@@ -86,7 +88,9 @@ export default function HeroWithStats() {
 						transformOrigin: 'top right',
 						zIndex: 0,
 					}}
-				/>
+				>
+					<Image src={heroImg} style={{scale: 1.3, transform: "translateX(-100px)"}}></Image>
+				</Box>
 
 				<RentStats />
 
