@@ -30,6 +30,8 @@ func App(cfg *config.Config) error {
 				"http://localhost:8080": true,
 				"http://127.0.0.1:5173": true,
 				"http://127.0.0.1:8080": true,
+				"https://fulgaz.ru":     true,
+				"https://www.fulgaz.ru": true,
 			}
 			return allowedOrigins[origin]
 		},
