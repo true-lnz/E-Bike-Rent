@@ -3,6 +3,7 @@ import AdminAllAccessories from "../components/Admin/AdminAllAccessories";
 import AdminAllBikes from "../components/Admin/AdminAllBikes";
 import AdminMaintenanceRequests from "../components/Admin/AdminMaintenanceRequests";
 import AdminRentRequests from "../components/Admin/AdminRentRequest";
+import { AdminRoute } from "../components/AdminRoute";
 import PinCodeForm from "../components/Auth/PinCodeForm";
 import { RegComplete } from "../components/Auth/RegComplete";
 import BikeList from "../components/Bikes/BikeList";
@@ -39,7 +40,7 @@ export const router = createBrowserRouter([
 	{
 		element: <PrivateRoute />, // Проверяет авторизацию
 		children: [
-			
+
 			{ // Личный кабинет (Dashboard)
 				path: "/dashboard",
 				element: <DashboardLayout />,
@@ -52,18 +53,22 @@ export const router = createBrowserRouter([
 				],
 			},
 
-
-			{		// Админка (Admin)
-				path: "/admin",
-				element: <AdminLayout />,
+			{
+				element: <AdminRoute />, // Проверяет авторизацию
 				children: [
-					{ index: true, element: <Navigate to="rent-requests" replace /> }, // Дефолтный редирект
-					{ path: "rent-requests", element: <AdminRentRequests /> },
-					{ path: "maintenance-requests", element: <AdminMaintenanceRequests /> },
-					{ path: "all-bikes", element: <AdminAllBikes /> },
-					{ path: "all-accessories", element: <AdminAllAccessories /> },
-				],
-			},
+					{		// Админка (Admin)
+						path: "/admin",
+						element: <AdminLayout />,
+						children: [
+							{ index: true, element: <Navigate to="rent-requests" replace /> }, // Дефолтный редирект
+							{ path: "rent-requests", element: <AdminRentRequests /> },
+							{ path: "maintenance-requests", element: <AdminMaintenanceRequests /> },
+							{ path: "all-bikes", element: <AdminAllBikes /> },
+							{ path: "all-accessories", element: <AdminAllAccessories /> },
+						],
+					},
+				]
+			}
 		],
 	},
 ]);
