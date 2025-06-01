@@ -59,3 +59,29 @@ func ImportCompanies(db *gorm.DB) error {
 
 	return nil
 }
+
+func ImportAccessories(db *gorm.DB) error {
+	file, err := os.Open("internal/database/data/accessories_seed.json")
+	if err != nil {
+		log.Fatalf("Не удалось открыть файл: %v", err)
+	}
+	defer file.Close()
+
+	// Декодирование JSON
+	var accessories []models.Accessory
+	if err := json.NewDecoder(file).Decode(&accessories); err != nil {
+		log.Fatalf("Ошибка декодирования JSON: %v", err)
+	}
+
+	// Добавление в базу данных
+	for _, accessory := range accessories {
+		if err := db.Create(&accessory).Error; err != nil {
+			log.Printf("Ошибка при добавлении %s: %v", accessory.Name, err)
+		} else {
+			fmt.Printf("Добавлен: %s\n", accessory.Name)
+		}
+	}
+
+	fmt.Println("Импорт велосипедов завершён.")
+	return nil
+}
