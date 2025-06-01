@@ -46,6 +46,9 @@ func GetConnection(cfg config.DatabaseConfig) (*gorm.DB, error) {
 			&models.Rent{},
 			&models.Maintenance{},
 		)
+		if err != nil {
+			log.Printf("failed to populate DB: %v", err)
+		}
 		addTriggers(db)
 		if err = populateDB(db); err != nil {
 			log.Printf("failed to populate DB: %v", err)

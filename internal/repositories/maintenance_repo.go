@@ -20,7 +20,7 @@ type MaintenanceRepo interface {
 
 func (r *maintenanceRepo) GetAll(c context.Context) ([]models.Maintenance, error) {
 	var maintenances []models.Maintenance
-	err := r.db.WithContext(c).Find(&maintenances).Error
+	err := r.db.WithContext(c).Preload("User").Find(&maintenances).Error
 	return maintenances, err
 }
 
