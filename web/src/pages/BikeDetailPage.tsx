@@ -15,7 +15,6 @@ import {
 	Tooltip
 } from "@mantine/core";
 import { modals } from '@mantine/modals';
-import { showNotification } from '@mantine/notifications';
 import { IconArrowLeft, IconMoodSad } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -52,7 +51,7 @@ export function BikeDetailPage() {
 	const calculatePrice = () => {
 		if (!bike) return 0;
 		const days = Number(rentalPeriod);
-		return bike.day_price * days;
+		return (bike.day_price) / 100 * days;
 	};
 
 	const handleOrderClick = () => {
@@ -101,10 +100,20 @@ export function BikeDetailPage() {
 						),
 					});
 				} catch (error: any) {
-					showNotification({
+					modals.open({
 						title: 'Ошибка бронирования',
-						message: error?.response?.data?.message || 'Что-то пошло не так. Попробуйте позже.',
-						color: 'red',
+						centered: true,
+						radius: "lg",
+						children: (
+							<Text>
+								К сожалению, не удалось выполнить бронирование. Пожалуйста, попробуйте позже.
+								{error.message && (
+									<Text size="sm" c="red" mt="sm">
+										{error.response.data.error}
+									</Text>
+								)}
+							</Text>
+						),
 					});
 				}
 			},
@@ -233,26 +242,26 @@ export function BikeDetailPage() {
 							{calculatePrice().toLocaleString()} ₽ / {rentalPeriod === "30" ? "месяц" : (rentalPeriod === "14" ? "2 недели" : "неделя")}
 						</Text>
 
-          <Tooltip
-            label={bike.available_quantity === 0 ? "Данный велосипед сейчас недоступен для аренды" : ""}
-            disabled={bike.available_quantity !== 0}
-            withArrow
-          >
-            <div>
-              {/* Оборачиваем кнопку в div, чтобы tooltip работал корректно с disabled кнопкой */}
-              <Button
-                color="orange"
-                radius="xl"
-                size="lg"
-                w={225}
-                onClick={handleOrderClick}
-                mb="sm"
-                disabled={bike.available_quantity === 0} // кнопка disabled если нет в наличии
-              >
-                Оставить заявку
-              </Button>
-            </div>
-          </Tooltip>
+						<Tooltip
+							label={bike.available_quantity === 0 ? "Данный велосипед сейчас недоступен для аренды" : ""}
+							disabled={bike.available_quantity !== 0}
+							withArrow
+						>
+							<div>
+								{/* Оборачиваем кнопку в div, чтобы tooltip работал корректно с disabled кнопкой */}
+								<Button
+									color="orange"
+									radius="xl"
+									size="lg"
+									w={225}
+									onClick={handleOrderClick}
+									mb="sm"
+									disabled={bike.available_quantity === 0} // кнопка disabled если нет в наличии
+								>
+									Оставить заявку
+								</Button>
+							</div>
+						</Tooltip>
 
 						<Stack my="xl">
 							<Text fw={600}>Выберите акксессуары к заказу</Text>
