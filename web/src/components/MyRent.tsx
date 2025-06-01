@@ -1,13 +1,28 @@
 // src/components/MyRent.jsx
-
-import { Container, Title } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { getUserRents } from "../services/rentService";
+import type { Rent } from "../types/rent";
 
 export default function MyRent() {
+	const [rents, setRents] = useState<Rent[]>([]);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		getUserRents()
+			.then(setRents)
+			.finally(() => setLoading(false));
+	}, []);
+
+	if (loading) return <div>Загрузка...</div>;
+
 	return (
-		<Container size="lg" py="xl">
-			<Title order={1} mb="md">
-				Арендованные электровелосипеды
-			</Title>
-		</Container>
+		<div>
+			<h1>Мои аренды</h1>
+			{rents.map(rent => (
+				<div key={rent.id}>
+					Велосипед #{rent.bicycle_id}, Статус: {rent.status}
+				</div>
+			))}
+		</div>
 	);
 }
