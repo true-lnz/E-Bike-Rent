@@ -1,4 +1,5 @@
 import { Card, Image, Stack, Text } from "@mantine/core";
+import { BASE_IMAGE_URL } from "../constants";
 import type { Company } from "../types/company";
 
 interface CompanyCardProps {
@@ -23,7 +24,7 @@ export default function CompanyCard({ company, selected, onSelect }: CompanyCard
     >
       <Stack align="center" gap="xs">
         <Image
-          src={company.image_url}
+          src={BASE_IMAGE_URL + "companies" + company.image_url}
           alt={company.name}
           width={56}
           height={56}

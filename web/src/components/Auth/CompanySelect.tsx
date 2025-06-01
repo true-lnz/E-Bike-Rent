@@ -24,7 +24,7 @@ export default function CompanySelect({ selectedId, onSelect }: Props) {
 
 	useEffect(() => {
 		companyService
-			.getAll()
+			.getAllCompanies()
 			.then(setCompanies)
 			.finally(() => setLoading(false));
 	}, []);
