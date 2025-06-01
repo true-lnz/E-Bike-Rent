@@ -58,8 +58,9 @@ func VerifyCode(us *services.UserService, cfg *config.Config) fiber.Handler {
 		if !ok {
 			return fiber.NewError(fiber.StatusUnauthorized, "Неверный код")
 		}
-
-		utils.SetCookie(c, user, cfg)
+		if user.IsVerified {
+			utils.SetCookie(c, user, cfg)
+		}
 		return c.JSON(fiber.Map{"message": "Успешная авторизация", "is_verified": user.IsVerified})
 	}
 }
