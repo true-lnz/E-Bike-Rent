@@ -1,5 +1,4 @@
 import {
-	Button,
 	Card,
 	Center,
 	Container,
@@ -10,8 +9,10 @@ import {
 	Title
 } from "@mantine/core";
 import { useEffect, useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
 import { getAllBikes } from "../../services/bikeService";
 import type { Bike } from "../../types/bike";
+import { ArrivalNotifyButton } from "../ArrivalNotifyButton";
 import BikeCard from "./BikeCard";
 
 interface BikeListPageProps {
@@ -21,6 +22,9 @@ interface BikeListPageProps {
 export default function BikeListPage({
 	onlyAvailableByDefault = false,
 }: BikeListPageProps) {
+	const { user } = useAuth();
+
+
 	const [bikes, setBikes] = useState<Bike[]>([]);
 	const [loading, setLoading] = useState(true);
 	const onlyAvailable = onlyAvailableByDefault;
@@ -67,9 +71,8 @@ export default function BikeListPage({
 							<Text size="md" c="dimmed" ta="center" maw="50%">
 								К сожалению, сейчас нет доступных к аренде моделей. Пожалуйста, зайдите позже, возможно вам повезет или можете подписаться на уведомления!
 							</Text>
-							<Button color="blue.7" radius="xl" size="md">
-								Уведомить о поступлении
-							</Button>
+							{user && <ArrivalNotifyButton user={user} />}
+
 						</Stack>
 					</Center>
 				</Card>

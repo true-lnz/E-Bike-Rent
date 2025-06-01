@@ -1,5 +1,4 @@
 import {
-	Button,
 	Card,
 	Center,
 	Container,
@@ -67,11 +66,8 @@ export default function AccessoriesList({
 						<Stack align="center" gap="md">
 							<Title order={2} c="gray.7">Пока ничего нет...</Title>
 							<Text size="md" c="dimmed" ta="center" maw="50%">
-								К сожалению, сейчас нет доступных к аренде моделей. Пожалуйста, зайдите позже, возможно вам повезет или можете подписаться на уведомления!
+								К сожалению, сейчас нет доступных к аренде аксессуаров Пожалуйста, зайдите позже, возможно вам повезет!
 							</Text>
-							<Button color="blue.7" radius="xl" size="md">
-								Уведомить о поступлении
-							</Button>
 						</Stack>
 					</Center>
 				</Card>
