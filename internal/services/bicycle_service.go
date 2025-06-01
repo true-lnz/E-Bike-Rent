@@ -42,18 +42,32 @@ func (s *BicycleService) GetAll(c context.Context) (*dto.BicyclesResponse, error
 	}, nil
 }
 
-func (s BicycleService) GetInformation(c context.Context, id uint) (*models.Bicycle, error) {
-	return s.repo.GetByID(c, id)
+func (s *BicycleService) GetInformation(c context.Context, id uint) (*dto.BicycleItem, error) {
+	bicycle, err := s.repo.GetByID(c, id)
+	if err != nil {
+		return nil, fmt.Errorf("ошибка при получении: %w", err)
+	}
+
+	rentCount, err := s.rentRepo.CountInRent(c, id)
+	if err != nil {
+		return nil, fmt.Errorf("не удалось посчитать: %w", err)
+	}
+	result := dto.BicycleItem{
+		Bicycle:           *bicycle,
+		AvailableQuantity: bicycle.Quantity - rentCount,
+	}
+
+	return &result, nil
 }
 
-func (s BicycleService) Create(c context.Context, data *models.Bicycle) (*models.Bicycle, error) {
+func (s *BicycleService) Create(c context.Context, data *models.Bicycle) (*models.Bicycle, error) {
 	return s.repo.Create(c, data)
 }
 
-func (s BicycleService) Update(c context.Context, data *models.Bicycle) (*models.Bicycle, error) {
+func (s *BicycleService) Update(c context.Context, data *models.Bicycle) (*models.Bicycle, error) {
 	return s.repo.Update(c, data)
 }
 
-func (s BicycleService) Delete(c context.Context, id uint) error {
+func (s *BicycleService) Delete(c context.Context, id uint) error {
 	return s.repo.Delete(c, id)
 }

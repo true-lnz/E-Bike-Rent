@@ -4,7 +4,7 @@ import "time"
 
 type Rent struct {
 	ID             uint        `gorm:"primaryKey" json:"id,omitempty"`
-	StartDate      *time.Time  `json:"start_date,omitempty"`
+	StartDate      time.Time   `gorm:"column:start_date" json:"start_date,omitempty"`
 	ExpireDate     time.Time   `json:"expire_date"`
 	UpdatedAt      time.Time   `gorm:"default now" json:"updated_at"`
 	UserID         uint        `json:"user_id,omitempty"`

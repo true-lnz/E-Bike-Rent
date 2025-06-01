@@ -61,7 +61,6 @@ func (s *RentService) CreateRent(c context.Context, req dto.CreateRentRequest, u
 	totalRentPrice := bicycle.DayPrice * req.RentalDays
 
 	newRent := models.Rent{
-		StartDate:      nil,
 		ExpireDate:     expDate,
 		UpdatedAt:      time.Now(),
 		UserID:         userID,
@@ -95,9 +94,9 @@ func (s *RentService) UpdateRent(c context.Context, req dto.UpdateRentRequest, r
 		if req.StartDate == nil && existingRent.Status == "в обработке" && *req.Status == "арендован" {
 			now := time.Now()
 			start := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
-			existingRent.StartDate = &start
+			existingRent.StartDate = start
 		} else {
-			existingRent.StartDate = req.StartDate
+			existingRent.StartDate = *req.StartDate
 		}
 		existingRent.Status = *req.Status
 	}
@@ -118,7 +117,7 @@ func (s *RentService) UpdateRent(c context.Context, req dto.UpdateRentRequest, r
 	} else {
 		start := existingRent.StartDate
 		end := existingRent.ExpireDate
-		days := int(end.Sub(*start).Hours() / 24)
+		days := int(end.Sub(start).Hours() / 24)
 		fmt.Println("Количество дней:", days)
 		totalRentPrice := existingRent.Bicycle.DayPrice * days
 		existingRent.RentPrice = totalRentPrice
