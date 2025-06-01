@@ -1,5 +1,6 @@
 import {
 	Button,
+	Container,
 	Group,
 	Modal,
 	Select,
@@ -49,7 +50,7 @@ export default function AdminRentRequests() {
   };
 
   return (
-    <>
+    <Container size="lg">
       <Title order={2} mb="md">Запросы на аренду</Title>
       <Table striped highlightOnHover withTableBorder>
         <Table.Thead>
@@ -115,6 +116,6 @@ export default function AdminRentRequests() {
           </Group>
         </Stack>
       </Modal>
-    </>
+    </Container>
   );
 }

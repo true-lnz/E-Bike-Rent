@@ -86,7 +86,7 @@ export default function BikeCard({ bike }: BikeCardProps) {
                 <Text size="xs" c="dimmed">
                   1 неделя
                 </Text>
-                <Text fw={600}>{(bike.day_price * 7).toLocaleString()} ₽</Text>
+                <Text fw={600}>{((bike.day_price/100) * 7).toLocaleString()} ₽</Text>
               </Box>
 
               <Divider orientation="vertical" />
@@ -95,7 +95,7 @@ export default function BikeCard({ bike }: BikeCardProps) {
                 <Text size="xs" c="dimmed">
                   2 недели
                 </Text>
-                <Text fw={600}>{(bike.day_price * 14).toLocaleString()} ₽</Text>
+                <Text fw={600}>{((bike.day_price/100) * 14).toLocaleString()} ₽</Text>
               </Box>
 
               <Divider orientation="vertical" />
@@ -105,7 +105,7 @@ export default function BikeCard({ bike }: BikeCardProps) {
                   1 месяц
                 </Text>
                 <Text fw={600}>
-                  {(bike.day_price * 30).toLocaleString()} ₽/мес.
+                  {((bike.day_price/100) * 30).toLocaleString()} ₽/мес.
                 </Text>
               </Box>
             </Group>
