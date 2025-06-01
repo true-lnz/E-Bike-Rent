@@ -8,10 +8,18 @@ export type Maintenance = {
   created_at: string;
   price: number;
   start_date: string;
-  finish_date: string; //sdsdsd
+  finish_date: string;
 };
 
 export interface CreateMaintenanceRequest {
   bicycle_name: string;
   details: string;
+}
+
+export interface UpdateMaintenanceRequest {
+  bicycle_name: string;
+  status: string;
+  finish_date: string; // ISO формат: "2025-06-10"
+  admin_message: string;
+  price: number;
 }
