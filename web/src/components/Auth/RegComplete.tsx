@@ -198,7 +198,7 @@ export function RegComplete() {
 										}}
 									>
 										<img
-											src={BASE_IMAGE_URL + company.image_url}
+											src={BASE_IMAGE_URL + "companies/" + company.image_url}
 											alt={company.name}
 											style={{
 												width: 120,

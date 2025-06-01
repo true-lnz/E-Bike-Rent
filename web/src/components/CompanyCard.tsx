@@ -24,7 +24,7 @@ export default function CompanyCard({ company, selected, onSelect }: CompanyCard
     >
       <Stack align="center" gap="xs">
         <Image
-          src={BASE_IMAGE_URL + "companies" + company.image_url}
+          src={BASE_IMAGE_URL+ "companies/" + company.image_url}
           alt={company.name}
           width={56}
           height={56}
