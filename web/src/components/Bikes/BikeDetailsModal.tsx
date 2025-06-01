@@ -105,7 +105,7 @@ export default function BikeDetailsModal({
 
 				<Group>
 					<Text size="md" fw={600}>
-						Цена за день: {bike.day_price.toLocaleString()} ₽
+						Цена за день: {(bike.day_price/100).toLocaleString()} ₽
 					</Text>
 					<Button
 						radius="xl"
