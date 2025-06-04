@@ -102,6 +102,7 @@ export function BikeDetailPage() {
 						),
 					});
 				} catch (error: any) {
+					document.getElementById('rentBtn')?.setAttribute('disabled', '');
 					modals.open({
 						title: 'Ошибка бронирования',
 						centered: true,
@@ -257,6 +258,7 @@ export function BikeDetailPage() {
 							<div>
 								{/* Оборачиваем кнопку в div, чтобы tooltip работал корректно с disabled кнопкой */}
 								<Button
+									id="rentBtn"
 									color="orange"
 									radius="xl"
 									size="lg"
