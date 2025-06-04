@@ -131,7 +131,7 @@ export function RegComplete() {
 				},
 				{ withCredentials: true }
 			);
-			navigate("/dashboard");
+			window.location.href = "/dashboard";
 		} catch (err) {
 			console.error(err);
 			setError("Не удалось завершить регистрацию. Попробуйте позже.");
