@@ -29,7 +29,13 @@ export const router = createBrowserRouter([
 
 			{ path: "/auth", element: <AuthPage /> },
 			{ path: "/auth/code", element: <PinCodeForm /> },
-			{ path: "/auth/complete", element: <RegComplete /> },
+			{
+				path: "/auth/complete",
+				element: <PrivateRoute unverifiedOnly />,
+				children: [
+					{ index: true, element: <RegComplete /> }
+				]
+			},
 
 			{ path: "/bikes/:id", element: <BikeDetailPage /> },
 
@@ -40,7 +46,7 @@ export const router = createBrowserRouter([
 	},
 
 	{
-		element: <PrivateRoute />, // Проверяет авторизацию
+		element: <PrivateRoute authOnly />, // Проверяет авторизацию
 		children: [
 
 			{ // Личный кабинет (Dashboard)

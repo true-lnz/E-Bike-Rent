@@ -19,7 +19,7 @@ import { IconAlertSquareRounded, IconChevronRight, IconSearch } from "@tabler/ic
 import axios from "axios";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { BASE_IMAGE_URL, BASE_URL } from "../../constants";
 import { companyService } from "../../services/companyService";
 import type { Company } from "../../types/company";
@@ -40,7 +40,6 @@ export function RegComplete() {
 	const [companies, setCompanies] = useState<Company[]>([]);
 	const [loading, setLoading] = useState(true);
 
-	const navigate = useNavigate();
 	const location = useLocation();
 	const email = location.state?.email;
 
