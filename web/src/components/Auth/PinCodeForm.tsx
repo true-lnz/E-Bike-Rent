@@ -38,32 +38,31 @@ export default function PinCodeForm() {
 		return () => clearInterval(interval);
 	}, [showResendButton]);
 
-	// Подтверждение кода
-	const handleCodeComplete = async (code: string) => {
-		setLoading(true);
-		setError(null);
-		try {
-			const res = await axios.post(BASE_URL + "api/auth/verify-code",
-				{
-					email,
-					code,
-				},
-				{ withCredentials: true }
-			);
-
-			// Добавьте проверку на успешную верификацию
-			if (res.data.is_verified) {
-				setTimeout(() => navigate("/dashboard"), 300);
-			} else {
-				navigate("/auth/complete", { state: { email } });
-			}
-		} catch (err: any) {
-			console.error(err);
-			setError("Неверный код. Попробуйте ещё раз.");
-		} finally {
-			setLoading(false);
-		}
-	};
+    // Подтверждение кода
+    const handleCodeComplete = async (code: string) => {
+        setLoading(true);
+        setError(null);
+        try {
+            const res = await axios.post(BASE_URL + "api/auth/verify-code",
+                {
+                    email,
+                    code,
+                },
+                {withCredentials: true}
+            );
+				if (res.data.is_verified) {
+                    window.location.href = "/dashboard";
+				} else {
+					navigate("/auth/complete", { state: { email } });
+				}
+            console.log("Код подтвержден, пользователь:", res.data);
+        } catch (err: any) {
+            console.error(err);
+            setError("Неверный код. Попробуйте ещё раз.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
 	// Повторная отправка кода
 	const handleResendCode = async () => {
