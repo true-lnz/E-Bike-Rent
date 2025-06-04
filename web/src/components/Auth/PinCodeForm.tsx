@@ -5,38 +5,38 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../constants";
 
 export default function PinCodeForm() {
-    const [timer, setTimer] = useState(60);
-    const [showResendButton, setShowResendButton] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+	const [timer, setTimer] = useState(60);
+	const [showResendButton, setShowResendButton] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 
-    const location = useLocation();
-    const navigate = useNavigate();
-    const email = location.state?.email;
+	const location = useLocation();
+	const navigate = useNavigate();
+	const email = location.state?.email;
 
-    useEffect(() => {
-        if (!email) {
-            // Если пользователь пришел без email — вернуть на первый этап
-            navigate("/auth");
-        }
-    }, [email, navigate]);
+	useEffect(() => {
+		if (!email) {
+			// Если пользователь пришел без email — вернуть на первый этап
+			navigate("/auth");
+		}
+	}, [email, navigate]);
 
-    // Таймер
-    useEffect(() => {
-        if (showResendButton) return;
+	// Таймер
+	useEffect(() => {
+		if (showResendButton) return;
 
-        const interval = setInterval(() => {
-            setTimer((prev) => {
-                if (prev === 1) {
-                    clearInterval(interval);
-                    setShowResendButton(true);
-                }
-                return prev > 0 ? prev - 1 : 0;
-            });
-        }, 1000);
+		const interval = setInterval(() => {
+			setTimer((prev) => {
+				if (prev === 1) {
+					clearInterval(interval);
+					setShowResendButton(true);
+				}
+				return prev > 0 ? prev - 1 : 0;
+			});
+		}, 1000);
 
-        return () => clearInterval(interval);
-    }, [showResendButton]);
+		return () => clearInterval(interval);
+	}, [showResendButton]);
 
     // Подтверждение кода
     const handleCodeComplete = async (code: string) => {
@@ -64,76 +64,76 @@ export default function PinCodeForm() {
         }
     };
 
-    // Повторная отправка кода
-    const handleResendCode = async () => {
-        setShowResendButton(false);
-        setTimer(60);
-        setError(null);
+	// Повторная отправка кода
+	const handleResendCode = async () => {
+		setShowResendButton(false);
+		setTimer(60);
+		setError(null);
 
-        try {
-            await axios.post(BASE_URL + "api/auth/send-code", {email});
-        } catch (err) {
-            console.error("Ошибка при повторной отправке кода", err);
-            setError("Не удалось отправить код. Попробуйте позже.");
-            setShowResendButton(true);
-        }
-    };
+		try {
+			await axios.post(BASE_URL + "api/auth/send-code", { email });
+		} catch (err) {
+			console.error("Ошибка при повторной отправке кода", err);
+			setError("Не удалось отправить код. Попробуйте позже.");
+			setShowResendButton(true);
+		}
+	};
 
-    return (
-        <Center h="72vh">
-            <Card withBorder shadow="sm" padding={rem(45)} radius="lg" w={500}>
-                <Stack gap="md">
-                    {/* Заголовки */}
-                    <Stack gap={rem(4)}>
-                        <Title order={1} ta="center">
-                            Код подтверждения отправлен на почту
-                        </Title>
+	return (
+		<Center h="72vh">
+			<Card withBorder shadow="sm" padding={rem(45)} radius="lg" w={500}>
+				<Stack gap="md">
+					{/* Заголовки */}
+					<Stack gap={rem(4)}>
+						<Title order={1} ta="center">
+							Код подтверждения отправлен на почту
+						</Title>
 
-                        <Text size="xs" c="dimmed" ta="center">
-                            Введи его ниже, чтобы продолжить. Если письмо не пришло,
-                            проверь папку "Спам" или запроси новый код.
-                        </Text>
-                    </Stack>
+						<Text size="xs" c="dimmed" ta="center">
+							Введи его ниже, чтобы продолжить. Если письмо не пришло,
+							проверь папку "Спам" или запроси новый код.
+						</Text>
+					</Stack>
 
-                    {/* Поле PIN-кода */}
-                    <Center>
-                        <PinInput
-                            length={4}
-                            size="lg"
-                            oneTimeCode
-                            disabled={loading}
-                            onComplete={handleCodeComplete}
-                        />
-                    </Center>
+					{/* Поле PIN-кода */}
+					<Center>
+						<PinInput
+							length={4}
+							size="lg"
+							oneTimeCode
+							disabled={loading}
+							onComplete={handleCodeComplete}
+						/>
+					</Center>
 
-                    {/* Ошибка */}
-                    {error && (
-                        <Text size="sm" c="red" ta="center">
-                            {error}
-                        </Text>
-                    )}
+					{/* Ошибка */}
+					{error && (
+						<Text size="sm" c="red" ta="center">
+							{error}
+						</Text>
+					)}
 
-                    {/* Таймер или кнопка */}
-                    {!showResendButton ? (
-                        <Text size="xs" c="dimmed" ta="center">
-                            Получить новый код можно через <strong>{timer} сек.</strong>
-                        </Text>
-                    ) : (
-                        <Button
-                            color="gray.3"
-                            c="dark.9"
-                            fw={700}
-                            radius="xl"
-                            size="md"
-                            fullWidth
-                            onClick={handleResendCode}
-                            disabled={loading}
-                        >
-                            Отправить код повторно
-                        </Button>
-                    )}
-                </Stack>
-            </Card>
-        </Center>
-    );
+					{/* Таймер или кнопка */}
+					{!showResendButton ? (
+						<Text size="xs" c="dimmed" ta="center">
+							Получить новый код можно через <strong>{timer} сек.</strong>
+						</Text>
+					) : (
+						<Button
+							color="gray.3"
+							c="dark.9"
+							fw={700}
+							radius="xl"
+							size="md"
+							fullWidth
+							onClick={handleResendCode}
+							disabled={loading}
+						>
+							Отправить код повторно
+						</Button>
+					)}
+				</Stack>
+			</Card>
+		</Center>
+	);
 }
