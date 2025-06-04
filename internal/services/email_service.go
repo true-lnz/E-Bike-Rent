@@ -68,6 +68,85 @@ func SendVerificationCode(to string, code string, cfg *config.Config) error {
 	return d.DialAndSend(m)
 }
 
+func SendAdminMaintenanceCreate(bicycleName string, details string, cfg *config.Config) error {
+	m := gomail.NewMessage()
+	m.SetAddressHeader("From", cfg.SMTP.User, cfg.SMTP.From)
+	m.SetHeader("To", cfg.SMTP.User)
+	m.SetHeader("Subject", fmt.Sprintf("Новая заявка на обслуживание: %s", bicycleName))
+
+	body := fmt.Sprintf(`
+		<!DOCTYPE html>
+		<html lang="ru">
+		<head>
+			<meta charset="UTF-8">
+			<style>
+				body {
+					font-family: Arial, sans-serif;
+					background-color: #f4f4f4;
+					padding: 20px;
+					color: #333;
+				}
+				.container {
+					background-color: #fff;
+					border-radius: 8px;
+					box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+					padding: 20px;
+					max-width: 600px;
+					margin: auto;
+				}
+				.title {
+					font-size: 24px;
+					color: #2c3e50;
+					margin-bottom: 20px;
+				}
+				.section {
+					margin-bottom: 15px;
+				}
+				.label {
+					font-weight: bold;
+					color: #555;
+				}
+				.details {
+					background-color: #f9f9f9;
+					border-left: 4px solid #2980b9;
+					padding: 10px 15px;
+					border-radius: 4px;
+					white-space: pre-wrap;
+				}
+				.footer {
+					margin-top: 30px;
+					font-size: 12px;
+					color: #888;
+				}
+			</style>
+		</head>
+		<body>
+			<div class="container">
+				<div class="title">Поступила новая заявка на обслуживание</div>
+
+				<div class="section">
+					<span class="label">Велосипед:</span>
+					<span><strong>%s</strong></span>
+				</div>
+
+				<div class="section">
+					<span class="label">Детали заявки:</span>
+					<div class="details">%s</div>
+				</div>
+
+				<div class="footer">
+					Это автоматическое уведомление. Не отвечайте на него.
+				</div>
+			</div>
+		</body>
+		</html>
+	`, bicycleName, details)
+
+	m.SetBody("text/html", body)
+	d := gomail.NewDialer(cfg.SMTP.Host, cfg.SMTP.Port, cfg.SMTP.User, cfg.SMTP.Password)
+	return d.DialAndSend(m)
+}
+
 func SendMaintenanceStatusUpdate(to string, bicycleName string, newStatus string, cfg *config.Config) error {
 	m := gomail.NewMessage()
 	m.SetAddressHeader("From", cfg.SMTP.User, cfg.SMTP.From)

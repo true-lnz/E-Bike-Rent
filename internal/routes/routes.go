@@ -63,7 +63,7 @@ func SetupRoutes(app *fiber.App, cfg *config.Config, ctx *context.AppContext) {
 	adminBicycleGroup.Delete("/:id", handlers.DeleteBicycle(ctx.BicycleService))
 
 	maintenanceGroup := api.Group("/maintenance").Use(requireAuth)
-	maintenanceGroup.Post("/", handlers.CreateMaintenance(ctx.MaintenanceService))
+	maintenanceGroup.Post("/", handlers.CreateMaintenance(ctx.MaintenanceService, cfg))
 	maintenanceGroup.Get("/:id", handlers.GetUsersMaintenanceInfo(ctx.MaintenanceService))
 	maintenanceGroup.Get("/", handlers.GetUsersMaintenances(ctx.MaintenanceService))
 
