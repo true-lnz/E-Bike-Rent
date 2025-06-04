@@ -1,3 +1,5 @@
+// web/src/router/index.tsx
+
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import AdminAllAccessories from "../components/Admin/AdminAllAccessories";
 import AdminAllBikes from "../components/Admin/AdminAllBikes";
@@ -27,7 +29,7 @@ export const router = createBrowserRouter([
 
 			{ path: "/auth", element: <AuthPage /> },
 			{ path: "/auth/code", element: <PinCodeForm /> },
-			{ path: "auth/complete", element: <RegComplete /> },
+			{ path: "/auth/complete", element: <RegComplete /> },
 
 			{ path: "/bikes/:id", element: <BikeDetailPage /> },
 
