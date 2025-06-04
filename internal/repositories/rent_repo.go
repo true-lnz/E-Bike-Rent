@@ -52,7 +52,7 @@ func (r *rentRepository) GetByAccessoryId(c context.Context, bicycleID uint) (in
 }
 func (r *rentRepository) GetAll(c context.Context) ([]models.Rent, error) {
 	var rents []models.Rent
-	err := r.db.WithContext(c).Preload("Bicycle").Preload("Accessories").Preload("User").Find(&rents).Error
+	err := r.db.WithContext(c).Preload("User").Preload("Bicycle").Preload("Accessories").Find(&rents).Error
 	if err != nil {
 		return nil, err
 	}
