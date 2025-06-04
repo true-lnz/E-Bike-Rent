@@ -27,11 +27,11 @@ func SendVerificationCode(us *services.UserService, cfg *config.Config) fiber.Ha
 		code := utils.GenerateCode()
 
 		if err = services.SendVerificationCode(req.Email, code, cfg); err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Не удалось отправить код"})
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Не удалось отправить код" + err.Error()})
 		}
 
 		if err = us.SetVerificationCode(c.Context(), req.Email, code); err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Не удалось сохранить код"})
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Не удалось сохранить код" + err.Error()})
 		}
 
 		return c.SendStatus(fiber.StatusOK)
@@ -72,7 +72,7 @@ func Logout() fiber.Handler {
 			Value:    "",
 			Expires:  time.Now().Add(-time.Hour), // Ставим просроченное время
 			HTTPOnly: true,
-			Secure:   true,
+			Secure:   false,
 			SameSite: "Strict",
 		})
 		return c.JSON(fiber.Map{"message": "Вы успешно вышли из аккаунта"})

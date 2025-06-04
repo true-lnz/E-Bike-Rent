@@ -50,13 +50,11 @@ export default function PinCodeForm() {
                 },
                 {withCredentials: true}
             );
-
 				if (res.data.is_verified) {
-					navigate("/dashboard");
+                    window.location.href = "/dashboard";
 				} else {
 					navigate("/auth/complete", { state: { email } });
 				}
-
             console.log("Код подтвержден, пользователь:", res.data);
         } catch (err: any) {
             console.error(err);
