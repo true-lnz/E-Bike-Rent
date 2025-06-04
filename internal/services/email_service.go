@@ -9,11 +9,6 @@ import (
 )
 
 func SendVerificationCode(to string, code string, cfg *config.Config) error {
-	m := gomail.NewMessage()
-	m.SetAddressHeader("From", cfg.SMTP.User, cfg.SMTP.From)
-	m.SetHeader("To", to)
-	m.SetHeader("Subject", "Код подтверждения")
-
 	body := fmt.Sprintf(`
 		<!DOCTYPE html>
 		<html lang="ru">
@@ -62,17 +57,11 @@ func SendVerificationCode(to string, code string, cfg *config.Config) error {
 		</body>
 		</html>
 	`, code)
-
-	m.SetBody("text/html", body)
-	d := gomail.NewDialer(cfg.SMTP.Host, cfg.SMTP.Port, cfg.SMTP.User, cfg.SMTP.Password)
-	return d.DialAndSend(m)
+	return sendHTMLMail(to, "Код подтверждения", body, cfg)
 }
 
 func SendAdminMaintenanceCreate(bicycleName string, details string, cfg *config.Config) error {
-	m := gomail.NewMessage()
-	m.SetAddressHeader("From", cfg.SMTP.User, cfg.SMTP.From)
-	m.SetHeader("To", cfg.SMTP.User)
-	m.SetHeader("Subject", fmt.Sprintf("Новая заявка на обслуживание: %s", bicycleName))
+	subject := fmt.Sprintf("Новая заявка на обслуживание: %s", bicycleName)
 
 	body := fmt.Sprintf(`
 		<!DOCTYPE html>
@@ -141,18 +130,11 @@ func SendAdminMaintenanceCreate(bicycleName string, details string, cfg *config.
 		</body>
 		</html>
 	`, bicycleName, details)
-
-	m.SetBody("text/html", body)
-	d := gomail.NewDialer(cfg.SMTP.Host, cfg.SMTP.Port, cfg.SMTP.User, cfg.SMTP.Password)
-	return d.DialAndSend(m)
+	return sendHTMLMail(cfg.SMTP.User, subject, body, cfg)
 }
 
 func SendMaintenanceStatusUpdate(to string, bicycleName string, newStatus string, cfg *config.Config) error {
-	m := gomail.NewMessage()
-	m.SetAddressHeader("From", cfg.SMTP.User, cfg.SMTP.From)
-	m.SetHeader("To", to)
-	m.SetHeader("Subject", fmt.Sprintf("Обновление статуса заявки на обслуживание велосипеда «%s»", bicycleName))
-
+	subject := fmt.Sprintf("Обновление статуса заявки на обслуживание велосипеда «%s»", bicycleName)
 	body := fmt.Sprintf(`
 		<!DOCTYPE html>
 		<html lang="ru">
@@ -203,18 +185,10 @@ func SendMaintenanceStatusUpdate(to string, bicycleName string, newStatus string
 		</body>
 		</html>
 	`, bicycleName, newStatus)
-
-	m.SetBody("text/html", body)
-	d := gomail.NewDialer(cfg.SMTP.Host, cfg.SMTP.Port, cfg.SMTP.User, cfg.SMTP.Password)
-	return d.DialAndSend(m)
+	return sendHTMLMail(to, subject, body, cfg)
 }
 
 func SendFeedbackLetter(request dto.FeedbackRequest, cfg *config.Config) error {
-	m := gomail.NewMessage()
-	m.SetAddressHeader("From", cfg.SMTP.User, cfg.SMTP.From)
-	m.SetHeader("To", cfg.SMTP.User)
-	m.SetHeader("Subject", "📩 Новый вопрос от пользователя")
-
 	body := fmt.Sprintf(`
 		<!DOCTYPE html>
 		<html lang="ru">
@@ -257,7 +231,16 @@ func SendFeedbackLetter(request dto.FeedbackRequest, cfg *config.Config) error {
 		</html>
 	`, request.PhoneNumber, request.Text)
 
-	m.SetBody("text/html", body)
+	return sendHTMLMail(cfg.SMTP.User, "📩 Новый вопрос от пользователя", body, cfg)
+
+}
+
+func sendHTMLMail(to string, subject string, htmlBody string, cfg *config.Config) error {
+	m := gomail.NewMessage()
+	m.SetAddressHeader("From", cfg.SMTP.User, cfg.SMTP.From)
+	m.SetHeader("To", to)
+	m.SetHeader("Subject", subject)
+	m.SetBody("text/html", htmlBody)
 
 	d := gomail.NewDialer(cfg.SMTP.Host, cfg.SMTP.Port, cfg.SMTP.User, cfg.SMTP.Password)
 	return d.DialAndSend(m)
