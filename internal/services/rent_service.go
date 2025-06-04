@@ -77,7 +77,7 @@ func (s *RentService) CreateRent(c context.Context, req dto.CreateRentRequest, u
 }
 
 func (s *RentService) GetUsersRents(c context.Context, userID uint) ([]models.Rent, error) {
-	return s.repo.GetAllByUserID(c, userID)
+	return s.repo.GetByUserID(c, userID)
 }
 
 func (s *RentService) GetAll(c context.Context) ([]models.Rent, error) {

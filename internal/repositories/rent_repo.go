@@ -15,7 +15,7 @@ type RentRepository interface {
 	BeginTx(ctx context.Context) *gorm.DB
 	GetById(c context.Context, rentID uint) (*models.Rent, error)
 	GetAll(c context.Context) ([]models.Rent, error)
-	GetAllByUserID(c context.Context, userID uint) ([]models.Rent, error)
+	GetByUserID(c context.Context, userID uint) ([]models.Rent, error)
 	CountInRent(c context.Context, bicycleID uint) (int, error)
 	Create(c context.Context, rent *models.Rent) (*models.Rent, error)
 	UpdateAccessoriesForRent(tx *gorm.DB, rent *models.Rent, accessoryIDs []uint) error
@@ -59,9 +59,9 @@ func (r *rentRepository) GetAll(c context.Context) ([]models.Rent, error) {
 	return rents, nil
 }
 
-func (r *rentRepository) GetAllByUserID(c context.Context, userID uint) ([]models.Rent, error) {
+func (r *rentRepository) GetByUserID(c context.Context, userID uint) ([]models.Rent, error) {
 	var rents []models.Rent
-	err := r.db.WithContext(c).Preload("Bicycle").Preload("Accessories").Find(&rents).Where("user_id = ?", userID).Error
+	err := r.db.WithContext(c).Preload("Bicycle").Preload("Accessories").Where("user_id = ?", userID).Find(&rents).Error
 	if err != nil {
 		return nil, err
 	}
