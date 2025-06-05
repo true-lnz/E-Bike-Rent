@@ -112,7 +112,7 @@ export default function DashboardHeader() {
 												}}
 											>
 												<Image
-													src={BASE_IMAGE_URL + user?.company.image_url}
+													src={BASE_IMAGE_URL + "companies/" + user?.company.image_url}
 													alt={user?.company.name}
 													width={40}
 													height={40}

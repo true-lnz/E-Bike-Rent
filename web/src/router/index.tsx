@@ -24,15 +24,9 @@ export const router = createBrowserRouter([
 		element: <MainLayout />, // Для большинства страниц
 		children: [
 			{ path: "/", element: <HomePage /> },
-
 			{ path: "/auth", element: <AuthPage /> },
-/* 			{ path: "/auth/code", element: <PinCodeForm /> },
-			{ path: "/auth/complete", element: <RegComplete /> }, */
-
 			{ path: "/bikes/:id", element: <BikeDetailPage /> },
-
 			{ path: "/policy", element: <PolicyPage /> },
-
 			{ path: "*", element: <HomePage /> },
 		]
 	},
@@ -40,7 +34,6 @@ export const router = createBrowserRouter([
 	{
 		element: <PrivateRoute />, // Проверяет авторизацию
 		children: [
-
 			{ // Личный кабинет (Dashboard)
 				path: "/dashboard",
 				element: <DashboardLayout />,
