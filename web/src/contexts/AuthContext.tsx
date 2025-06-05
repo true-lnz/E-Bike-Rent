@@ -3,8 +3,6 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { getMe } from '../services/authService';
 import type { User } from '../types/user';
 
-// AuthContext.tsx
-
 interface AuthContextProps {
   email: string;
   setEmail: (e: string) => void;

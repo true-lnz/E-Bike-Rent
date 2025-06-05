@@ -177,10 +177,28 @@ export function RentalBikeCard({
 							Срок аренды: до {rentEnd}
 							{isActive && daysLeft !== undefined && <> (осталось {daysLeft} дн.)</>}
 							<br />
-							Аксессуары: {hasAccessories ? "есть" : "нет"}
-						</Text>
-						<Text size="md" fw={500} c={isDeclined ? "red" : "dimmed"}>
-							Статус: {status}
+							Аксессуары:{" "}
+							{hasAccessories ? (
+								"есть"
+							) : (
+								<>
+									нет{" "}
+									<Text
+										component="a"
+										href="#"
+										variant="link"
+										c="blue.7"
+										onClick={(e) => {
+											e.preventDefault();
+											setAccessoryModalOpen(true);
+											if (onAddAccessory) onAddAccessory();
+										}}
+										style={{ cursor: "pointer", display: "inline" }}
+									>
+										(добавить)
+									</Text>
+								</>
+							)}
 						</Text>
 
 						{isActive && isExpired && (
