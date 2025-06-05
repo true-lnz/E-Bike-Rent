@@ -294,6 +294,7 @@ export function RegComplete() {
 						label="Дата рождения"
 						placeholder="ДД.ММ.ГГГГ"
 						value={birthday}
+						locale="ru"
 						onChange={handleBirthdayChange as (value: any) => void}
 						maxDate={new Date()}
 						size="md"

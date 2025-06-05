@@ -1,9 +1,9 @@
 import { Avatar, Box, Button, Container, Divider, Group, HoverCard, Image, rem, Stack, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { BASE_IMAGE_URL } from '../../constants';
 import { useAuth } from '../../hooks/useAuth';
-import { authService } from '../../services/authService';
+import { logout } from '../../services/authService';
 import { formatBirthday } from '../../utils/formatDate';
 import logo from "./../../assets/images/Logo512x512.png";
 import { NavLink } from './NavLink';
@@ -14,8 +14,7 @@ type NavItem = {
 };
 
 export default function DashboardHeader() {
-	const { user, setUser } = useAuth();
-	const navigate = useNavigate();
+	const { user, setEmail, setUser, setIsVerified } = useAuth();
 	const location = useLocation();
 	const [activeNav, setActiveNav] = useState<string | null>(null);
 
@@ -36,14 +35,13 @@ export default function DashboardHeader() {
 		setActiveNav(path);
 	};
 
-	const handleLogout = async () => {
-		try {
-			await authService.logout();
-			setUser(null);
-			navigate("/");
-		} catch (error) {
-			console.error("Ошибка при выходе:", error);
-		}
+	const handleLogout = () => {
+		document.cookie = 'token=; Max-Age=0; path=/'; // удаляет cookie
+		setUser(null);
+		setEmail('');
+		setIsVerified(false);
+		logout();
+		window.location.href = '/';
 	};
 
 	const fullName = `${user?.first_name} ${user?.last_name}`;

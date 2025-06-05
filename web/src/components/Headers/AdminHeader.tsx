@@ -1,5 +1,7 @@
 import { Badge, Box, Button, Container, Group, Image, rem } from '@mantine/core';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
+import { logout } from '../../services/authService';
 import logo from "./../../assets/images/Logo512x512.png";
 import { NavLink } from './NavLink';
 
@@ -10,6 +12,7 @@ type NavItem = {
 
 export default function AdminHeader() {
 	const location = useLocation();
+	const { setEmail, setUser, setIsVerified } = useAuth();
 
 	// Пункты меню администратора
 	const navItems: NavItem[] = [
@@ -23,6 +26,15 @@ export default function AdminHeader() {
 	const getActiveNav = () => {
 		const currentPath = location.pathname.split('/').pop() || '';
 		return navItems.find(item => item.path === currentPath)?.path || '';
+	};
+
+	const handleLogout = () => {
+		document.cookie = 'token=; Max-Age=0; path=/'; // удаляет cookie
+		setUser(null);
+		setEmail('');
+		setIsVerified(false);
+		logout();
+		window.location.href = '/';
 	};
 
 	return (
@@ -66,13 +78,7 @@ export default function AdminHeader() {
 				{/* Бейдж + кнопка */}
 				<Group wrap="nowrap" gap="sm">
 					<Badge variant="outline">Админ-панель</Badge>
-					<Button
-						component={Link}
-						size="md"
-						to="/dashboard"
-						radius="xl"
-						color="orange.5"
-					>
+					<Button size="md" onClick={handleLogout} radius="xl" color="orange.5">
 						Выйти
 					</Button>
 				</Group>

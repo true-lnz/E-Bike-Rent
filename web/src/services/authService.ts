@@ -1,31 +1,18 @@
-// src/services/authService.ts
-import axios from "axios";
-import { BASE_URL } from "../constants";
+import axios from "axios"
+import { BASE_URL } from "../constants"
+import type { User } from "../types/user"
 
-export const authService = {
+axios.defaults.withCredentials = true
 
-  async logout(): Promise<void> {
-    try {
-      await axios.post(
-        BASE_URL + "api/auth/logout",
-        {},
-        { withCredentials: true }
-      );
-			delete axios.defaults.headers.common['Authorization'];
-      localStorage.clear();
-      sessionStorage.clear();
-      
-    } catch (error) {
-      console.error("Ошибка при выходе:", error);
-      document.cookie.split(";").forEach((c) => {
-        document.cookie = c
-          .replace(/^ +/, "")
-          .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
-      });
-			delete axios.defaults.headers.common['Authorization'];
-      localStorage.clear();
-      sessionStorage.clear();
-      throw error;
-    }
-  }
-};
+export const sendCode = (email: string) =>
+  axios.post(BASE_URL+"api/auth/send-code", { email })
+
+export const verifyCode = (email: string, code: string) =>
+  axios.post(BASE_URL+"api/auth/verify-code", { email, code })
+
+export const completeRegistration = (data: any) =>
+  axios.post(BASE_URL+"api/auth/complete-registration", data)
+
+export const getMe = () => axios.get<{ user: User }>(BASE_URL+"api/auth/me")
+
+export const logout = () => axios.post(BASE_URL+"api/auth/logout")

@@ -57,14 +57,14 @@ type MaintenanceListProps = {
 };
 
 export function MaintenanceList({ onCreated }: MaintenanceListProps) {
-	const { isAuthenticated } = useAuth();
+	const { user } = useAuth();
 	const navigate = useNavigate();
 	const [opened, setOpened] = useState(false);
 	const [authModalOpened, setAuthModalOpened] = useState(false);
 	const [selectedTitle, setSelectedTitle] = useState("");
 
 	const handleApply = (title: string) => {
-		if (!isAuthenticated) {
+		if (!user) {
 			setAuthModalOpened(true);
 			return;
 		}

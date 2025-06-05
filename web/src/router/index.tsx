@@ -6,8 +6,6 @@ import AdminAllBikes from "../components/Admin/AdminAllBikes";
 import AdminMaintenanceRequests from "../components/Admin/AdminMaintenanceRequests";
 import AdminRentRequests from "../components/Admin/AdminRentRequest";
 import { AdminRoute } from "../components/AdminRoute";
-import PinCodeForm from "../components/Auth/PinCodeForm";
-import { RegComplete } from "../components/Auth/RegComplete";
 import BikeList from "../components/Bikes/BikeList";
 import Maintenance from "../components/Maintenance/Maintenance";
 import MyRent from "../components/MyRent";
@@ -28,14 +26,8 @@ export const router = createBrowserRouter([
 			{ path: "/", element: <HomePage /> },
 
 			{ path: "/auth", element: <AuthPage /> },
-			{ path: "/auth/code", element: <PinCodeForm /> },
-			{
-				path: "/auth/complete",
-				element: <PrivateRoute unverifiedOnly />,
-				children: [
-					{ index: true, element: <RegComplete /> }
-				]
-			},
+/* 			{ path: "/auth/code", element: <PinCodeForm /> },
+			{ path: "/auth/complete", element: <RegComplete /> }, */
 
 			{ path: "/bikes/:id", element: <BikeDetailPage /> },
 
@@ -46,7 +38,7 @@ export const router = createBrowserRouter([
 	},
 
 	{
-		element: <PrivateRoute authOnly />, // Проверяет авторизацию
+		element: <PrivateRoute />, // Проверяет авторизацию
 		children: [
 
 			{ // Личный кабинет (Dashboard)

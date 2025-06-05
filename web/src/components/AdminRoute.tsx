@@ -1,17 +1,15 @@
+import { LoadingOverlay } from "@mantine/core";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
 export const AdminRoute = () => {
-	const { user } = useAuth();
+  const { user, isLoading } = useAuth();
 
-	if (!user) {
-		return <Navigate to="/auth" replace />;
-	}
+  if (isLoading) return <LoadingOverlay />;
 
-	if (user.role !== "admin") {
-		return <Navigate to="/dashboard" replace />;
-	}
+  if (user?.role !== "admin") {
+    return <Navigate to="/dashboard" replace />;
+  }
 
-	return <Outlet />;
+  return <Outlet />;
 };
-

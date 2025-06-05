@@ -2,14 +2,14 @@ import type { Company } from "./company";
 
 export interface User {
 	id: number;
+	email: string;
 	first_name: string;
 	last_name: string;
 	patronymic: string;
-	email: string;
 	phone_number: string;
-	birthday: string; // "YYYY-MM-DD" sdsdsdsd
-	is_verified: boolean;
-	company_id?: number;
-	role: string;
+	birthday: string;
 	company?: Company;
+	company_id?: number;
+	is_verified: boolean;
+	role: string;
 }
