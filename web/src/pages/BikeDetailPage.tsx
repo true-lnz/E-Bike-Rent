@@ -88,9 +88,8 @@ export function BikeDetailPage() {
 									С вами свяжутся по номеру телефона, указанному при регистрации.
 								</Text>
 								<Button
-									fullWidth
 									color="orange.5"
-									radius="xl"
+									radius="md"
 									onClick={() => {
 										modals.closeAll();
 										navigator('/dashboard/my-rents');
@@ -104,14 +103,14 @@ export function BikeDetailPage() {
 				} catch (error: any) {
 					document.getElementById('rentBtn')?.setAttribute('disabled', '');
 					modals.open({
-						title: 'Ошибка бронирования',
+						title: 'Ошибка в запросе аренды',
 						centered: true,
 						radius: "lg",
 						children: (
 							<Text>
 								К сожалению, не удалось выполнить бронирование. Пожалуйста, попробуйте позже.
 								{error.message && (
-									<Text size="sm" c="red" mt="sm">
+									<Text tt="capitalize" size="sm" c="red" mt="sm">
 										{error.response.data.error}
 									</Text>
 								)}
