@@ -1,4 +1,5 @@
 import { Avatar, Box, Button, Container, Divider, Group, HoverCard, Image, rem, Stack, Text, Title } from '@mantine/core';
+import { IconLogout } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { BASE_IMAGE_URL } from '../../constants';
@@ -137,7 +138,10 @@ export default function DashboardHeader() {
 					</HoverCard>
 
 					<Button size="md" onClick={handleLogout} radius="xl" color="orange.5">
-						Выйти
+						<Group align='center' gap="xs">
+							<IconLogout size={16} />
+							<Text>Выйти</Text>
+						</Group>
 					</Button>
 				</Group>
 			</Box>

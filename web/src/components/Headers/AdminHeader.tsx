@@ -1,4 +1,5 @@
-import { Badge, Box, Button, Container, Group, Image, rem } from '@mantine/core';
+import { Badge, Box, Button, Container, Group, Image, Text, rem } from '@mantine/core';
+import { IconLogout } from '@tabler/icons-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { logout } from '../../services/authService';
@@ -79,7 +80,10 @@ export default function AdminHeader() {
 				<Group wrap="nowrap" gap="sm">
 					<Badge variant="outline">Админ-панель</Badge>
 					<Button size="md" onClick={handleLogout} radius="xl" color="orange.5">
-						Выйти
+						<Group align='center' gap="xs">
+							<IconLogout size={16} />
+							<Text>Выйти</Text>
+						</Group>
 					</Button>
 				</Group>
 			</Box>
