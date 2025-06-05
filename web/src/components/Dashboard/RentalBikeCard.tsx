@@ -13,8 +13,8 @@ import {
 import { IconAlertCircle, IconPlus } from "@tabler/icons-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { BASE_IMAGE_URL } from "../constants";
-import AccessoryModal from "./Accessory/AccessoryModal";
+import { BASE_IMAGE_URL } from "../../constants";
+import AccessoryModal from "../Accessory/AccessoryModal";
 
 interface RentalBikeCardProps {
   bikeId: number;

@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { getAllBikes } from "../../services/bikeService";
 import type { Bike } from "../../types/bike";
-import { ArrivalNotifyButton } from "../ArrivalNotifyButton";
+import { ArrivalNotifyButton } from "../Dashboard/ArrivalNotifyButton";
 import BikeCard from "./BikeCard";
 
 interface BikeListPageProps {

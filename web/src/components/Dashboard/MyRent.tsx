@@ -2,8 +2,8 @@ import { Button, Center, Container, Paper, Stack, Text, Title } from "@mantine/c
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getUserRents } from "../services/rentService";
-import type { Rent } from "../types/rent";
+import { getUserRents } from "../../services/rentService";
+import type { Rent } from "../../types/rent";
 import { RentalBikeCard } from "./RentalBikeCard";
 
 export default function MyRent() {

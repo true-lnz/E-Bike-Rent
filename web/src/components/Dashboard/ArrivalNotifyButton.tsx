@@ -1,8 +1,8 @@
 import { Button, Modal, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
-import { sendArrivalNotification } from '../services/feedbackService';
-import type { User } from '../types/user';
+import { sendArrivalNotification } from '../../services/feedbackService';
+import type { User } from '../../types/user';
 
 interface ArrivalNotifyButtonProps {
 	user: User;

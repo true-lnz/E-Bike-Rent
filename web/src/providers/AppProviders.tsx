@@ -6,21 +6,15 @@ import { DatesProvider } from '@mantine/dates';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 import { AuthProvider } from '../contexts/AuthContext';
-import { ModalProvider } from '../contexts/ModalContext';
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
 	return (
 		<MantineProvider withGlobalClasses withCssVariables>
 			<DatesProvider settings={{ locale: 'ru' }}>
-				<Notifications
-					position="top-right"
-					zIndex={9999}
-				/>
+				<Notifications position="top-right" />
 				<AuthProvider>
 					<ModalsProvider>
-						<ModalProvider>
-							{children}
-						</ModalProvider>
+						{children}
 					</ModalsProvider>
 				</AuthProvider>
 			</DatesProvider>

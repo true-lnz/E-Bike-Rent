@@ -7,8 +7,8 @@ import AdminMaintenanceRequests from "../components/Admin/AdminMaintenanceReques
 import AdminRentRequests from "../components/Admin/AdminRentRequest";
 import { AdminRoute } from "../components/AdminRoute";
 import BikeList from "../components/Bikes/BikeList";
+import MyRent from "../components/Dashboard/MyRent";
 import Maintenance from "../components/Maintenance/Maintenance";
-import MyRent from "../components/MyRent";
 import PrivateRoute from "../components/PrivateRoute";
 import AdminLayout from "../layouts/AdminLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
