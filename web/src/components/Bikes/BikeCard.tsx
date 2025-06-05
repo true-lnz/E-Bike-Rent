@@ -37,7 +37,7 @@ export default function BikeCard({ bike }: BikeCardProps) {
       >
         <Group justify="space-between" mb="xs">
           <Box>
-            <Text fw={700} size="lg">
+            <Text fw={700} size="xl">
               {bike.name}
             </Text>
             <Text size="sm" c="dimmed">
