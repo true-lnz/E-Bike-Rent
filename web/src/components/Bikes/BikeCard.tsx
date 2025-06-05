@@ -26,9 +26,9 @@ export default function BikeCard({ bike }: BikeCardProps) {
   return (
     <>
       <Card
-        bg="gray.0"
+        bg="gray.1"
         p="lg"
-        radius="lg"
+        radius="xl"
         style={{
           position: "relative",
           display: "flex",
@@ -44,14 +44,6 @@ export default function BikeCard({ bike }: BikeCardProps) {
               {bike.battery} / {bike.power}W
             </Text>
           </Box>
-          {/* <Badge
-            color="blue.7"
-						size="lg"
-            variant="light"
-            radius="xl"
-          >
-            до {bike.max_range} км
-          </Badge> */}
         </Group>
 
         <Image

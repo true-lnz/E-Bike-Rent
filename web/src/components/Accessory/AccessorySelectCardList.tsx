@@ -14,11 +14,13 @@ import type { Accessory } from "../../types/accessory.ts";
 
 interface AccessorySelectCardListProps {
 	selectedAccessories: number[];
+	lockedAccessories?: number[];
 	onChangeSelected: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 export default function AccessorySelectCardList({
 	selectedAccessories,
+	lockedAccessories = [],
 	onChangeSelected,
 }: AccessorySelectCardListProps) {
 	const [accessories_list, setAccessories] = useState<Accessory[]>([]);
@@ -35,13 +37,12 @@ export default function AccessorySelectCardList({
 
 	if (loading) return <LoadingOverlay visible={true} zIndex={101} />;
 
-	// Обработчик клика по аксессуару
 	function toggleAccessory(id: number) {
+		if (lockedAccessories.includes(id)) return;
+
 		if (selectedAccessories.includes(id)) {
-			// Убираем из выбранных
 			onChangeSelected(selectedAccessories.filter((item) => item !== id));
 		} else {
-			// Добавляем в выбранные
 			onChangeSelected([...selectedAccessories, id]);
 		}
 	}
@@ -50,19 +51,23 @@ export default function AccessorySelectCardList({
 		<SimpleGrid cols={4} spacing="sm">
 			{accessories_list.map((accessory) => {
 				const isSelected = selectedAccessories.includes(accessory.id);
+				const isLocked = lockedAccessories.includes(accessory.id);
 
 				return (
+					<Stack gap='xs'>
 					<Card
 						key={accessory.id}
-						bg="gray.0"
+						bg="white"
 						p="lg"
+						m={3}
 						radius="lg"
 						style={{
 							position: "relative",
 							display: "flex",
 							flexDirection: "column",
-							border: isSelected ? "2px solid #228be6" : "1px solid #ccc",
-							cursor: "pointer",
+							border: "1px solid #eee",
+							outline: isSelected ? "3px solid #228be6" : "1px solid #eee",
+							cursor: accessory.available_quantity > 0 && !isLocked ? "pointer" : "default",
 							userSelect: "none",
 							opacity: accessory.available_quantity === 0 ? 0.7 : 1,
 							filter: accessory.available_quantity === 0 ? "grayscale(80%)" : "none",
@@ -80,7 +85,6 @@ export default function AccessorySelectCardList({
 								h={60}
 								fit="contain"
 							/>
-
 							<Center>
 								<Text fw={600} ta="center" lineClamp={2}>
 									{accessory.name}
@@ -88,6 +92,14 @@ export default function AccessorySelectCardList({
 							</Center>
 						</Stack>
 					</Card>
+											{
+					isLocked && (
+						<Text ta="center" size="xs" c="dimmed">
+							Уже добавлен
+						</Text>
+					)
+				}
+				</Stack>
 				);
 			})}
 		</SimpleGrid>

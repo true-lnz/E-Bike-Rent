@@ -2,43 +2,34 @@ import {
 	Button,
 	Group,
 	Modal,
+	NumberInput,
 	Stack,
-	Text,
 } from "@mantine/core";
-
 import { showNotification } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
+
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { sendFeedback } from "../../services/feedbackService";
-import AccessorySelectCardList from "./AccessorySelectCardList";
 
 interface Props {
 	opened: boolean;
 	onClose: () => void;
 	rentId?: number;
-	initialAccessoryIds?: number[]; // новые пропсы, можно передавать "уже добавленные"
 }
 
-export default function AccessoryModal({
-	opened,
-	onClose,
-	rentId,
-	initialAccessoryIds = [],
-}: Props) {
+export default function ExtendRentalModal({ opened, onClose, rentId }: Props) {
 	const { user } = useAuth();
-	const [selected, setSelected] = useState<number[]>([]);
+	const [days, setDays] = useState<number | ''>('');
 	const [submitting, setSubmitting] = useState(false);
 	const [successModalOpen, setSuccessModalOpen] = useState(false);
 
 	useEffect(() => {
-		if (opened) {
-			setSelected(initialAccessoryIds);
-		} else {
-			setSelected([]);
+		if (!opened) {
+			setDays('');
 			setSuccessModalOpen(false);
 		}
-	}, [opened, initialAccessoryIds]);
+	}, [opened]);
 
 	const handleSubmit = async () => {
 		if (!user) {
@@ -52,12 +43,10 @@ export default function AccessoryModal({
 			return;
 		}
 
-		const hasNewSelection = selected.some(id => !initialAccessoryIds.includes(id));
-
-		if (!hasNewSelection) {
+		if (!days || days <= 0) {
 			showNotification({
-				title: "Не выбраны новые аксессуары",
-				message: "Пожалуйста, выберите хотя бы один новый аксессуар",
+				title: "Некорректное значение",
+				message: "Введите положительное количество дней",
 				color: "red",
 				radius: 'md',
 				icon: <IconX size={16} />,
@@ -69,13 +58,13 @@ export default function AccessoryModal({
 
 		const fullName = `${user.last_name} ${user.first_name} ${user.patronymic}`;
 		const text = `
-Пользователь запросил добавление аксессуаров к аренде №${rentId}
+			Пользователь запросил продление аренды №${rentId}
 
-👤 ФИО: ${fullName}
-📧 Email: ${user.email}
-📞 Телефон: ${user.phone_number}
-🛠 Выбранные аксессуары (ID): ${selected.join(", ") || "—"}
-`.trim();
+			👤 ФИО: ${fullName}
+			📧 Email: ${user.email}
+			📞 Телефон: ${user.phone_number}
+			📅 Желаемое продление: ${days} ${days === 1 ? 'день' : (days >= 2 && days <= 4 ? 'дня' : 'дней')}
+			`.trim();
 
 		try {
 			const response = await sendFeedback({
@@ -86,7 +75,7 @@ export default function AccessoryModal({
 			if (!response.error) {
 				showNotification({
 					title: "Запрос отправлен",
-					message: "Скоро с вами свяжется оператор для уточнения информации",
+					message: "Мы получили ваш запрос на продление аренды",
 					color: "green",
 					radius: 'md',
 					icon: <IconCheck size={16} />,
@@ -103,7 +92,6 @@ export default function AccessoryModal({
 				color: "red",
 				icon: <IconX size={16} />,
 			});
-			window.scrollTo({ top: 0, behavior: "smooth" });
 		} finally {
 			setSubmitting(false);
 		}
@@ -111,19 +99,14 @@ export default function AccessoryModal({
 
 	return (
 		<>
-			<Modal
-				opened={opened}
-				onClose={onClose}
-				title="Добавить аксессуары"
-				size="lg"
-				radius="lg"
-				centered
-			>
+			<Modal opened={opened} onClose={onClose} title="Продлить аренду" size="lg" radius="lg" centered>
 				<Stack gap="md">
-					<AccessorySelectCardList
-						selectedAccessories={selected}
-						lockedAccessories={initialAccessoryIds}
-						onChangeSelected={setSelected}
+					<NumberInput
+						label="Количество дней продления"
+						placeholder="Например, 3"
+						min={1}
+						value={days}
+						onChange={(value) => setDays(typeof value === "number" ? value : '')}
 					/>
 					<Group mt="sm" align="end" gap="xs" justify="flex-end">
 						<Button variant="default" onClick={onClose} radius="md" disabled={submitting}>
@@ -133,9 +116,9 @@ export default function AccessoryModal({
 							onClick={handleSubmit}
 							loading={submitting}
 							radius="md"
-							disabled={selected.length === 0 || submitting}
+							disabled={!days || submitting}
 						>
-							Выбрать
+							Продлить
 						</Button>
 					</Group>
 				</Stack>
@@ -153,18 +136,20 @@ export default function AccessoryModal({
 				radius="lg"
 				withCloseButton={false}
 			>
-				<Text>Отлично! Скоро с вами свяжется оператор для уточнения информации.</Text>
-				<Button
-					fullWidth
-					mt="md"
-					radius="md"
-					onClick={() => {
-						setSuccessModalOpen(false);
-						onClose();
-					}}
-				>
-					Закрыть
-				</Button>
+				<Stack>
+					<p>Спасибо! Мы получили ваш запрос на продление аренды. С вами свяжется оператор.</p>
+					<Button
+						fullWidth
+						mt="md"
+						radius="md"
+						onClick={() => {
+							setSuccessModalOpen(false);
+							onClose();
+						}}
+					>
+						Закрыть
+					</Button>
+				</Stack>
 			</Modal>
 		</>
 	);

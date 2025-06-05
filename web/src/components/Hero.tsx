@@ -20,20 +20,20 @@ export default function HeroWithStats() {
 	return (
 		<>
 			{/* HERO СЕКЦИЯ */}
-			<Box pos="relative" bg="white" pt="xl" style={{ overflow: 'hidden' }} >
+			<Box pos="relative" pt="xl" style={{ overflow: 'hidden' }} >
 				{/* Фоновая геометрия — наклонный прямоугольник с закруглением */}
 				<Container size="lg" pos="relative" py="xl">
 					<Stack gap="0" maw={500}>
 						<Title order={1} lh="1" size={90} fw={800}>
 							Аренда велосипедов
 						</Title>
-						<Title order={1} size={70} lh="1" fw={800} c="orange">
+						<Title order={1} size={70} lh="1" fw={800} c="orange.5">
 							для курьеров в Уфе
 						</Title>
 
 						<Group mt={45} gap="xl">
 							<Button
-								color="orange"
+								color="orange.5"
 								size="xl"
 								radius="xl"
 								w={250}
@@ -48,7 +48,7 @@ export default function HeroWithStats() {
 								<Box
 									w="60"
 									h="60"
-									bg="orange"
+									bg="orange.5"
 									component={Link}
 									to={"https://t.me/lansonz"}
 									style={{ borderRadius: '50%' }}
@@ -60,7 +60,7 @@ export default function HeroWithStats() {
 								<Box
 									w="60"
 									h="60"
-									bg="orange"
+									bg="orange.5"
 									component={Link}
 									to={"https://vk.com/true_lnz"}
 									style={{ borderRadius: '50%' }}

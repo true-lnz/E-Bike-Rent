@@ -258,7 +258,7 @@ export function BikeDetailPage() {
 								{/* Оборачиваем кнопку в div, чтобы tooltip работал корректно с disabled кнопкой */}
 								<Button
 									id="rentBtn"
-									color="orange"
+									color="orange.5"
 									radius="xl"
 									size="lg"
 									w={225}

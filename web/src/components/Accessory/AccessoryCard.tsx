@@ -20,9 +20,9 @@ export default function AccessoryCard({
 }: AccessoryCardProps) {
 	return (
 		<Card
-			bg="gray.0"
+			bg="white"
 			p="lg"
-			radius="lg"
+			radius="xl"
 			style={{
 				position: "relative",
 				display: "flex",
