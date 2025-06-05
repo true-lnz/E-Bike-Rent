@@ -34,7 +34,7 @@ export default function AdminHeader() {
 		setEmail('');
 		setIsVerified(false);
 		logout();
-		window.location.href = '/';
+		window.location.reload()
 	};
 
 	return (

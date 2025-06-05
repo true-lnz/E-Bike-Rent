@@ -41,7 +41,7 @@ export default function DashboardHeader() {
 		setEmail('');
 		setIsVerified(false);
 		logout();
-		window.location.href = '/';
+		window.location.reload();
 	};
 
 	const fullName = `${user?.first_name} ${user?.last_name}`;
