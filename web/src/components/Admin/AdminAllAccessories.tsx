@@ -158,7 +158,6 @@ export default function AdminAllAccessories() {
 
 	return (
 		<Container id="accessories" py="xl" size="lg">
-
 			<Group justify="space-between" mb="xl">
 				<Title fz={45}>Управление аксессуарами</Title>
 				<Button

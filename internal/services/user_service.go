@@ -7,9 +7,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/gofiber/fiber/v2/log"
 	"gorm.io/gorm"
-	"time"
 )
 
 type UserService struct {
@@ -27,7 +28,7 @@ func (s *UserService) GetUser(c context.Context, userID uint) (*models.User, err
 func (s *UserService) RegisterUser(c context.Context, input models.User) (*models.User, error) {
 	existingUser, err := s.repo.GetUserByEmail(c, input.Email)
 	if err == nil && existingUser != nil {
-		return nil, fmt.Errorf("Аккаунт с такой почтой уже существует")
+		return nil, fmt.Errorf("аккаунт с такой почтой уже существует")
 	}
 
 	err = s.repo.CreateUser(c, &input)

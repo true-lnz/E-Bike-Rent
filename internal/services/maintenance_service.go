@@ -69,7 +69,7 @@ func (s *MaintenanceService) UpdateMaintenance(c context.Context, request *dto.U
 
 	fmt.Print(request.FinishDate)
 
-	t, err := time.Parse("2006-01-02", request.FinishDate)
+	t, _ := time.Parse("2006-01-02", request.FinishDate)
 
 	lastStatus := existingMaintenance.Status
 
