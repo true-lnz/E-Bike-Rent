@@ -74,7 +74,6 @@ func (s *AccessoryService) Update(ctx *fiber.Ctx, request *dto.CreateUpdateAcces
 		if existing.ImageURL != "" {
 			_ = os.Remove("./public/uploads/" + existing.ImageURL)
 		}
-
 		filename, err = utils.SaveImage(ctx, file)
 		if err != nil {
 			return nil, fmt.Errorf("ошибка при сохранении изображения: %w", err)
