@@ -94,11 +94,11 @@ export default function AuthForm() {
 
 					<Text size="xs" c="dimmed" ta="center" mt="xs">
 						Вводя адрес электронной почты, ты соглашаешься с{" "}
-						<Text span inherit c="dimmed" component={Link} to="/policy" fw={500}>
+						<Text span inherit c="dimmed" component={Link} to="/policy" target="_blank" fw={500}>
 							Политикой Конфиденциальности
 						</Text>{" "}
 						и даешь{" "}
-						<Text span inherit c="dimmed" component={Link} to="/policy" fw={500}>
+						<Text span inherit c="dimmed" component={Link} to="/policy" target="_blank" fw={500}>
 							Согласие на обработку персональных данных
 						</Text>
 					</Text>

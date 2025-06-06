@@ -22,12 +22,12 @@ export default function CompanyCard({ company, selected, onSelect }: CompanyCard
         transition: "0.2s ease",
       }}
     >
-      <Stack align="center" gap="xs">
+      <Stack align="center" gap="4">
         <Image
           src={BASE_IMAGE_URL+ "companies/" + company.image_url}
           alt={company.name}
-          width={56}
-          height={56}
+          width={130}
+          height={130}
           fit="contain"
         />
         <Text ta="center" size="sm" fw={500}>
