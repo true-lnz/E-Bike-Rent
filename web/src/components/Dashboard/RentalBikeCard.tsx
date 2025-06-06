@@ -68,7 +68,6 @@ export function RentalBikeCard({
 	isActive,
 	isPending,
 	isDeclined,
-	status,
 	accessories,
 	onExtend,
 	onContact,
@@ -77,7 +76,6 @@ export function RentalBikeCard({
 	const [accessoryModalOpen, setAccessoryModalOpen] = useState(false);
 	const [extendRentalModalOpen, setExtendRentalModalOpen] = useState(false);
 	const initialAccessoryIds = useMemo(() => accessories.map(acc => acc.id), [accessories]);
-
 
 	const renderStatusSection = () => {
 		if (isPending) {
@@ -215,6 +213,7 @@ export function RentalBikeCard({
 								c="black"
 								variant="light"
 								onClick={() => {
+									if (onContact) onContact();
 									modals.open({
 										title: (
 											<Title order={3} ta="center" fw={600}>

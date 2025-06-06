@@ -40,7 +40,6 @@ export default function RegistrationStep() {
 	const [companies, setCompanies] = useState<Company[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-	const [showAgeWarning, setShowAgeWarning] = useState(false);
 	const [isValid, setIsValid] = useState(false);
 
 	useEffect(() => {
@@ -81,7 +80,6 @@ export default function RegistrationStep() {
 	const handleBirthdayChange = (value: Date | null) => {
 		setBirthday(value);
 		if (value && !is18OrOlder(value)) {
-			setShowAgeWarning(true);
 			modals.open({
 				title: "Возрастное ограничение",
 				centered: true,
@@ -97,8 +95,6 @@ export default function RegistrationStep() {
 					</Center>
 				),
 			});
-		} else {
-			setShowAgeWarning(false);
 		}
 	};
 
