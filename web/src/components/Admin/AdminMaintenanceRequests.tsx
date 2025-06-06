@@ -49,7 +49,7 @@ export default function AdminMaintenanceRequests() {
 							{maintenances.map((m) => (
 								<Table.Tr key={m.id}>
 									<Table.Td>{m.id}</Table.Td>
-									<Table.Td>{m.user_id}</Table.Td>
+									<Table.Td>{m.user.first_name}</Table.Td>
 									<Table.Td>{m.bicycle_name}</Table.Td>
 									<Table.Td>{dayjs(m.created_at).format("DD.MM.YYYY HH:mm")}</Table.Td>
 									<Table.Td>{m.status}</Table.Td>

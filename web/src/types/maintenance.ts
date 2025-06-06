@@ -1,6 +1,9 @@
+import type { User } from "./user";
+
 export type Maintenance = {
   id: number;
   user_id: number;
+	user: User;
   bicycle_name: string;
   status: string;
   details: string;
