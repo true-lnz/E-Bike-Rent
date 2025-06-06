@@ -85,7 +85,7 @@ export default function AdminMaintenanceRequests() {
 			actions.push(
 				<Button
 					fullWidth
-					color="orange"
+					color="orange.5"
 					onClick={() => { handleAccept(id, data.bicycle_name); onClose(); }}
 					radius="md"
 				>
@@ -93,8 +93,7 @@ export default function AdminMaintenanceRequests() {
 				</Button>,
 				<Button
 					fullWidth
-					variant="outline"
-					color="red"
+					variant="default"
 					onClick={() => { handleReject(id, { ...data, status }); onClose(); }}
 					radius="md"
 				>
@@ -105,7 +104,6 @@ export default function AdminMaintenanceRequests() {
 			actions.push(
 				<Button
 					fullWidth
-					color="blue"
 					onClick={() => { handleEditMaintenance(id, { ...data, status }); onClose(); }}
 					radius="md"
 				>
@@ -113,7 +111,7 @@ export default function AdminMaintenanceRequests() {
 				</Button>,
 				<Button
 					fullWidth
-					color="teal"
+					variant="default"
 					onClick={() => { handleComplete(id, data, 2); onClose(); }}
 					radius="md"
 				>
@@ -121,7 +119,7 @@ export default function AdminMaintenanceRequests() {
 				</Button>,
 				<Button
 					fullWidth
-					color="teal"
+					variant="default"
 					onClick={() => { handleComplete(id, data, 1); onClose(); }}
 					radius="md"
 				>
@@ -129,6 +127,7 @@ export default function AdminMaintenanceRequests() {
 				</Button>
 			);
 		}
+
 
 		return (
 			<Stack p="xs" style={{ width: 200 }}>
@@ -264,6 +263,9 @@ export default function AdminMaintenanceRequests() {
 			confirmProps: { color: 'teal' },
 			onConfirm: async () => {
 				setLoadingMaintenance(true);
+				if (currentData.finish_date && currentData.finish_date.includes('T')) {
+					currentData.finish_date = new Date(currentData.finish_date).toISOString().slice(0, 10);
+				}
 				try {
 					await maintenanceService.updateMaintenance(maintenanceId, {
 						...currentData,
@@ -289,7 +291,6 @@ export default function AdminMaintenanceRequests() {
 		});
 	};
 
-/* 
 	const handleEditDate = (
 		maintenanceId: number,
 		currentFinishDate: string,
@@ -300,7 +301,7 @@ export default function AdminMaintenanceRequests() {
 			price: number;
 		}
 	) => {
-		let newDate = currentFinishDate || "";
+		let newDate = !currentFinishDate || currentFinishDate.startsWith('0001-01-01') ? (new Date).toISOString() : currentFinishDate;
 
 		modals.openConfirmModal({
 			title: 'Изменить дату завершения',
@@ -319,6 +320,9 @@ export default function AdminMaintenanceRequests() {
 			),
 			onConfirm: async () => {
 				setLoadingMaintenance(true);
+				if (newDate && newDate.includes('T')) {
+					newDate = new Date(newDate).toISOString().slice(0, 10);
+				}
 				try {
 					await maintenanceService.updateMaintenance(maintenanceId, {
 						...currentData,
@@ -343,7 +347,7 @@ export default function AdminMaintenanceRequests() {
 			},
 		});
 	};
- */
+
 	const handleReject = (
 		maintenanceId: number,
 		currentData: {
@@ -430,6 +434,7 @@ export default function AdminMaintenanceRequests() {
 					label="Комментарий администратора"
 					placeholder="Введите комментарий..."
 					autosize
+					required
 					onChange={(e) => {
 						adminMessage = e.currentTarget.value;
 					}}
@@ -446,6 +451,7 @@ export default function AdminMaintenanceRequests() {
 							label="Стоимость"
 							placeholder="Введите стоимость ремонта"
 							min={0}
+							required
 							onChange={(val) => {
 								price = Number(val);
 							}}
@@ -462,6 +468,7 @@ export default function AdminMaintenanceRequests() {
 									label="Дата завершения"
 									placeholder="Выберите дату"
 									valueFormat="YYYY-MM-DD"
+									required
 									onChange={(date) => {
 										if (date) finishDate = date;
 									}}
@@ -535,8 +542,12 @@ export default function AdminMaintenanceRequests() {
 					]}
 				/>
 
-				<Stack>
-					<LoadingOverlay visible={loadingMaintenance}></LoadingOverlay>
+				<Stack pos="relative">
+					<LoadingOverlay
+						visible={loadingMaintenance}
+						overlayProps={{ radius: 'sm', blur: 2 }}
+						loaderProps={{ color: 'blue.5', type: 'bars' }}
+					/>
 					{filtered.length === 0 ? (
 						<Text c="dimmed">Нет заявок для отображения.</Text>
 					) : (
@@ -659,9 +670,28 @@ export default function AdminMaintenanceRequests() {
 										</Text>
 
 										{m.finish_date && (
-											<Text size="md">
-												Дата окончания ремонта: {dayjs(m.finish_date).format('DD.MM.YYYY')}
-											</Text>
+											<Group>
+												<Text size="md">
+													Дата окончания: {m.finish_date && dayjs(m.finish_date).year() > 1
+														? dayjs(m.finish_date).format('DD.MM.YYYY')
+														: '—'}
+												</Text>
+												{(m.status === "ремонтируется" || m.status === "готов к выдаче") &&
+													<Button
+														size="compact-sm"
+														p={0}
+														variant="transparent"
+														onClick={() => {
+															handleEditDate(m.id, m.finish_date, {
+																bicycle_name: m.bicycle_name,
+																status: m.status,
+																admin_message: m.admin_message || '',
+																price: m.price || 0,
+															})
+														}}
+													>Изменить</Button>
+												}
+											</Group>
 										)}
 
 										{m.admin_message && (
