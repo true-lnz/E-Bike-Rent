@@ -53,18 +53,7 @@ func CreateAccessory(accessoryService *services.AccessoryService) fiber.Handler 
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 		}
 
-		file, err := c.FormFile("image")
-		var filename string
-		if err == nil && file != nil {
-			filename, err = utils.SaveImage(c, file)
-			if err != nil {
-				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-			}
-		}
-
-		newAccessory := &models.Accessory{
-			ImageURL: filename,
-		}
+		newAccessory := &models.Accessory{}
 		if req.Name != nil {
 			newAccessory.Name = *req.Name
 		}
@@ -74,7 +63,7 @@ func CreateAccessory(accessoryService *services.AccessoryService) fiber.Handler 
 		if req.Price != nil {
 			newAccessory.Price = *req.Price
 		}
-		created, err := accessoryService.Create(c.Context(), newAccessory)
+		created, err := accessoryService.Create(c, newAccessory)
 
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
