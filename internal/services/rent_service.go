@@ -20,9 +20,6 @@ func NewRentService(repo repositories.RentRepository, bicycleRepo repositories.B
 }
 
 func (s *RentService) CreateRent(c context.Context, req dto.CreateRentRequest, userID uint) (resp *models.Rent, err error) {
-	//Узнать есть ли свободные.
-	//Если есть, то все ок.
-
 	if req.RentalDays < 1 {
 		return nil, fmt.Errorf("некорректное количество дней: %d", req.RentalDays)
 	}
@@ -58,7 +55,17 @@ func (s *RentService) CreateRent(c context.Context, req dto.CreateRentRequest, u
 
 	exp := time.Now().AddDate(0, 0, req.RentalDays)
 	expDate := time.Date(exp.Year(), exp.Month(), exp.Day(), 0, 0, 0, 0, exp.Location())
-	totalRentPrice := bicycle.DayPrice * req.RentalDays
+	totalRentPrice := func(duration int) int {
+		switch duration {
+		case 7:
+			return bicycle.OneWeekPrice
+		case 14:
+			return bicycle.TwoWeekPrice
+		case 30:
+			return bicycle.MonthPrice
+		}
+		return 0
+	}(req.RentalDays)
 
 	newRent := models.Rent{
 		ExpireDate:     expDate,
@@ -119,7 +126,17 @@ func (s *RentService) UpdateRent(c context.Context, req dto.UpdateRentRequest, r
 		end := existingRent.ExpireDate
 		days := int(end.Sub(*start).Hours() / 24)
 		fmt.Println("Количество дней:", days)
-		totalRentPrice := existingRent.Bicycle.DayPrice * days
+		totalRentPrice := func(duration int) int {
+			switch duration {
+			case 7:
+				return existingRent.Bicycle.OneWeekPrice
+			case 14:
+				return existingRent.Bicycle.TwoWeekPrice
+			case 30:
+				return existingRent.Bicycle.MonthPrice
+			}
+			return 0
+		}(days)
 		existingRent.RentPrice = totalRentPrice
 	}
 

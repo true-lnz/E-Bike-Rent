@@ -130,8 +130,14 @@ func (s *BicycleService) Update(ctx *fiber.Ctx, req *dto.UpdateBicycleRequest, i
 	if req.BrakeSystem != nil {
 		bicycle.BrakeSystem = *req.BrakeSystem
 	}
-	if req.DayPrice != nil {
-		bicycle.DayPrice = *req.DayPrice
+	if req.OneWeekPrice != nil {
+		bicycle.OneWeekPrice = *req.OneWeekPrice
+	}
+	if req.TwoWeekPrice != nil {
+		bicycle.TwoWeekPrice = *req.TwoWeekPrice
+	}
+	if req.MonthPrice != nil {
+		bicycle.MonthPrice = *req.MonthPrice
 	}
 	if req.Quantity != nil {
 		bicycle.Quantity = *req.Quantity
