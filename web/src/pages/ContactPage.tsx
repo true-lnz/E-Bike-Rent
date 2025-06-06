@@ -83,7 +83,7 @@ export default function ContactPage() {
 		}
 	};
 
-	const handlePhoneChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+	const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setFormData((prev) => ({ ...prev, phone: e.target.value }));
 	};
 
@@ -233,7 +233,7 @@ export default function ContactPage() {
 									name="phone"
 									value={formData.phone}
 									radius="md"
-									onChange={(event) => handlePhoneChange(event.currentTarget.value)}
+									onChange={handlePhoneChange}
 									component={IMaskInput}
 									mask="+7 (000) 000-00-00"
 									placeholder="Ваш телефон"
