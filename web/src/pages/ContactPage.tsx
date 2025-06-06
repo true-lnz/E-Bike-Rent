@@ -83,8 +83,8 @@ export default function ContactPage() {
 		}
 	};
 
-	const handlePhoneChange = (value: string) => {
-		setFormData((prev) => ({ ...prev, phone: value }));
+	const handlePhoneChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+		setFormData((prev) => ({ ...prev, phone: e.target.value }));
 	};
 
 	const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
