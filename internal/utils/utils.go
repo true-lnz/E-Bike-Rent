@@ -10,6 +10,7 @@ import (
 	"mime/multipart"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -82,6 +83,54 @@ func ParseUint(v string) uint {
 func ParseFloat(v string) float64 {
 	f, _ := strconv.ParseFloat(v, 64)
 	return f
+}
+
+func ParseByte(s string) byte {
+	i, _ := strconv.Atoi(s)
+	return byte(i)
+}
+
+func ParseBool(s string) bool {
+	return s == "true" || s == "1" || strings.ToLower(s) == "on"
+}
+
+func ToPtr(s string) *string {
+	if s == "" {
+		return nil
+	}
+	return &s
+}
+
+func ToIntPtr(s string) *int {
+	if s == "" {
+		return nil
+	}
+	v, err := strconv.Atoi(s)
+	if err != nil {
+		return nil
+	}
+	return &v
+}
+
+func ToBoolPtr(s string) *bool {
+	if s == "" {
+		return nil
+	}
+	v := strings.ToLower(s)
+	result := v == "true" || v == "1" || v == "on"
+	return &result
+}
+
+func ToBytePtr(s string) *byte {
+	if s == "" {
+		return nil
+	}
+	v, err := strconv.Atoi(s)
+	if err != nil {
+		return nil
+	}
+	b := byte(v)
+	return &b
 }
 
 func GenerateCode() string {

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"E-Bike-Rent/internal/dto"
 	"E-Bike-Rent/internal/models"
 	"E-Bike-Rent/internal/services"
 	"E-Bike-Rent/internal/utils"
@@ -31,27 +32,96 @@ func GetBicycleInformation(bicycleService *services.BicycleService) fiber.Handle
 
 func CreateBicycle(bicycleService *services.BicycleService) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		var req models.Bicycle
-		if err := c.BodyParser(&req); err != nil {
-			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
-		}
-		created, err := bicycleService.Create(c, &req)
+		form, err := c.MultipartForm()
 		if err != nil {
-			return err
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"error": "invalid multipart form",
+			})
 		}
+
+		get := func(key string) string {
+			if v, ok := form.Value[key]; ok && len(v) > 0 {
+				return v[0]
+			}
+			return ""
+		}
+
+		weight := utils.ParseInt(get("weight"))
+		maxSpeed := utils.ParseInt(get("max_speed"))
+		maxRange := utils.ParseInt(get("max_range"))
+		maxLoad := utils.ParseInt(get("max_load"))
+		power := utils.ParseInt(get("power"))
+		dayPrice := utils.ParseInt(get("day_price"))
+		quantity := utils.ParseInt(get("quantity"))
+		suspension := utils.ParseBool(get("suspension"))
+		wheelSize := utils.ParseByte(get("wheel_size"))
+
+		bicycle := &models.Bicycle{
+			Name:            get("name"),
+			Weight:          weight,
+			MaxSpeed:        maxSpeed,
+			MaxRange:        maxRange,
+			MaxLoad:         maxLoad,
+			Power:           power,
+			ChargeTimeHours: get("charge_time_hours"),
+			Battery:         get("battery"),
+			Suspension:      suspension,
+			Brakes:          get("brakes"),
+			Frame:           get("frame"),
+			WheelSize:       wheelSize,
+			WheelType:       get("wheel_type"),
+			Drive:           get("drive"),
+			BrakeSystem:     get("brake_system"),
+			DayPrice:        dayPrice,
+			Quantity:        quantity,
+		}
+
+		created, err := bicycleService.Create(c, bicycle)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+		}
+
 		return c.JSON(created)
 	}
 }
-
 func UpdateBicycle(bicycleService *services.BicycleService) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		var req models.Bicycle
-		if err := c.BodyParser(&req); err != nil {
-			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		bicycleID := utils.ParseUint(c.Params("id"))
+		form, err := c.MultipartForm()
+		if err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"error": "invalid multipart form",
+			})
 		}
 
-		req.ID = utils.ParseUint(c.Params("id"))
-		updated, err := bicycleService.Update(c.Context(), &req)
+		get := func(key string) string {
+			if v, ok := form.Value[key]; ok && len(v) > 0 {
+				return v[0]
+			}
+			return ""
+		}
+
+		req := &dto.UpdateBicycleRequest{
+			Name:            utils.ToPtr(get("name")),
+			Weight:          utils.ToIntPtr(get("weight")),
+			MaxSpeed:        utils.ToIntPtr(get("max_speed")),
+			MaxRange:        utils.ToIntPtr(get("max_range")),
+			MaxLoad:         utils.ToIntPtr(get("max_load")),
+			Power:           utils.ToIntPtr(get("power")),
+			ChargeTimeHours: utils.ToPtr(get("charge_time_hours")),
+			Battery:         utils.ToPtr(get("battery")),
+			Suspension:      utils.ToBoolPtr(get("suspension")),
+			Brakes:          utils.ToPtr(get("brakes")),
+			Frame:           utils.ToPtr(get("frame")),
+			WheelSize:       utils.ToBytePtr(get("wheel_size")),
+			WheelType:       utils.ToPtr(get("wheel_type")),
+			Drive:           utils.ToPtr(get("drive")),
+			BrakeSystem:     utils.ToPtr(get("brake_system")),
+			DayPrice:        utils.ToIntPtr(get("day_price")),
+			Quantity:        utils.ToIntPtr(get("quantity")),
+		}
+
+		updated, err := bicycleService.Update(c, req, bicycleID)
 		if err != nil {
 			return err
 		}
