@@ -9,7 +9,7 @@ export const getAllAccessories = async (): Promise<[Accessory[], number]> => {
 
 // Удаление по ID
 export const deleteAccessory = async (id: number): Promise<void> => {
-  await axios.delete(`${BASE_URL}api/accessory/${id}`);
+  await axios.delete(`${BASE_URL}api/admin/accessory/${id}`);
 };
 
 // Создание аксессуара с картинкой
@@ -25,7 +25,7 @@ export const createAccessory = async (data: {
   if (data.price !== undefined) formData.append("price", data.price.toString());
   if (data.image) formData.append("image", data.image);
 
-  const response = await axios.post<Accessory>(BASE_URL + "api/accessory/", formData, {
+  const response = await axios.post<Accessory>(BASE_URL + "api/admin/accessory/", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
   return response.data;
@@ -44,7 +44,7 @@ export const updateAccessory = async (id: number, data: {
   if (data.price !== undefined) formData.append("price", data.price.toString());
   if (data.image) formData.append("image", data.image);
 
-  const response = await axios.put<Accessory>(`${BASE_URL}api/accessory/${id}`, formData, {
+  const response = await axios.put<Accessory>(`${BASE_URL}api/admin/accessory/${id}`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
   return response.data;

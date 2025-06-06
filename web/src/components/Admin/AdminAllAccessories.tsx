@@ -15,10 +15,11 @@ import {
 	TextInput,
 	Title
 } from "@mantine/core";
-import { IconPlus } from "@tabler/icons-react";
+import { showNotification } from "@mantine/notifications";
+import { IconCheck, IconPlus, IconX } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { BASE_IMAGE_URL } from "../../constants";
-import { getAllAccessories } from "../../services/accessoryService";
+import { createAccessory, deleteAccessory, getAllAccessories, updateAccessory } from "../../services/accessoryService";
 import type { Accessory } from "../../types/accessory";
 import AccessoryCard from "../Accessory/AccessoryCard";
 
@@ -66,13 +67,29 @@ export default function AdminAllAccessories() {
 	const handleSave = async () => {
 		try {
 			if (selectedAccessory) {
-				console.log("Обновление аксессуара:", selectedAccessory);
-				// await updateAccessory(selectedAccessory);
+				await updateAccessory(selectedAccessory.id, {
+					name: selectedAccessory.name,
+					quantity: selectedAccessory.quantity,
+					price: selectedAccessory.price,
+					image: newImage || undefined,
+				});
+
+				showNotification({
+					title: 'Успешно',
+					message: 'Аксессуар обновлён',
+					color: 'green',
+					icon: <IconCheck />,
+				});
 			}
 			setEditModalOpened(false);
 			loadAccessories();
 		} catch (error) {
-			console.error("Ошибка сохранения:", error);
+			showNotification({
+				title: 'Ошибка',
+				message: 'Ошибка при сохранении аксессуара',
+				color: 'red',
+				icon: <IconX />,
+			});
 		}
 	};
 
@@ -80,21 +97,32 @@ export default function AdminAllAccessories() {
 		if (!newAccessory?.name) return;
 
 		try {
-			const formData = new FormData();
-			formData.append('name', newAccessory.name);
-			formData.append('quantity', String(newAccessory.quantity || 0));
-			formData.append('available_quantity', String(newAccessory.quantity || 0));
-			if (newImage) {
-				formData.append('image', newImage);
-			}
+			await createAccessory({
+				name: newAccessory.name,
+				quantity: newAccessory.quantity,
+				price: newAccessory.price,
+				image: newImage || undefined,
+			});
 
-			// await createAccessory(formData);
+			showNotification({
+				title: 'Успешно',
+				message: 'Аксессуар создан',
+				color: 'green',
+				icon: <IconCheck />,
+			});
+
 			setAddModalOpened(false);
 			loadAccessories();
 		} catch (error) {
-			console.error("Ошибка создания:", error);
+			showNotification({
+				title: 'Ошибка',
+				message: 'Ошибка при создании аксессуара',
+				color: 'red',
+				icon: <IconX />,
+			});
 		}
 	};
+
 
 	const handleDeleteConfirm = () => {
 		setDeleteModalOpened(true);
@@ -102,13 +130,27 @@ export default function AdminAllAccessories() {
 
 	const handleDelete = async () => {
 		try {
-			console.log("Удаление аксессуара:", selectedAccessory?.id);
-			// await deleteAccessory(selectedAccessory.id);
+			if (selectedAccessory?.id) {
+				await deleteAccessory(selectedAccessory.id);
+
+				showNotification({
+					title: 'Удалено',
+					message: 'Аксессуар успешно удалён',
+					color: 'green',
+					icon: <IconCheck />,
+				});
+			}
+
 			setEditModalOpened(false);
 			setDeleteModalOpened(false);
 			loadAccessories();
 		} catch (error) {
-			console.error("Ошибка удаления:", error);
+			showNotification({
+				title: 'Ошибка',
+				message: 'Ошибка при удалении аксессуара',
+				color: 'red',
+				icon: <IconX />,
+			});
 		}
 	};
 
