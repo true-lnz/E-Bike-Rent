@@ -29,9 +29,9 @@ import { maintenanceService } from "../../services/maintenanceService";
 import type { Maintenance } from "../../types/maintenance";
 import { MaintenanceDetailModal } from "../Maintenance/MaintenanceDetailModal";
 
-function isZeroDate(dateString: string) {
+/* function isZeroDate(dateString: string) {
 	return !dateString || dayjs(dateString).year() === 1;
-}
+} */
 
 export default function AdminMaintenanceRequests() {
 	const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
@@ -40,7 +40,6 @@ export default function AdminMaintenanceRequests() {
 	const [modalOpened, setModalOpened] = useState(false);
 	const [loadingMaintenance, setLoadingMaintenance] = useState(false);
 	const [openedPopoverId, setOpenedPopoverId] = useState<number | null>(null);
-	const [finishDateValue, setFinishDateValue] = useState<string | null>(null);
 
 	const refreshMaintenances = async () => {
 		setLoadingMaintenance(true);
@@ -149,7 +148,6 @@ export default function AdminMaintenanceRequests() {
 		}
 	) => {
 		let state = { ...initialData };
-		setFinishDateValue(state.finish_date)
 
 		modals.openConfirmModal({
 			title: 'Редактировать заявку',
@@ -291,7 +289,7 @@ export default function AdminMaintenanceRequests() {
 		});
 	};
 
-
+/* 
 	const handleEditDate = (
 		maintenanceId: number,
 		currentFinishDate: string,
@@ -345,7 +343,7 @@ export default function AdminMaintenanceRequests() {
 			},
 		});
 	};
-
+ */
 	const handleReject = (
 		maintenanceId: number,
 		currentData: {

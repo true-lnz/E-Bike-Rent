@@ -215,7 +215,6 @@ export default function AdminAllBikes() {
 	const renderModalContent = (
 		bike: Partial<Bike>,
 		setBike: (bike: Partial<Bike>) => void,
-		isEdit: boolean
 	) => (
 		<SimpleGrid cols={2} spacing="xl">
 			<Stack>
@@ -321,8 +320,7 @@ export default function AdminAllBikes() {
 					<>
 						{renderModalContent(
 							selectedBike,
-							(updated) => setSelectedBike((prev) => ({ ...(prev || {}), ...updated } as Bike)),
-							true
+							(updated) => setSelectedBike((prev) => ({ ...(prev || {}), ...updated } as Bike))
 						)}
 						{renderModalActions(selectedBike, true)}
 					</>
@@ -367,8 +365,7 @@ export default function AdminAllBikes() {
 					<>
 						{renderModalContent(
 							newBike,
-							(updated) => setNewBike((prev) => ({ ...(prev || {}), ...updated })),
-							false
+							(updated) => setNewBike((prev) => ({ ...(prev || {}), ...updated }))
 						)}
 						{renderModalActions(newBike, false)}
 					</>
