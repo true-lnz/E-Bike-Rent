@@ -4,8 +4,10 @@ import (
 	"E-Bike-Rent/internal/dto"
 	"E-Bike-Rent/internal/models"
 	"E-Bike-Rent/internal/repositories"
+	"E-Bike-Rent/internal/utils"
 	"context"
 	"fmt"
+	"github.com/gofiber/fiber/v2"
 )
 
 type BicycleService struct {
@@ -60,8 +62,18 @@ func (s *BicycleService) GetInformation(c context.Context, id uint) (*dto.Bicycl
 	return &result, nil
 }
 
-func (s *BicycleService) Create(c context.Context, data *models.Bicycle) (*models.Bicycle, error) {
-	return s.repo.Create(c, data)
+func (s *BicycleService) Create(ctx *fiber.Ctx, data *models.Bicycle) (*models.Bicycle, error) {
+	file, err := ctx.FormFile("image")
+	var filename string
+	if err == nil && file != nil {
+		filename, err = utils.SaveImage(ctx, file)
+		if err != nil {
+			return nil, err
+		}
+	}
+	data.ImageURL = filename
+
+	return s.repo.Create(ctx.Context(), data)
 }
 
 func (s *BicycleService) Update(c context.Context, data *models.Bicycle) (*models.Bicycle, error) {

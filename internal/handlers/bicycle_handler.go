@@ -35,7 +35,7 @@ func CreateBicycle(bicycleService *services.BicycleService) fiber.Handler {
 		if err := c.BodyParser(&req); err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 		}
-		created, err := bicycleService.Create(c.Context(), &req)
+		created, err := bicycleService.Create(c, &req)
 		if err != nil {
 			return err
 		}

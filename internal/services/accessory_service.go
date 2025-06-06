@@ -49,8 +49,17 @@ func (s *AccessoryService) Delete(c context.Context, accessoryID uint) error {
 	return s.repo.Delete(c, accessoryID)
 }
 
-func (s *AccessoryService) Create(c context.Context, accessory *models.Accessory) (*models.Accessory, error) {
-	return s.repo.Create(c, accessory)
+func (s *AccessoryService) Create(ctx *fiber.Ctx, accessory *models.Accessory) (*models.Accessory, error) {
+	file, err := ctx.FormFile("image")
+	var filename string
+	if err == nil && file != nil {
+		filename, err = utils.SaveImage(ctx, file)
+		if err != nil {
+			return nil, err
+		}
+	}
+	accessory.ImageURL = filename
+	return s.repo.Create(ctx.Context(), accessory)
 }
 func (s *AccessoryService) Update(ctx *fiber.Ctx, request *dto.CreateUpdateAccessoryRequest, accessoryID uint) (*models.Accessory, error) {
 	existing, err := s.repo.GetByID(ctx.Context(), accessoryID)
@@ -65,7 +74,6 @@ func (s *AccessoryService) Update(ctx *fiber.Ctx, request *dto.CreateUpdateAcces
 		if existing.ImageURL != "" {
 			_ = os.Remove("./public/uploads/" + existing.ImageURL)
 		}
-
 		filename, err = utils.SaveImage(ctx, file)
 		if err != nil {
 			return nil, fmt.Errorf("ошибка при сохранении изображения: %w", err)
