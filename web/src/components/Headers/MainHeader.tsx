@@ -151,6 +151,7 @@ export default function Header() {
 										variant="white"
 										c="blue"
 										size="sm"
+										mr="xs"
 										color="initials"
 										name={user?.first_name + ' ' + user?.last_name}
 									/>
