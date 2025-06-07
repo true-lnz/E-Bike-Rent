@@ -4,7 +4,7 @@ import vel1Img from "./../assets/images/liming-v8-1.png";
 
 export default function RentalAdvertise() {
 	return (
-		<Container size="xxl" px="0" py="xl" style={{ overflow: 'hidden' }}>
+		<Container size="xxl" px="0" py="xl" style={{ overflow: 'hidden' }} visibleFrom='lg'>
 			<Stack gap={60}>
 				{/* Block 1 */}
 				<Box
