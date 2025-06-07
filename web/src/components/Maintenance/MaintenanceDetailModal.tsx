@@ -193,7 +193,7 @@ export function MaintenanceDetailModal({
 									<Text size="sm" c="dimmed">Стоимость</Text>
 									<Text fw={500}>
 										{maintenance.price
-											? `${maintenance.price.toLocaleString()} ₽`
+											? `${(maintenance.price/100).toLocaleString()} ₽`
 											: "—"}
 									</Text>
 								</Card>

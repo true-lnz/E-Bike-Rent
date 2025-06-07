@@ -1,29 +1,37 @@
 import {
 	Avatar,
+	Badge,
+	Box,
 	Button,
 	Card,
 	Container,
 	Divider,
 	Group,
 	HoverCard,
+	Image,
 	LoadingOverlay,
 	Modal,
 	NumberInput,
+	Paper,
 	Pill,
 	Popover,
+	ScrollArea,
 	SegmentedControl,
 	Select,
+	SimpleGrid,
 	Stack,
 	Text,
-	Title,
+	ThemeIcon,
+	Title
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { modals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
-import { IconDotsVertical, IconPhoneCall } from "@tabler/icons-react";
+import { IconBike, IconCalendar, IconDotsVertical, IconPhoneCall, IconUser } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { BASE_IMAGE_URL } from "../../constants";
 import { getAllRents, updateRent } from "../../services/rentService";
 import type { Rent, UpdateRentRequest } from "../../types/rent";
 import AccessorySelectCardList from "../Accessory/AccessorySelectCardList";
@@ -35,6 +43,11 @@ export default function AdminRentRequests() {
 	const [loadingRents, setLoadingRents] = useState(false);
 	const [openedPopoverId, setOpenedPopoverId] = useState<number | null>(null);
 	const [modalOpened, setModalOpened] = useState(false);
+	const [updateData, setUpdateData] = useState<UpdateRentRequest | null>(null);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [editingRent, setEditingRent] = useState<Rent | null>(null);
+
+
 
 	const refreshRents = async () => {
 		setLoadingRents(true);
@@ -58,7 +71,10 @@ export default function AdminRentRequests() {
 
 	const filtered = rents.filter((r) => {
 		if (statusFilter === "done") {
-			return ["завершена"].includes(r.status);
+			return ["завершен", "отказано"].includes(r.status);
+		}
+		if (statusFilter === "processing") {
+			return ["арендован", "аренда продлена"].includes(r.status);
 		}
 		return r.status === statusFilter;
 	});
@@ -89,7 +105,7 @@ export default function AdminRentRequests() {
 					Отказать
 				</Button>
 			);
-		} else if (status === 'арендован') {
+		} else if (status === 'арендован' || status === 'аренда продлена') {
 			actions.push(
 				<Button
 					fullWidth
@@ -109,7 +125,6 @@ export default function AdminRentRequests() {
 				</Button>
 			);
 		}
-
 		return (
 			<Stack p="xs" style={{ width: 200 }}>
 				{actions.length > 0 ? actions : <Text size="sm" c="dimmed">Нет доступных действий</Text>}
@@ -118,79 +133,15 @@ export default function AdminRentRequests() {
 	};
 
 	const handleEditRent = (rent: Rent) => {
-		let updateData: UpdateRentRequest = {
+		setEditingRent(rent);
+		setUpdateData({
 			startDate: rent.start_date,
 			status: rent.status,
-			accessories: rent.accessories.map(a => a.id)
-		};
-
-		modals.openConfirmModal({
-			title: 'Редактировать аренду',
-			size: 'lg',
-			centered: true,
-			closeOnConfirm: false,
-			labels: { confirm: 'Сохранить', cancel: 'Отмена' },
-			children: (
-				<Stack>
-					<DateInput
-						label="Дата начала"
-						placeholder="Выберите дату"
-						valueFormat="YYYY-MM-DD"
-						value={updateData.startDate ? new Date(updateData.startDate) : null}
-						onChange={(date) => {
-							if (date) {
-								updateData.startDate = date.slice(0, 10);
-							}
-						}}
-					/>
-
-					<Select
-						label="Статус"
-						data={[
-							{ value: 'в обработке', label: 'В обработке' },
-							{ value: 'арендован', label: 'Арендован' },
-							{ value: 'завершен', label: 'Завершен' },
-							{ value: 'отказано', label: 'отказано' },
-							{ value: 'аренда продлена', label: 'Аренда продлена' },
-						]}
-						value={updateData.status}
-						onChange={(value) => (updateData.status = value || updateData.status)}
-					/>
-
-					<Text fw={600}>Выберите аксессуары</Text>
-					<AccessorySelectCardList
-						selectedAccessories={updateData.accessories || []}
-						onChangeSelected={(ids) => {
-							const resolvedIds = typeof ids === 'function' ? ids(updateData.accessories || []) : ids;
-							updateData.accessories = resolvedIds;
-						}}
-					/>
-
-				</Stack>
-			),
-			onConfirm: async () => {
-				try {
-					setLoadingRents(true);
-					await updateRent(rent.id!, updateData);
-					showNotification({
-						title: 'Успешно',
-						message: 'Аренда обновлена',
-						color: 'green',
-					});
-					await refreshRents();
-					modals.closeAll();
-				} catch (error) {
-					showNotification({
-						title: 'Ошибка',
-						message: 'Не удалось обновить аренду',
-						color: 'red',
-					});
-				} finally {
-					setLoadingRents(false);
-				}
-			},
+			accessories: rent.accessories.map(a => a.id),
 		});
+		setIsModalOpen(true);
 	};
+
 
 	const handleAccept = async (rentId: number) => {
 		modals.openConfirmModal({
@@ -282,7 +233,7 @@ export default function AdminRentRequests() {
 				setLoadingRents(true);
 				try {
 					await updateRent(rentId, {
-						status: 'завершена',
+						status: 'завершен',
 					});
 					showNotification({
 						title: 'Успешно',
@@ -367,12 +318,12 @@ export default function AdminRentRequests() {
 					onChange={setStatusFilter}
 					data={[
 						{ label: 'Ожидают подтверждения', value: 'в обработке' },
-						{ label: 'Активные аренды', value: 'арендован' },
+						{ label: 'Активные аренды', value: 'processing' },
 						{ label: 'Завершенные', value: 'done' },
 					]}
 				/>
 
-				<Stack pos="relative">
+				<Stack pos="relative" gap="xl">
 					<LoadingOverlay
 						visible={loadingRents}
 						overlayProps={{ radius: 'sm', blur: 2 }}
@@ -382,165 +333,298 @@ export default function AdminRentRequests() {
 						<Text c="dimmed">Нет запросов для отображения.</Text>
 					) : (
 						filtered.map((r) => (
-							<Card withBorder radius="xl" key={r.id} shadow="sm" h={265} p="xl">
-								<Group align="start" gap="xl" justify="space-between" wrap="nowrap" style={{ width: '100%' }}>
-									{/* Левый столбец */}
-									<Stack gap={4} w={200} align="center" style={{ height: '100%' }}>
-										<HoverCard width={260} shadow="md" withArrow position="right-start">
-											<HoverCard.Target>
-												<Group gap="sm" justify="center" style={{ cursor: 'pointer' }}>
-													<Avatar
-														size={80}
-														name={`${r.user?.first_name} ${r.user?.last_name}`}
-														radius={9999}
-													/>
-													<Text fw={700} fz="xl" style={{ whiteSpace: 'nowrap' }}>
-														{r.user?.last_name} {r.user?.first_name?.[0]}.{r.user?.patronymic?.[0] || ''}.
-													</Text>
-												</Group>
-											</HoverCard.Target>
+							<Box style={{ borderRadius: "xl", overflow: "hidden" }}>
 
-											<HoverCard.Dropdown>
+								<Card withBorder radius="xl" key={r.id} h={265} p="xl">
+									<Group align="start" gap="xl" justify="space-between" wrap="nowrap" style={{ width: '100%' }}>
+										{/* Левый столбец */}
+										<Stack gap={4} w={200} align="center" style={{ height: '100%' }}>
+											<HoverCard width={260} shadow="md" withArrow position="right-start">
+												<HoverCard.Target>
+													<Group gap="sm" justify="center" style={{ cursor: 'pointer' }}>
+														<Avatar
+															size={80}
+															name={`${r.user?.first_name} ${r.user?.last_name}`}
+															radius={9999}
+														/>
+														<Text fw={700} fz="xl" style={{ whiteSpace: 'nowrap' }}>
+															{r.user?.last_name} {r.user?.first_name?.[0]}.{r.user?.patronymic?.[0] || ''}.
+														</Text>
+													</Group>
+												</HoverCard.Target>
+
+												<HoverCard.Dropdown>
+													<Stack gap={4}>
+														<Text size="sm" fw={500}>{r.user?.last_name} {r.user?.first_name} {r.user?.patronymic} </Text>
+														<Text size="sm">📧 Почта: {r.user?.email}</Text>
+														<Text size="sm">
+															🎂 Дата рождения: {r.user?.birthday && dayjs(r.user.birthday).format('DD.MM.YYYY')} (
+															{r.user?.birthday && dayjs().diff(r.user.birthday, 'year')} лет)
+														</Text>
+														<Button
+															variant="light"
+															color="gray"
+															size="xs"
+															radius="md"
+															fullWidth
+															component={Link}
+															to={`tel:${r.user?.phone_number}`}
+															leftSection={<IconPhoneCall size={14} />}
+														>
+															Позвонить
+														</Button>
+													</Stack>
+												</HoverCard.Dropdown>
+											</HoverCard>
+
+											<Text size="sm">Тел.: {r.user?.phone_number}</Text>
+											<Button
+												variant="light"
+												color="gray"
+												size="sm"
+												mt="auto"
+												radius="xl"
+												fullWidth
+												component={Link}
+												to={`tel:${r.user?.phone_number}`}
+												leftSection={<IconPhoneCall size={14} />}
+											>
+												Связаться с клиентом
+											</Button>
+										</Stack>
+
+										<Divider orientation="vertical" />
+
+										{/* Правый столбец */}
+										<Stack gap={8} style={{ flexGrow: 1, height: '200px' }}>
+											<Group justify="space-between" align="start">
 												<Stack gap={4}>
-													<Text size="sm" fw={500}>{r.user?.last_name} {r.user?.first_name} {r.user?.patronymic} </Text>
-													<Text size="sm">📧 Почта: {r.user?.email}</Text>
-													<Text size="sm">
-														🎂 Дата рождения: {r.user?.birthday && dayjs(r.user.birthday).format('DD.MM.YYYY')} (
-														{r.user?.birthday && dayjs().diff(r.user.birthday, 'year')} лет)
+													<Group gap="xs">
+														<Avatar variant="default">
+															<Image
+																src={`${BASE_IMAGE_URL}/${r.bicycle.image_url}`}
+															/>
+														</Avatar>
+														<Text fz="28" lh={1.2} fw={700} lineClamp={1} title={r.bicycle.name}>
+															{r.bicycle.name}
+														</Text>
+													</Group>
+													<Text size="sm" c="dimmed">
+														Последнее обновление заявки: {dayjs(r.updated_at).format('DD.MM.YYYY')}
 													</Text>
-													<Button
-														variant="light"
-														color="gray"
-														size="xs"
-														radius="md"
-														fullWidth
-														component={Link}
-														to={`tel:${r.user?.phone_number}`}
-														leftSection={<IconPhoneCall size={14} />}
-													>
-														Позвонить
-													</Button>
 												</Stack>
-											</HoverCard.Dropdown>
-										</HoverCard>
 
-										<Text size="sm">Тел.: {r.user?.phone_number}</Text>
-										<Button
-											variant="light"
-											color="gray"
-											size="sm"
-											mt="auto"
-											radius="xl"
-											fullWidth
-											component={Link}
-											to={`tel:${r.user?.phone_number}`}
-											leftSection={<IconPhoneCall size={14} />}
-										>
-											Связаться с клиентом
-										</Button>
-									</Stack>
+												<Group gap="xs">
+													<Button
+														variant="default"
+														size="sm"
+														radius="md"
+														onClick={() => handleDetails(r)}
+													>
+														Детали
+													</Button>
 
-									<Divider orientation="vertical" />
+													<Popover width={220} position="bottom-end" opened={openedPopoverId === r.id}>
+														<Popover.Target>
+															<Button variant="subtle" size="sm" radius="md" px={8}
+																onClick={() =>
+																	setOpenedPopoverId((prev) => {
+																		if (typeof r.id === "undefined") return prev; // или null, по логике
+																		return prev === r.id ? null : r.id;
+																	})
+																}>
+																<IconDotsVertical size={18} />
+															</Button>
+														</Popover.Target>
+														<Popover.Dropdown
+															style={{
+																borderRadius: 'var(--mantine-radius-lg)',
+																boxShadow: '0 6px 24px rgba(0, 0, 0, 0.35)',
+																padding: 'var(--mantine-spacing-sm)',
+															}}
+														>
+															{handleActions(r.id!, r.status, () => setOpenedPopoverId(null))}
+														</Popover.Dropdown>
+													</Popover>
+												</Group>
+											</Group>
 
-									{/* Правый столбец */}
-									{/* Правый столбец */}
-									<Stack style={{ flexGrow: 1, height: '200px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-										{/* Заголовок на всю ширину */}
-										<Stack style={{ gridColumn: '1 / -1' }}>
-											<Text fz="28" lh={1.2} fw={700} lineClamp={1} title={r.bicycle.name}>
-												{r.bicycle.name}
-											</Text>
-											<Text size="md" c="dimmed">
-												Запрашиваемый период: {dayjs(r.start_date).format('DD.MM.YYYY')} - {dayjs(r.expire_date).format('DD.MM.YYYY')}
-											</Text>
-										</Stack>
+											<SimpleGrid cols={2} spacing={0}>
+												<Stack gap={0}>
+													<Text size="md">
+														Период:{" "}
+														{r.start_date && r.start_date !== '0001-01-01T00:00:00Z'
+															? dayjs(r.start_date).format('DD.MM.YYYY')
+															: '—'}{" "}
+														-{" "}
+														{r.expire_date && r.expire_date !== '0001-01-01T00:00:00Z'
+															? dayjs(r.expire_date).format('DD.MM.YYYY')
+															: '—'}
+														{r.start_date && r.expire_date &&
+															r.start_date !== '0001-01-01T00:00:00Z' &&
+															r.expire_date !== '0001-01-01T00:00:00Z' && (
+																<> ({dayjs(r.expire_date).diff(dayjs(r.start_date), 'day') + 1} дней)</>
+															)}
+													</Text>
 
-										{/* Левая колонка */}
-										<Stack gap={4}>
-											<Text size="md" fw={500}>
-												Стоимость аренды: {r.rent_price / 100} ₽
-											</Text>
-											{r.accessories.length > 0 && (
-												<Text size="md" lineClamp={2} title={r.accessories.map(a => a.name).join(', ')}>
-													Аксессуары: {r.accessories.map(a => a.name).join(', ')}
-												</Text>
-											)}
-										</Stack>
+													<Text size="md" lineClamp={1}>
+														Аксессуары: {r.accessories.length > 0 ? 'есть' : 'нет'}
+													</Text>
+												</Stack>
 
-										{/* Правая колонка */}
-										<Stack gap={4} align="flex-start">
-											<Text size="md" fw={500}>
-												Аксессуары: {r.accessory_price / 100} ₽
-											</Text>
-											<Group align="center" gap={6}>
+												<Stack gap={0}>
+													<Text size="md">
+														Аренда: {(r.rent_price / 100).toLocaleString()} ₽
+													</Text>
+													<Text size="md">
+														Аксессуары: {(r.accessory_price / 100).toLocaleString()} ₽
+													</Text>
+													<Text size="md">
+														Общая сумма: {(r.rent_price / 100 + r.accessory_price / 100).toLocaleString()} ₽
+													</Text>
+												</Stack>
+											</SimpleGrid>
+											<Group mt="auto" mb="8" align="flex-end">
 												<Text size="md" fw={700} title={r.status}>
 													Текущий статус:
 												</Text>
-												<Pill c="blue">{r.status}</Pill>
+												<Pill c="blue">
+													{r.status}
+												</Pill>
 											</Group>
-											<Text size="md" fw={700}>
-												Итого: {(r.rent_price / 100 + r.accessory_price / 100).toFixed(2)} ₽
-											</Text>
+
 										</Stack>
+									</Group>
+								</Card>
+								{/* Блок аксессуаров — серая подложка снизу */}
+								{r.accessories.length > 0 && (
+									<Box
+										bg="gray.1"
+										style={{
+											marginTop: '-2rem',
+											padding: "3.5rem 1rem 1.5rem 1rem",
+											borderBottomLeftRadius: "2rem",
+											borderBottomRightRadius: "2rem",
+										}}
+									>
+										<Text ta="center" size="lg" mb="md" fw={500} c="black">
+											Выбранные аксессуары
+										</Text>
 
-										{/* Кнопки действий — разместим на всю ширину снизу */}
-										<Group gap="sm">
-											<Button variant="default" size="sm" radius="md" onClick={() => handleDetails(r)}>
-												Детали
-											</Button>
-
-											<Popover width={220} position="bottom-end" opened={openedPopoverId === r.id}>
-												<Popover.Target>
-													<Button
-														variant="subtle"
-														size="sm"
-														radius="md"
-														px={8}
-														onClick={() =>
-															setOpenedPopoverId((prev) => {
-																if (typeof r.id === "undefined") return prev;
-																return prev === r.id ? null : r.id;
-															})
-														}
-													>
-														<IconDotsVertical size={18} />
-													</Button>
-												</Popover.Target>
-												<Popover.Dropdown
+										<Group px="xl" gap="xl" wrap="wrap">
+											{r.accessories.map((item) => (
+												<Stack
+													key={item.id}
+													align="center"
+													gap={4}
+													p="xs"
 													style={{
-														borderRadius: 'var(--mantine-radius-lg)',
-														boxShadow: '0 6px 24px rgba(0, 0, 0, 0.35)',
-														padding: 'var(--mantine-spacing-sm)',
+														backgroundColor: "white",
+														borderRadius: "16px",
+														width: 100,
 													}}
 												>
-													{handleActions(r.id!, r.status, () => setOpenedPopoverId(null))}
-												</Popover.Dropdown>
-											</Popover>
+													<Image
+														src={`${BASE_IMAGE_URL}/${item.image_url}`}
+														alt={item.name}
+														width={60}
+														height={60}
+														fit="contain"
+													/>
+													<Text size="xs" ta="center" color="black">
+														{item.name}
+													</Text>
+												</Stack>
+											))}
 										</Group>
-									</Stack>
-
-								</Group>
-							</Card>
+									</Box>
+								)}
+							</Box>
 						))
 					)}
 				</Stack>
 			</Stack >
 
-			<Modal opened={modalOpened} onClose={() => setModalOpened(false)} size="lg" title="Детали аренды">
+			<Modal
+				opened={modalOpened}
+				onClose={() => setModalOpened(false)}
+				size="lg"
+				title={'Детали аренды id: ' + selectedRent?.id}
+				centered
+				padding="md"
+				radius="md"
+				overlayProps={{ blur: 4, opacity: 0.2 }}
+			>
 				{selectedRent && (
-					<Stack>
-						<Text size="sm"><b>ID:</b> {selectedRent.id}</Text>
-						<Text size="sm"><b>Пользователь:</b> {selectedRent.user?.last_name} {selectedRent.user?.first_name}</Text>
-						<Text size="sm"><b>Велосипед:</b> {selectedRent.bicycle.name}</Text>
-						<Text size="sm"><b>Период аренды:</b> {dayjs(selectedRent.start_date).format('DD.MM.YYYY')} - {dayjs(selectedRent.expire_date).format('DD.MM.YYYY')}</Text>
-						<Text size="sm"><b>Статус:</b> {selectedRent.status}</Text>
-						<Text size="sm"><b>Стоимость:</b> {selectedRent.rent_price + selectedRent.accessory_price}₽</Text>
-						{selectedRent.accessories.length > 0 && (
-							<Text size="sm"><b>Аксессуары:</b> {selectedRent.accessories.map(a => a.name).join(', ')}</Text>
-						)}
+					<ScrollArea h={400}>
+						<Paper radius="md" p="md" withBorder>
+							<Stack gap="xs">
+								<Group gap="xs">
+									<ThemeIcon variant="light" color="blue" radius="xl">
+										<IconUser size={18} />
+									</ThemeIcon>
+									<Text size="sm"><b>Пользователь:</b> {selectedRent.user?.last_name} {selectedRent.user?.first_name}</Text>
+								</Group>
+
+								<Group gap="xs">
+									<ThemeIcon variant="light" color="green" radius="xl">
+										<IconBike size={18} />
+									</ThemeIcon>
+									<Text size="sm"><b>Велосипед:</b> {selectedRent.bicycle.name}</Text>
+								</Group>
+
+								<Group gap="xs">
+									<ThemeIcon variant="light" color="violet" radius="xl">
+										<IconCalendar size={18} />
+									</ThemeIcon>
+									<Text size="md">
+										Период:{" "}
+										{selectedRent.start_date && selectedRent.start_date !== '0001-01-01T00:00:00Z'
+											? dayjs(selectedRent.start_date).format('DD.MM.YYYY')
+											: '—'}{" "}
+										-{" "}
+										{selectedRent.expire_date && selectedRent.expire_date !== '0001-01-01T00:00:00Z'
+											? dayjs(selectedRent.expire_date).format('DD.MM.YYYY')
+											: '—'}
+										{selectedRent.start_date && selectedRent.expire_date &&
+											selectedRent.start_date !== '0001-01-01T00:00:00Z' &&
+											selectedRent.expire_date !== '0001-01-01T00:00:00Z' && (
+												<> ({dayjs(selectedRent.expire_date).diff(dayjs(selectedRent.start_date), 'day') + 1} дней)</>
+											)}
+									</Text>
+								</Group>
+
+								<Divider my="xs" />
+
+								<Text size="sm"><b>ID аренды:</b> {selectedRent.id}</Text>
+
+								<Group gap="xs">
+									<Text size="sm"><b>Статус:</b></Text>
+									<Badge color={
+										(selectedRent.status === 'арендован' || selectedRent.status === 'аренда продлена') ? 'green' :
+											selectedRent.status === 'в обработке' ? 'yellow' :
+												selectedRent.status === 'завершен' ? 'blue' :
+													'red'
+									}>
+										{selectedRent.status}
+									</Badge>
+								</Group>
+
+								<Group gap="xs">
+									<Text size="sm"><b>Полная сумма:</b> {(selectedRent.rent_price / 100 + selectedRent.accessory_price / 100).toLocaleString()} ₽</Text>
+								</Group>
+
+								{selectedRent.accessories.length > 0 && (
+									<Box>
+										<Text size="sm" fw={500}>Аксессуары:</Text>
+										<Text size="sm" c="dimmed">{selectedRent.accessories.map(a => a.name).join(', ')}</Text>
+									</Box>
+								)}
+							</Stack>
+						</Paper>
 
 						<Group justify="flex-end" mt="md">
-							<Button variant="default" onClick={() => setModalOpened(false)}>
+							<Button variant="outline" color="gray" onClick={() => setModalOpened(false)}>
 								Закрыть
 							</Button>
 							<Button onClick={() => {
@@ -550,9 +634,99 @@ export default function AdminRentRequests() {
 								Редактировать
 							</Button>
 						</Group>
-					</Stack>
+					</ScrollArea>
 				)}
 			</Modal>
+
+			{isModalOpen && editingRent && updateData && (
+				<Modal
+					opened={isModalOpen}
+					onClose={() => setIsModalOpen(false)}
+					title="Редактировать аренду"
+					size="lg"
+					centered
+				>
+					<Stack>
+						<DateInput
+							label="Дата начала"
+							placeholder="Выберите дату"
+							valueFormat="YYYY-MM-DD"
+							value={
+								updateData.startDate?.startsWith('0001-01-01')
+									? new Date()
+									: dayjs(updateData.startDate).toDate()
+							}
+							onChange={(date) => {
+								if (date) {
+									setUpdateData((prev) => ({
+										...prev!,
+										startDate: dayjs(date).format('YYYY-MM-DD'),
+									}));
+								}
+							}}
+						/>
+
+						<Select
+							label="Статус"
+							data={[
+								{ value: 'в обработке', label: 'В обработке' },
+								{ value: 'арендован', label: 'Арендован' },
+								{ value: 'завершен', label: 'Завершен' },
+								{ value: 'отказано', label: 'Отказано' },
+								{ value: 'аренда продлена', label: 'Аренда продлена' },
+							]}
+							value={updateData.status}
+							onChange={(value) =>
+								setUpdateData((prev) => ({ ...prev!, status: value || prev!.status }))
+							}
+						/>
+
+						<Text fw={600}>Выберите аксессуары</Text>
+						<AccessorySelectCardList
+							selectedAccessories={updateData.accessories || []}
+							onChangeSelected={(ids) => {
+								const resolvedIds = typeof ids === 'function' ? ids(updateData.accessories || []) : ids;
+								setUpdateData((prev) => ({
+									...prev!,
+									accessories: resolvedIds,
+								}));
+							}}
+						/>
+
+						<Group mt="md">
+							<Button
+								onClick={async () => {
+									try {
+										setLoadingRents(true);
+										await updateRent(editingRent.id!, updateData);
+										showNotification({
+											title: 'Успешно',
+											message: 'Аренда обновлена',
+											color: 'green',
+										});
+										await refreshRents();
+										setIsModalOpen(false);
+									} catch (error) {
+										showNotification({
+											title: 'Ошибка',
+											message: 'Не удалось обновить аренду',
+											color: 'red',
+										});
+									} finally {
+										setLoadingRents(false);
+									}
+								}}
+							>
+								Сохранить
+							</Button>
+							<Button variant="outline" onClick={() => setIsModalOpen(false)}>
+								Отмена
+							</Button>
+						</Group>
+					</Stack>
+				</Modal>
+			)}
+
 		</Container >
 	);
 }

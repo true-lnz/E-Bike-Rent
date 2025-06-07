@@ -612,7 +612,7 @@ export default function AdminMaintenanceRequests() {
 									<Stack gap={8} style={{ flexGrow: 1, height: '200px' }}>
 										<Group justify="space-between" align="start">
 											<Stack gap={0}>
-												<Text fz="28" lh={1} fw={700} lineClamp={1} title={m.bicycle_name}>
+												<Text fz="28" lh={1.2} fw={700} lineClamp={1} title={m.bicycle_name}>
 													Заявка: {m.bicycle_name}
 												</Text>
 												<Text size="md" c="dimmed">
