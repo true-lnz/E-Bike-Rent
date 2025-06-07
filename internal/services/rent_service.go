@@ -95,7 +95,7 @@ func (s *RentService) UpdateRent(c context.Context, req dto.UpdateRentRequest, r
 			now := time.Now()
 			start := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
 			existingRent.StartDate = &start
-		} else {
+		} else if req.StartDate != nil {
 			existingRent.StartDate = req.StartDate
 		}
 		existingRent.Status = *req.Status

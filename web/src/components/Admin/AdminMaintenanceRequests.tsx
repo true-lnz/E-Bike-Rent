@@ -29,10 +29,6 @@ import { maintenanceService } from "../../services/maintenanceService";
 import type { Maintenance } from "../../types/maintenance";
 import { MaintenanceDetailModal } from "../Maintenance/MaintenanceDetailModal";
 
-/* function isZeroDate(dateString: string) {
-	return !dateString || dayjs(dateString).year() === 1;
-} */
-
 export default function AdminMaintenanceRequests() {
 	const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
 	const [statusFilter, setStatusFilter] = useState("заявка в обработке");
@@ -552,8 +548,8 @@ export default function AdminMaintenanceRequests() {
 						<Text c="dimmed">Нет заявок для отображения.</Text>
 					) : (
 						filtered.map((m) => (
-							<Card withBorder radius="lg" key={m.id} shadow="sm" h={265} p="xl">
-								<Group align="start" justify="space-between" wrap="nowrap" style={{ width: '100%' }}>
+							<Card withBorder radius="xl" key={m.id} shadow="sm" h={265} p="xl">
+								<Group align="start" gap="xl" justify="space-between" wrap="nowrap" style={{ width: '100%' }}>
 									{/* Левый столбец */}
 									<Stack gap={4} w={200} align="center" style={{ height: '100%' }}>
 										<HoverCard width={260} shadow="md" withArrow position="right-start">
@@ -609,14 +605,20 @@ export default function AdminMaintenanceRequests() {
 											Связаться с клиентом
 										</Button>
 									</Stack>
+
 									<Divider orientation="vertical" />
 
 									{/* Правый столбец */}
-									<Stack gap={4} style={{ flexGrow: 1, height: '200px' }}>
+									<Stack gap={8} style={{ flexGrow: 1, height: '200px' }}>
 										<Group justify="space-between" align="start">
-											<Text fz="xl" fw={700} lineClamp={1} title={m.bicycle_name}>
-												Заявка: {m.bicycle_name}
-											</Text>
+											<Stack gap={0}>
+												<Text fz="28" lh={1} fw={700} lineClamp={1} title={m.bicycle_name}>
+													Заявка: {m.bicycle_name}
+												</Text>
+												<Text size="md" c="dimmed">
+													Дата заявки: {dayjs(m.created_at).format('DD.MM.YYYY')}
+												</Text>
+											</Stack>
 
 											<Group gap="xs">
 												<Button
@@ -660,45 +662,40 @@ export default function AdminMaintenanceRequests() {
 											</Group>
 										</Group>
 
-
-										<Text size="md" c="dimmed">
-											Дата заявки: {dayjs(m.created_at).format('DD.MM.YYYY')}
-										</Text>
-
-										<Text size="md" lineClamp={1} title={m.details}>
-											Детали заявки: {m.details}
-										</Text>
-
-										{m.finish_date && (
-											<Group>
-												<Text size="md">
-													Дата окончания: {m.finish_date && dayjs(m.finish_date).year() > 1
-														? dayjs(m.finish_date).format('DD.MM.YYYY')
-														: '—'}
-												</Text>
-												{(m.status === "ремонтируется" || m.status === "готов к выдаче") &&
-													<Button
-														size="compact-sm"
-														p={0}
-														variant="transparent"
-														onClick={() => {
-															handleEditDate(m.id, m.finish_date, {
-																bicycle_name: m.bicycle_name,
-																status: m.status,
-																admin_message: m.admin_message || '',
-																price: m.price || 0,
-															})
-														}}
-													>Изменить</Button>
-												}
-											</Group>
-										)}
-
-										{m.admin_message && (
+										<Stack gap={0}>
+											<Text size="md" lineClamp={1} title={m.details}>
+												Детали заявки: {m.details}
+											</Text>
+											{m.finish_date && (
+												<Group>
+													<Text size="md">
+														Дата окончания: {m.finish_date && dayjs(m.finish_date).year() > 1
+															? dayjs(m.finish_date).format('DD.MM.YYYY')
+															: '—'}
+													</Text>
+													{(m.status === "ремонтируется" || m.status === "готов к выдаче") &&
+														<Button
+															size="compact-sm"
+															p={0}
+															variant="transparent"
+															onClick={() => {
+																handleEditDate(m.id, m.finish_date, {
+																	bicycle_name: m.bicycle_name,
+																	status: m.status,
+																	admin_message: m.admin_message || '',
+																	price: m.price || 0,
+																})
+															}}
+														>Изменить</Button>
+													}
+												</Group>
+											)}
+																					{m.admin_message && (
 											<Text size="md" lineClamp={1} title={m.admin_message}>
 												Ваш комментарий: {m.admin_message}
 											</Text>
 										)}
+										</Stack>
 										<Group mt="auto" mb="8" align="flex-end">
 											<Text size="md" fw={700} title={m.status}>
 												Текущий статус:

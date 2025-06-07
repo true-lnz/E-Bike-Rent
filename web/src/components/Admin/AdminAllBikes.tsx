@@ -90,26 +90,6 @@ export default function AdminAllBikes() {
 		setDeleteModalOpened(true);
 	};
 
-	const handleCreate = async () => {
-		if (!newBike?.name) return;
-		setSaving(true);
-		try {
-			await createBike({
-				...newBike,
-				image: newImage || undefined,
-			});
-			setAddModalOpened(false);
-			setNewBike(null);
-			setNewImage(null);
-			setImagePreview(null);
-			loadBikes();
-		} catch (error) {
-			console.error("Ошибка создания:", error);
-		} finally {
-			setSaving(false);
-		}
-	};
-
 	const handleDelete = async () => {
 		if (!selectedBike?.id) return;
 		setSaving(true);
@@ -291,7 +271,7 @@ export default function AdminAllBikes() {
 					radius="md"
 				/>
 				<NumberInput
-					label="Цена за день (₽)"
+					label="Цена за день (в копейках, ₽)"
 					value={bike.day_price ?? 0}
 					onChange={(v) => setBike(updateBikeField(bike, "day_price", v))}
 					radius="md"

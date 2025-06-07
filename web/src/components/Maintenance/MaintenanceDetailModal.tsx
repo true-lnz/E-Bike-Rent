@@ -73,7 +73,7 @@ export function MaintenanceDetailModal({
 		<Modal
 			opened={opened}
 			onClose={onClose}
-			title={`Заявка #${maintenance.id}`}
+			title={`Заявка id: ${maintenance.id}`}
 			centered
 			size="xl"
 			radius="lg"

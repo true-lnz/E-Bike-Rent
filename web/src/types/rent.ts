@@ -5,7 +5,7 @@ import type { User } from "./user";
 // types/rent.ts
 export interface Rent {
   id?: number;
-  start_date?: string | null;
+  start_date?: string;
   expire_date: string;
   updated_at: string;
   user_id?: number;

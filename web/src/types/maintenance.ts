@@ -22,7 +22,7 @@ export interface CreateMaintenanceRequest {
 export interface UpdateMaintenanceRequest {
   bicycle_name: string;
   status: string;
-  finish_date: string; // ISO формат
+  finish_date: string;
   admin_message: string;
   price: number;
 }
