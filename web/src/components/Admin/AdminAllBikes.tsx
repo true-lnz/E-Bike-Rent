@@ -185,6 +185,7 @@ export default function AdminAllBikes() {
 			<Stack gap="sm" p="sm">
 				<TextInput
 					label="Название"
+					placeholder="Например, Kirin V3 Pro"
 					value={bike.name ?? ""}
 					onChange={(e) => setBike(updateBikeField(bike, "name", e.target.value))}
 					radius="md"
@@ -227,16 +228,20 @@ export default function AdminAllBikes() {
 				/>
 				<TextInput
 					label="Время зарядки (ч)"
+					placeholder="Например, 7-8"
 					value={bike.charge_time_hours ?? ""}
 					onChange={(e) => setBike(updateBikeField(bike, "charge_time_hours", e.target.value))}
 					radius="md"
 				/>
 				<TextInput
 					label="Батарея"
+					placeholder="Например, съемная, литиевая, 21Ah"
 					value={bike.battery ?? ""}
 					onChange={(e) => setBike(updateBikeField(bike, "battery", e.target.value))}
 					radius="md"
 				/>
+
+				<Text fw={500} size="sm">Наличие амортизации</Text>
 				<Switch
 					label="Подвеска"
 					checked={bike.suspension ?? false}
@@ -244,6 +249,7 @@ export default function AdminAllBikes() {
 				/>
 				<TextInput
 					label="Тормоза"
+					placeholder="Например, задний гидравлический тормоз"
 					value={bike.brakes ?? ""}
 					onChange={(e) => setBike(updateBikeField(bike, "brakes",
 						e.target.value))}
@@ -251,6 +257,7 @@ export default function AdminAllBikes() {
 				/>
 				<TextInput
 					label="Рама"
+					placeholder="Например, алюминий"
 					value={bike.frame ?? ""}
 					onChange={(e) => setBike(updateBikeField(bike, "frame", e.target.value))}
 					radius="md"
@@ -264,18 +271,21 @@ export default function AdminAllBikes() {
 				/>
 				<TextInput
 					label="Тип колеса"
+					placeholder="Например, надувные"
 					value={bike.wheel_type ?? ""}
 					onChange={(e) => setBike(updateBikeField(bike, "wheel_type", e.target.value))}
 					radius="md"
 				/>
 				<TextInput
 					label="Привод"
+					placeholder="Например, задний"
 					value={bike.drive ?? ""}
 					onChange={(e) => setBike(updateBikeField(bike, "drive", e.target.value))}
 					radius="md"
 				/>
 				<TextInput
 					label="Тормозная система"
+					placeholder="Например, гидравлический"
 					value={bike.brake_system ?? ""}
 					onChange={(e) => setBike(updateBikeField(bike, "brake_system", e.target.value))}
 					radius="md"
