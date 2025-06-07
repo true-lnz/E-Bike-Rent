@@ -77,30 +77,30 @@ export default function BikeCard({ bike }: BikeCardProps) {
 							flexWrap: 'wrap',
 						}}
 					>
-						<Group justify="space-between" gap="md" wrap="nowrap">
+						<Group justify="space-between" gap="md" wrap="nowrap" w="100%">
 							<Box>
-								<Text size="xs" c="dimmed">
+								<Text size="xs" c="dimmed" className="nobr">
 									1 неделя
 								</Text>
-								<Text fw={600}>{((bike.day_price / 100) * 7).toLocaleString()} ₽</Text>
+								<Text fz={{base: 'xs', xs: '18px', sm: "14px", md: "16px", xxl: '24px'}} fw={600} className="nobr">{((bike.day_price / 100) * 7).toLocaleString()} ₽</Text>
 							</Box>
 
 							<Divider orientation="vertical" />
 
 							<Box>
-								<Text size="xs" c="dimmed">
+								<Text size="xs" c="dimmed" className="nobr">
 									2 недели
 								</Text>
-								<Text fw={600}>{((bike.day_price / 100) * 14).toLocaleString()} ₽</Text>
+								<Text fz={{base: 'xs', xs: '18px', sm: "14px", md: "16px", xxl: '24px'}} fw={600} className="nobr">{((bike.day_price / 100) * 14).toLocaleString()} ₽</Text>
 							</Box>
 
 							<Divider orientation="vertical" />
 
 							<Box>
-								<Text size="xs" c="dimmed">
+								<Text size="xs" c="dimmed" className="nobr">
 									1 месяц
 								</Text>
-								<Text fw={600}>
+								<Text fw={600} fz={{base: 'xs', xs: '18px', sm: "14px", md: "16px", xxl: '24px'}} className="nobr">
 									{((bike.day_price / 100) * 30).toLocaleString()} ₽/мес.
 								</Text>
 							</Box>

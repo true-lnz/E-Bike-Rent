@@ -49,18 +49,12 @@ export default function BikeListPage({
 	return (
 		<Container id="bikes" size="lg" py="xl">
 			{onlyAvailable ? (
-				<Title order={1} size={45} mb="xl">
-					Доступно к аренде
-				</Title>
+				<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>Доступно к аренде</Title>
 			) : (
-				<Stack mb="xl">
-					<Title order={1} size={45} lh={0.5}>
+					<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>
 						Выбери свою идеальную модель
+						<Text fz="inherit" c="orange.5" fw={700}>электровелосипеда</Text>
 					</Title>
-					<Title order={1} size={45} c="orange.5">
-						электровелосипеда
-					</Title>
-				</Stack>
 			)}
 
 			{noVisibleBikes ? (

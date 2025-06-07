@@ -50,14 +50,10 @@ export default function AccessoriesList({
 					Доступно акссесуары
 				</Title>
 			) : (
-				<Stack mb="xl">
-					<Title order={1} size={45} lh={0.5}>
-						Добавь в свою подписку
-					</Title>
-					<Title order={1} size={45} c="orange.5">
-						акссесуары
-					</Title>
-				</Stack>
+				<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>
+					Добавь в свою подписку
+					<Text fz="inherit" c="orange.5" fw={700}>акссесуары</Text>
+				</Title>
 			)}
 
 			{noVisibleAccessories ? (
@@ -73,7 +69,7 @@ export default function AccessoriesList({
 				</Card>
 			) : (
 				<SimpleGrid
-					cols={{ base: 2, sm: 3, md: 4, lg: 5 }}
+					cols={{ base: 2, xs: 3, sm: 5, md: 6, lg: 5 }}
 					spacing="md"
 				>
 					{visibleAccessories.map((accessories) => (

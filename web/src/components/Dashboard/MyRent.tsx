@@ -27,7 +27,8 @@ export default function MyRent() {
 	return (
 		<Container py="xl" size="lg">
 			<Stack gap="xl">
-				<Title fz={45}>Мои аренды</Title>
+				<Title order={1} mb="sm" fz={{base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px"}}>Мои аренды</Title>
+				
 				{rents.length === 0 ? (
 					<>
 						<Paper radius="lg" withBorder>
