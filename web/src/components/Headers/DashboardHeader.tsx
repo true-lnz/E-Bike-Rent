@@ -192,7 +192,7 @@ export default function DashboardHeader() {
 				opened={opened}
 				onClose={close}
 				padding="md"
-				size="60%"
+				size="70%"
 				position="right"
 				overlayProps={{ opacity: 0.5, blur: 4 }}
 			>

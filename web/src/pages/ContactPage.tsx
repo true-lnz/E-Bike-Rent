@@ -116,7 +116,7 @@ export default function ContactPage() {
 				{/* Левая колонка */}
 				<Grid.Col span={{ base: 12, md: 5 }}>
 					{/* Информация о компании */}
-					<Card shadow="sm" radius="xl" p="xl" mb="md" withBorder bg="orange.5" c="white">
+					<Card shadow="sm" radius="xl" p={{base: "lg", sm: "xl"}} mb="md" withBorder bg="orange.5" c="white">
 						<Stack gap="sm">
 							<Group align="center">
 								<Box
@@ -135,16 +135,16 @@ export default function ContactPage() {
 							</Group>
 
 							<Stack gap={4} mt="xs">
-								<Group gap="xs">
+								<Group gap="xs" wrap='nowrap'>
 									<IconMail size={18} />
 									<Anchor href="mailto:fulgaz@gmail.com" underline="never" c="white">
 										<Text size="md"><b>Почта:</b> fulgaz@gmail.com</Text>
 									</Anchor>
 								</Group>
-								<Group gap="xs">
+								<Group gap="xs" wrap='nowrap'>
 									<IconMail size={18} />
 									<Anchor href="mailto:help-fulgaz@gmail.com" underline="never" c="white">
-										<Text size="md"><b>Тех. поддержка:</b> help-fulgaz@gmail.com</Text>
+										<Text size="md"><b>Тех. поддержка:</b> fulgaz@gmail.com</Text>
 									</Anchor>
 								</Group>
 								<Group gap="xs">
@@ -158,7 +158,7 @@ export default function ContactPage() {
 					</Card>
 
 					{/* Адрес */}
-					<Card shadow="sm" radius="xl" p="xl" mb="md" withBorder>
+					<Card shadow="sm" radius="xl" p={{base: "lg", sm: "xl"}} mb="md" withBorder>
 						<Group gap="xs" mb="xs">
 							<IconMapPin size={20} />
 							<Text fw={600} fz="lg">
@@ -172,24 +172,24 @@ export default function ContactPage() {
 					</Card>
 
 					{/* Услуги */}
-					<Card shadow="sm" radius="xl" p="xl" withBorder>
+					<Card shadow="sm" radius="xl" p={{base: "lg", sm: "xl"}} withBorder>
 						<Text fw={600} fz="lg" mb="sm">
 							Услуги
 						</Text>
 						<Stack gap="xs">
-							<Group gap="xs">
+							<Group gap="xs" wrap='nowrap'>
 								<IconBolt size={18} />
 								<Text size="sm">Сдача в аренду электровелосипедов</Text>
 							</Group>
-							<Group gap="xs">
+							<Group gap="xs" wrap='nowrap'>
 								<IconTool size={18} />
 								<Text size="sm">Ремонт и обслуживание велосипедов</Text>
 							</Group>
-							<Group gap="xs">
+							<Group gap="xs" wrap='nowrap'>
 								<IconDeviceDesktopCog size={18} />
 								<Text size="sm">Прошивка ПО электровелосипедов</Text>
 							</Group>
-							<Group gap="xs">
+							<Group gap="xs" wrap='nowrap'>
 								<IconSettings size={18} />
 								<Text size="sm">Диагностика электросистем велосипедов</Text>
 							</Group>
@@ -212,7 +212,7 @@ export default function ContactPage() {
 					</Card>
 
 					{/* Обратная связь */}
-					<Card shadow="sm" radius="xl" p="xl" withBorder>
+					<Card shadow="sm" radius="xl" p={{base: "lg", sm: "xl"}} withBorder>
 						<Text fw={600} fz="lg" mb="sm">
 							Форма обратной связи
 						</Text>

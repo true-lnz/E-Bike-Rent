@@ -89,7 +89,7 @@ export function MaintenanceList({ onCreated }: MaintenanceListProps) {
 
 	return (
 		<Container id="maintenance" size="lg" py="xl">
-			<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>Обслуживание и ремонт</Title>
+			<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>Обслуживание и ремонт</Title>
 
 			<Grid gutter="xl" grow>
 				{mockServices.map((service, idx) => (
