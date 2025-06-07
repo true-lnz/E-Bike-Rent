@@ -5,13 +5,14 @@ import {
 	Burger,
 	Button,
 	Container,
+	Divider,
 	Drawer,
 	Flex,
 	Group,
 	Image,
 	rem,
 	Stack,
-	Text,
+	Text
 } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
@@ -32,7 +33,7 @@ export default function Header() {
 	const { user } = useAuth();
 	const [activeNav, setActiveNav] = useState<string | null>(null);
 	const [opened, { toggle, close }] = useDisclosure(false);
-	const isMobile = useMediaQuery(`(max-width: 750px)`);
+	const isMobile = useMediaQuery(`(max-width: 800px)`);
 
 
 	const navItems: NavItem[] = [
@@ -99,12 +100,12 @@ export default function Header() {
 			>
 				{/* Логотип + навигация */}
 				<Group wrap="nowrap" gap="xl">
-					<Link to="/">
+					<Link to='/'>
 						<Image src={logo} alt="FulGaz" w={64} h={64} radius="sm" />
 					</Link>
 
-					{!isMobile && (
-						<Flex gap="xl" rowGap={4} align="center" wrap="wrap">
+				{!isMobile && (
+						<Flex gap="md" rowGap={0} align="center" wrap="wrap" mr="lg">
 							{navItems.map(item => (
 								<NavLink
 									key={item.path}
@@ -129,6 +130,7 @@ export default function Header() {
 								color="black"
 								onClick={close}
 								className="nobr"
+								visibleFrom='md'
 							>
 								<Text fw={700} size="lg" className="nobr">
 									+7 (964) 951-28-10
@@ -167,24 +169,24 @@ export default function Header() {
 			<Drawer
 				opened={opened}
 				onClose={close}
-				title="Меню"
 				padding="md"
-				size="260px"
+				size="60%"
 				position="right"
 				overlayProps={{ opacity: 0.5, blur: 4 }}
 			>
-				<Stack gap={8} align="stretch"> {/* spacing меньше, чем gap="sm" */}
+				<Stack gap='md' align="stretch"> {/* spacing меньше, чем gap="sm" */}
 					{navItems.map(item => (
 						<NavLink
 							key={item.path}
 							to={item.path}
 							active={activeNav === item.path}
 							onClick={() => handleNavClick(item.path)}
-						// style={{ padding: '6px 0' }} // чуть меньше padding, если нужно
 						>
 							{item.label}
 						</NavLink>
 					))}
+
+					<Divider mt='xl'></Divider>
 
 					<Anchor
 						href="tel:+79649512810"
@@ -197,8 +199,6 @@ export default function Header() {
 							+7 (964) 951-28-10
 						</Text>
 					</Anchor>
-
-
 
 					<Button
 						component={Link}
@@ -219,6 +219,7 @@ export default function Header() {
 						{user && (
 							<Avatar
 								variant="white"
+								visibleFrom='md'
 								c="blue"
 								size="sm"
 								color="initials"

@@ -191,9 +191,8 @@ export default function DashboardHeader() {
 			<Drawer
 				opened={opened}
 				onClose={close}
-				title="Меню"
 				padding="md"
-				size="260px"
+				size="60%"
 				position="right"
 				overlayProps={{ opacity: 0.5, blur: 4 }}
 			>
@@ -210,7 +209,7 @@ export default function DashboardHeader() {
 						</NavLink>
 					))}
 
-					<Divider my="xs" />
+					<Divider my="sm" />
 
 					{/* Пользовательская информация */}
 					<Text size="sm" fw={500}>
@@ -265,6 +264,7 @@ export default function DashboardHeader() {
 						fullWidth
 						variant="light"
 						color="orange.5"
+						radius="xl"
 						onClick={() => {
 							handleLogout();
 							close();
