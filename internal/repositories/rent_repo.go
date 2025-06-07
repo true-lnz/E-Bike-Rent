@@ -102,5 +102,6 @@ func (r *rentRepository) Update(tx *gorm.DB, rent *models.Rent) (*models.Rent, e
 	if err != nil {
 		return nil, err
 	}
+	tx.Model(rent).Preload("Accessories").First(rent)
 	return rent, nil
 }
