@@ -48,7 +48,7 @@ export default function AccessorySelectCardList({
 
   return (
     <SimpleGrid
-      cols={{ base: 2, sm: 3, md: 4, lg: 5 }}
+      cols={{ base: 2, xs: 3, sm: 4, lg: 3 }}
       spacing="md"
       verticalSpacing="md"
     >
@@ -85,19 +85,18 @@ export default function AccessorySelectCardList({
                 justifyContent: "center",
               }}
             >
-              <Stack align="center" gap="xs">
+              <Stack align="center" gap="4">
                 <Image
                   src={`${BASE_IMAGE_URL}${accessory.image_url}`}
                   alt={accessory.name}
-                  height={60}
+                  h={{ base: 120, xs: 150, sm: 80, lg: 120 }}
                   fit="contain"
                 />
                 <Text
                   fw={600}
                   ta="center"
-                  size="sm"
+                  fz={{base: "14px", sm: "16px", lg: "18px", xxl: "32px"}}
                   lineClamp={2}
-                  style={{ wordBreak: "break-word" }}
                 >
                   {accessory.name}
                 </Text>
