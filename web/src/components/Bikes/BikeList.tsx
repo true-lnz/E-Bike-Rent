@@ -77,7 +77,10 @@ export default function BikeListPage({
 					</Center>
 				</Card>
 			) : (
-				<SimpleGrid cols={3} spacing="lg">
+				<SimpleGrid
+					cols={{ base: 1, sm: 2, md: 3 }}
+					spacing="lg"
+				>
 					{visibleBikes.map((bike) => (
 						<BikeCard key={bike.id} bike={bike} />
 					))}

@@ -20,7 +20,7 @@ interface AccessoriesListPageProps {
 
 export default function AccessoriesList({
 	onlyAvailableByDefault = false,
-	showQuantityByDefault= false,
+	showQuantityByDefault = false,
 }: AccessoriesListPageProps) {
 	const [accessories, setAccessories] = useState<Accessory[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -72,11 +72,19 @@ export default function AccessoriesList({
 					</Center>
 				</Card>
 			) : (
-				<SimpleGrid cols={5} spacing="sm">
+				<SimpleGrid
+					cols={{ base: 2, sm: 3, md: 4, lg: 5 }}
+					spacing="md"
+				>
 					{visibleAccessories.map((accessories) => (
-						<AccessoryCard key={accessories.id} accessory={accessories} showQuantity={showQuantityByDefault} />
+						<AccessoryCard
+							key={accessories.id}
+							accessory={accessories}
+							showQuantity={showQuantityByDefault}
+						/>
 					))}
 				</SimpleGrid>
+
 			)}
 		</Container>
 	);

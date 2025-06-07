@@ -10,7 +10,6 @@ export default function ContactCard() {
 					pos="relative"
 					p="xl"
 					h={600}
-					bg="white"
 					style={{
 						margin: "auto",
 						display: "flex",

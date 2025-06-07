@@ -1,9 +1,24 @@
-import { Anchor, Avatar, Box, Button, Container, Group, Image, rem, Text } from '@mantine/core';
+import {
+	Anchor,
+	Avatar,
+	Box,
+	Burger,
+	Button,
+	Container,
+	Drawer,
+	Flex,
+	Group,
+	Image,
+	rem,
+	Stack,
+	Text,
+} from '@mantine/core';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { NavLink } from '../Headers/NavLink';
-import logo from "./../../assets/images/Logo512x512.png";
+import logo from './../../assets/images/Logo512x512.png';
 
 type NavItem = {
 	path: string;
@@ -15,8 +30,11 @@ export default function Header() {
 	const [isScrolled, setIsScrolled] = useState(false);
 	const location = useLocation();
 	const { user } = useAuth();
+	const [activeNav, setActiveNav] = useState<string | null>(null);
+	const [opened, { toggle, close }] = useDisclosure(false);
+	const isMobile = useMediaQuery(`(max-width: 750px)`);
 
-	// Пункты меню
+
 	const navItems: NavItem[] = [
 		{ path: '/', label: 'Главная' },
 		{ path: '/#bikes', label: 'Аренда', hash: '#bikes' },
@@ -27,32 +45,22 @@ export default function Header() {
 
 	// Определяем активный пункт на основе текущего URL
 	const getActiveNav = () => {
-		// Если есть хэш в URL, ищем соответствующий пункт меню
 		if (location.hash) {
 			const itemWithHash = navItems.find(item => item.hash === location.hash);
 			if (itemWithHash) return itemWithHash.path;
 		}
-
-		// Если нет хэша, проверяем путь
 		const currentPath = location.pathname;
 		const itemWithPath = navItems.find(item => item.path === currentPath);
-
-		return itemWithPath?.path || '/'; // По умолчанию главная
+		return itemWithPath?.path || '/';
 	};
 
-	const [activeNav, setActiveNav] = useState(getActiveNav());
-
-	// Обновляем активный пункт при изменении location
 	useEffect(() => {
 		setActiveNav(getActiveNav());
 	}, [location.pathname, location.hash]);
 
-	// Эффект для скролла
 	useEffect(() => {
 		const handleScroll = () => {
 			setIsScrolled(window.scrollY > 32);
-
-			// Автоматическое определение активного пункта при скролле
 			const sections = document.querySelectorAll('section[id]');
 			sections.forEach(section => {
 				const rect = section.getBoundingClientRect();
@@ -69,6 +77,11 @@ export default function Header() {
 		window.addEventListener('scroll', handleScroll);
 		return () => window.removeEventListener('scroll', handleScroll);
 	}, []);
+
+	const handleNavClick = (path: string) => {
+		setActiveNav(path);
+		close();
+	};
 
 	return (
 		<Container size="lg" mt="xl" px="14" component="header" pos="sticky" top="0" style={{ zIndex: 102 }}>
@@ -89,34 +102,136 @@ export default function Header() {
 					<Link to="/">
 						<Image src={logo} alt="FulGaz" w={64} h={64} radius="sm" />
 					</Link>
-					<Group gap="xl">
-						{navItems.map((item) => (
-							<NavLink
-								key={item.path}
-								to={item.path}
-								active={activeNav === item.path}
-							>
-								{item.label}
-							</NavLink>
-						))}
-					</Group>
+
+					{!isMobile && (
+						<Flex gap="xl" rowGap={4} align="center" wrap="wrap">
+							{navItems.map(item => (
+								<NavLink
+									key={item.path}
+									to={item.path}
+									active={activeNav === item.path}
+									onClick={() => handleNavClick(item.path)}
+								>
+									{item.label}
+								</NavLink>
+							))}
+						</Flex>
+					)}
 				</Group>
 
-				{/* Телефон + кнопка */}
+				{/* Телефон + кнопка или бургер */}
 				<Group wrap="nowrap" gap="xl">
-					<Anchor href="tel:+79649512810" underline="never" color="black">
-						<Text fw={700} size="lg">+7 (964) 951-28-10</Text>
-					</Anchor>
-					<Button component={Link} size="md" to="/dashboard" radius="xl" color="orange.5">
-						<Group gap={4}>
-							{user &&
-								<Avatar variant='white' c="blue" size="sm" color="initials" name={user?.first_name + " " + user?.last_name} />
-							}
-							Личный кабинет
-						</Group>
-					</Button>
+					{!isMobile ? (
+						<>
+							<Anchor
+								href="tel:+79649512810"
+								underline="never"
+								color="black"
+								onClick={close}
+								className="nobr"
+							>
+								<Text fw={700} size="lg" className="nobr">
+									+7 (964) 951-28-10
+								</Text>
+							</Anchor>
+
+							<Button
+								component={Link}
+								size="md"
+								to="/dashboard"
+								radius="xl"
+								color="orange.5"
+								fullWidth
+								onClick={close}
+							>
+								{user && (
+									<Avatar
+										variant="white"
+										c="blue"
+										size="sm"
+										color="initials"
+										name={user?.first_name + ' ' + user?.last_name}
+									/>
+								)}
+								Личный кабинет
+							</Button>
+
+						</>
+					) : (
+						<Burger opened={opened} onClick={toggle} aria-label="Открыть меню" />
+					)}
 				</Group>
 			</Box>
+
+			{/* Drawer для мобильных */}
+			<Drawer
+				opened={opened}
+				onClose={close}
+				title="Меню"
+				padding="md"
+				size="260px"
+				position="right"
+				overlayProps={{ opacity: 0.5, blur: 4 }}
+			>
+				<Stack gap={8} align="stretch"> {/* spacing меньше, чем gap="sm" */}
+					{navItems.map(item => (
+						<NavLink
+							key={item.path}
+							to={item.path}
+							active={activeNav === item.path}
+							onClick={() => handleNavClick(item.path)}
+						// style={{ padding: '6px 0' }} // чуть меньше padding, если нужно
+						>
+							{item.label}
+						</NavLink>
+					))}
+
+					<Anchor
+						href="tel:+79649512810"
+						underline="never"
+						color="black"
+						onClick={close}
+						className="nobr"
+					>
+						<Text fw={700} size="lg" className="nobr">
+							+7 (964) 951-28-10
+						</Text>
+					</Anchor>
+
+
+
+					<Button
+						component={Link}
+						size="md"
+						to="/dashboard"
+						radius="xl"
+						color="orange.5"
+						fullWidth
+						onClick={close}
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+							gap: '8px',
+							whiteSpace: 'nowrap',
+							justifyContent: 'center',
+						}}
+					>
+						{user && (
+							<Avatar
+								variant="white"
+								c="blue"
+								size="sm"
+								color="initials"
+								name={user?.first_name + ' ' + user?.last_name}
+								style={{ flexShrink: 0 }}
+							/>
+						)}
+						Личный кабинет
+					</Button>
+
+				</Stack>
+			</Drawer>
+
 		</Container>
 	);
 }
