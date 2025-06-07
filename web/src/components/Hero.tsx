@@ -9,6 +9,7 @@ import {
 	Image,
 	rem,
 	Stack,
+	Text,
 	Title
 } from '@mantine/core';
 import { IconBrandTelegram, IconBrandVk, IconPlus } from '@tabler/icons-react';
@@ -22,15 +23,32 @@ export default function HeroWithStats() {
 			{/* HERO СЕКЦИЯ */}
 			<Box pos="relative" pt="xl" style={{ overflow: 'hidden' }} >
 				{/* Фоновая геометрия — наклонный прямоугольник с закруглением */}
-				<Container size="lg" pos="relative" py="xl">
-					<Stack gap="0" maw={500}>
-						<Title order={1} lh="1" size={90} fw={800}>
+				<Container size="lg" pos="relative" py={{ base: "0", md: "xl" }}>
+					<Stack gap="0" w={{ base: "100%", sm: "55%", md: "55%" }}>
+						<Title
+							order={1}
+							mb="xl"
+							lh={{ base: "1.2", lg: "1", xxl: "2" }}
+							fz={{ base: "36px", xs: "50px", sm: "60px", md: "70px", lg: "80px", xxl: "120px" }} fw={900}
+						>
 							Аренда велосипедов
+							<Text fz="inherit" lh="inherit" fw={900} c="orange.5">для курьеров в Уфе</Text>
 						</Title>
-						<Title order={1} size={70} lh="1" fw={800} c="orange.5">
-							для курьеров в Уфе
-						</Title>
-
+						<Center hiddenFrom='sm' my={40}>
+							<Box
+								w="350"
+								h="350"
+								bg="blue.7"
+								style={{
+									borderRadius: rem(100),
+									transform: 'rotate(-12deg)',
+									zIndex: 0,
+								}}
+							>
+								{/* XS и SM (меньше md) */}
+								<Image hiddenFrom="md" src={heroImg} style={{ scale: 1.6 }} />
+							</Box>
+						</Center>
 						<Group mt={45} gap="xl">
 							<Button
 								color="orange.5"
@@ -79,9 +97,10 @@ export default function HeroWithStats() {
 					pos="absolute"
 					top={0}
 					right={0}
-					w="680"
-					h="680"
+					w={{ base: "400", xs: "350", sm: "400", md: "500", lg: "620", xl: "680" }}
+					h={{ base: "400", xs: "350", sm: "400", md: "500", lg: "620", xl: "680" }}
 					bg="blue.7"
+					visibleFrom='sm'
 					style={{
 						borderRadius: rem(100),
 						transform: 'rotate(-12deg)',
@@ -89,7 +108,18 @@ export default function HeroWithStats() {
 						zIndex: 0,
 					}}
 				>
-					<Image src={heroImg} style={{scale: 1.3, transform: "translateX(-100px)"}}></Image>
+					{/* XS и SM (меньше md) */}
+					<Image visibleFrom="xs" hiddenFrom="md" src={heroImg} style={{ scale: 1.2, transform: "translateX(-30px)" }} />
+
+					{/* MD (от md до lg) */}
+					<Image visibleFrom="md" hiddenFrom="lg" src={heroImg} style={{ scale: 1.3, transform: "translateX(0px)" }} />
+
+					{/* LG (от lg до xl) */}
+					<Image visibleFrom="lg" hiddenFrom="xl" src={heroImg} style={{ scale: 1.3, transform: "translateX(0px)" }} />
+
+					{/* XL и выше */}
+					<Image visibleFrom="xl" src={heroImg} style={{ scale: 1.3, transform: "translateX(-100px)" }} />
+
 				</Box>
 
 				<RentStats />

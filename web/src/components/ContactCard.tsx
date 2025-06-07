@@ -19,7 +19,6 @@ export default function ContactCard() {
   // Медиа-запросы
   const isMobile = useMediaQuery("(max-width: 576px)");
   const isTablet = useMediaQuery("(max-width: 768px)");
-  const isSmallLaptop = useMediaQuery("(max-width: 1024px)");
 
   return (
     <Container id="contact" size="xxl" p={0} style={{ overflow: "hidden" }}>
