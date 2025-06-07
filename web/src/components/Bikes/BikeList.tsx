@@ -38,7 +38,12 @@ export default function BikeListPage({
 			.finally(() => setLoading(false));
 	}, []);
 
-	if (loading) return <LoadingOverlay visible={true} zIndex={101} />;
+	if (loading) return
+		<LoadingOverlay
+			visible
+			overlayProps={{ radius: 'sm', blur: 2 }}
+			loaderProps={{ color: 'blue.5', type: 'bars' }}
+		/>;
 
 	const visibleBikes = onlyAvailable
 		? bikes.filter((bike) => bike.available_quantity > 0)
@@ -51,10 +56,10 @@ export default function BikeListPage({
 			{onlyAvailable ? (
 				<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>Доступно к аренде</Title>
 			) : (
-					<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>
-						Выбери свою идеальную модель
-						<Text fz="inherit" c="orange.5" fw={700}>электровелосипеда</Text>
-					</Title>
+				<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>
+					Выбери свою идеальную модель
+					<Text fz="inherit" c="orange.5" fw={700}>электровелосипеда</Text>
+				</Title>
 			)}
 
 			{noVisibleBikes ? (

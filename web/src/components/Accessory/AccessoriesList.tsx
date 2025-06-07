@@ -35,7 +35,12 @@ export default function AccessoriesList({
 			.finally(() => setLoading(false));
 	}, []);
 
-	if (loading) return <LoadingOverlay visible={true} zIndex={101} />;
+	if (loading) return
+	<LoadingOverlay
+		visible
+		overlayProps={{ radius: 'sm', blur: 2 }}
+		loaderProps={{ color: 'blue.5', type: 'bars' }}
+	/>;
 
 	const visibleAccessories = onlyAvailable
 		? accessories.filter((accessories) => accessories.available_quantity > 0)

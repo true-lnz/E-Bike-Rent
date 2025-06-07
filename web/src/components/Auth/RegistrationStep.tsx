@@ -6,7 +6,7 @@ import {
 	Container,
 	Group,
 	Input,
-	Loader,
+	LoadingOverlay,
 	Paper,
 	SimpleGrid,
 	Stack,
@@ -121,7 +121,11 @@ export default function RegistrationStep() {
 			radius: 'md',
 			children: (
 				<Center>
-					<Loader size="sm" />
+					<LoadingOverlay
+						visible
+						overlayProps={{ radius: 'sm', blur: 2 }}
+						loaderProps={{ color: 'blue.5', type: 'bars' }}
+					/>
 					<Text ml="md">Пожалуйста, подождите...</Text>
 				</Center>
 			),
@@ -210,7 +214,11 @@ export default function RegistrationStep() {
 						/>
 
 						{loading ? (
-							<Loader />
+							<LoadingOverlay
+								visible
+								overlayProps={{ radius: 'sm', blur: 2 }}
+								loaderProps={{ color: 'blue.5', type: 'bars' }}
+							/>
 						) : (
 							<SimpleGrid cols={5} spacing="lg">
 								{filteredCompanies.map((company) => (

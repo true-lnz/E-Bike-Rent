@@ -6,7 +6,7 @@ import {
 	Container,
 	Group,
 	Input,
-	Loader,
+	LoadingOverlay,
 	SimpleGrid,
 	Stack,
 	Text,
@@ -85,7 +85,7 @@ export function RegComplete() {
 					<Center>
 						<Group>
 							<IconAlertSquareRounded color="red" size={45}></IconAlertSquareRounded>
-							<Text style={{width: '85%'}}>
+							<Text style={{ width: '85%' }}>
 								Для регистрации вам должно быть не менее 18 лет. Пожалуйста, укажите корректную дату рождения.
 							</Text>
 						</Group>
@@ -167,7 +167,11 @@ export function RegComplete() {
 
 					{
 						loading ? (
-							<Loader />
+							<LoadingOverlay
+								visible
+								overlayProps={{ radius: 'sm', blur: 2 }}
+								loaderProps={{ color: 'blue.5', type: 'bars' }}
+							/>
 						) : (
 							<SimpleGrid
 								cols={5}
@@ -312,7 +316,7 @@ export function RegComplete() {
 						<Button variant="outline" onClick={handleBack} size="lg" radius="md">
 							Назад
 						</Button>
-						<Button  onClick={handleSubmit} disabled={!isStep2Valid || showAgeWarning} size="lg" radius="md">
+						<Button onClick={handleSubmit} disabled={!isStep2Valid || showAgeWarning} size="lg" radius="md">
 							Завершить регистрацию
 						</Button>
 					</Group>

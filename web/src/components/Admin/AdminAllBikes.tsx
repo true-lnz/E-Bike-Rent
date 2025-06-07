@@ -302,7 +302,11 @@ export default function AdminAllBikes() {
 					Добавить велосипед
 				</Button>
 			</Group>
-			<LoadingOverlay visible={loading} />
+			<LoadingOverlay
+				visible={loading}
+				overlayProps={{ radius: 'sm', blur: 2 }}
+				loaderProps={{ color: 'blue.5', type: 'bars' }}
+			/>
 			<SimpleGrid cols={{ base: 1, sm: 1, md: 1 }} spacing="lg">
 				{bikes.map((bike) => (
 					<AdminBikeCard
@@ -337,9 +341,9 @@ export default function AdminAllBikes() {
 								fit="contain"
 							/>
 						) : (
-						<Group h={200} w={200} bg="gray.1" justify="center" align="center" style={{ borderRadius: 8 }}>
-							<IconPhoto size={48} color="gray" />
-						</Group>
+							<Group h={200} w={200} bg="gray.1" justify="center" align="center" style={{ borderRadius: 8 }}>
+								<IconPhoto size={48} color="gray" />
+							</Group>
 						)}
 						<FileInput
 							placeholder={newImage?.name || "Выберите изображение"}

@@ -1,4 +1,4 @@
-import { ActionIcon, Badge, Button, Center, Container, Group, Paper, ScrollArea, Table, Text, Title, Tooltip } from "@mantine/core";
+import { ActionIcon, Badge, Button, Center, Container, Group, LoadingOverlay, Paper, ScrollArea, Table, Text, Title, Tooltip } from "@mantine/core";
 import { IconPhone } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -42,21 +42,18 @@ const getTextColor = (status: string): string => {
 export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 	if (loading) {
 		return (
-			<Container size="lg" py="xl">
-				<Title order={1} mb="md">Заявки на обслуживание</Title>
-				<Paper radius="lg" withBorder>
-					<Center style={{ minHeight: 100 }}>
-						<Text color="dimmed" size="lg">Загрузка...</Text>
-					</Center>
-				</Paper>
-			</Container>
+			<LoadingOverlay
+				visible
+				overlayProps={{ radius: 'sm', blur: 2 }}
+				loaderProps={{ color: 'blue.5', type: 'bars' }}
+			/>
 		);
 	}
 
 	if (!data || data.length === 0) {
 		return (
 			<Container size="lg" py="xl">
-				<Title order={1} mb="md">Заявки на обслуживание</Title>
+				<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>Заявки на обслуживание</Title>
 				<Paper radius="lg" withBorder>
 					<Center style={{ minHeight: 100 }}>
 						<Text color="dimmed" size="lg">Нет заявок на обслуживание</Text>
@@ -81,10 +78,7 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 
 	return (
 		<Container size="lg" py="xl">
-			<Title order={1} mb="md">
-				Заявки на обслуживание
-			</Title>
-
+			<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>Заявки на обслуживание</Title>
 			<ScrollArea>
 				<Paper radius="lg" withBorder>
 					<Table striped highlightOnHover withColumnBorders>

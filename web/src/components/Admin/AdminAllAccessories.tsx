@@ -154,7 +154,12 @@ export default function AdminAllAccessories() {
 		}
 	};
 
-	if (loading) return <LoadingOverlay visible={true} zIndex={101} />;
+	if (loading) return 
+		<LoadingOverlay
+			visible
+			overlayProps={{ radius: 'sm', blur: 2 }}
+			loaderProps={{ color: 'blue.5', type: 'bars' }}
+		/>;
 
 	return (
 		<Container id="accessories" py="xl" size="lg">
