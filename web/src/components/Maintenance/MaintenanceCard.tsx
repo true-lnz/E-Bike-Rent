@@ -1,5 +1,4 @@
 import { Box, Button, Card, Image, Text } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
 import type { ReactNode } from "react";
 
@@ -20,8 +19,6 @@ export function MaintenanceCard({
 	textColor?: string;
 	btnVariant?: string;
 }) {
-	const isMobile = useMediaQuery("(max-width: 600px)");
-
 	return (
 		<Card
 			shadow="sm"
