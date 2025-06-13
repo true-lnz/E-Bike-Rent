@@ -7,9 +7,9 @@ import {
 	Group,
 	HoverCard,
 	LoadingOverlay,
+	Menu,
 	NumberInput,
 	Pill,
-	Popover,
 	SegmentedControl,
 	Select,
 	Stack,
@@ -21,7 +21,7 @@ import {
 import { DateInput } from "@mantine/dates";
 import { modals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
-import { IconDotsVertical, IconPhoneCall } from "@tabler/icons-react";
+import { IconCheck, IconCheckupList, IconDotsVertical, IconEdit, IconPhoneCall, IconTool, IconX } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -35,7 +35,6 @@ export default function AdminMaintenanceRequests() {
 	const [selectedMaintenance, setSelectedMaintenance] = useState<Maintenance | null>(null);
 	const [modalOpened, setModalOpened] = useState(false);
 	const [loadingMaintenance, setLoadingMaintenance] = useState(false);
-	const [openedPopoverId, setOpenedPopoverId] = useState<number | null>(null);
 
 	const refreshMaintenances = async () => {
 		setLoadingMaintenance(true);
@@ -73,62 +72,70 @@ export default function AdminMaintenanceRequests() {
 			admin_message: string;
 			price: number;
 		},
-		onClose: () => void
-	) => {
+	): React.ReactNode => {
 		const actions: React.ReactNode[] = [];
 
 		if (status === 'заявка в обработке') {
 			actions.push(
-				<Button
-					fullWidth
-					color="orange.5"
-					onClick={() => { handleAccept(id, data.bicycle_name); onClose(); }}
-					radius="md"
+				<Menu.Item
+					key="accept"
+					c="green"
+					leftSection={<IconCheck size={16} />}
+					onClick={() => {
+						handleAccept(id, data.bicycle_name);
+					}}
 				>
 					Принять
-				</Button>,
-				<Button
-					fullWidth
-					variant="default"
-					onClick={() => { handleReject(id, { ...data, status }); onClose(); }}
-					radius="md"
+				</Menu.Item>,
+				<Menu.Item
+					key="reject"
+					color="red"
+					leftSection={<IconX size={16} />}
+					onClick={() => {
+						handleReject(id, { ...data, status });
+					}}
 				>
 					Отказать
-				</Button>
+				</Menu.Item>
 			);
 		} else if (status === 'ремонтируется' || status === 'готов к выдаче') {
 			actions.push(
-				<Button
-					fullWidth
-					onClick={() => { handleEditMaintenance(id, { ...data, status }); onClose(); }}
-					radius="md"
+				<Menu.Item
+					key="edit"
+					leftSection={<IconEdit size={16} />}
+					onClick={() => {
+						handleEditMaintenance(id, { ...data, status });
+					}}
 				>
 					Редактировать
-				</Button>,
-				<Button
-					fullWidth
-					variant="default"
-					onClick={() => { handleComplete(id, data, 2); onClose(); }}
-					radius="md"
+				</Menu.Item>,
+				<Menu.Item
+					key="ready"
+					color="blue.7"
+					leftSection={<IconTool size={16} />}
+					onClick={() => {
+						handleComplete(id, data, 2);
+					}}
 				>
 					Готов к выдаче
-				</Button>,
-				<Button
-					fullWidth
-					variant="default"
-					onClick={() => { handleComplete(id, data, 1); onClose(); }}
-					radius="md"
+				</Menu.Item>,
+				<Menu.Item
+					key="complete"
+					color="blue.7"
+					leftSection={<IconCheckupList size={16} />}
+					onClick={() => {
+						handleComplete(id, data, 1);
+					}}
 				>
 					Завершить
-				</Button>
+				</Menu.Item>
 			);
 		}
 
-
-		return (
-			<Stack p="xs" style={{ width: 200 }}>
-				{actions.length > 0 ? actions : <Text size="sm" c="dimmed">Нет доступных действий</Text>}
-			</Stack>
+		return actions.length > 0 ? actions : (
+			<Menu.Item disabled>
+				<Text size="sm" c="dimmed">Нет доступных действий</Text>
+			</Menu.Item>
 		);
 	};
 
@@ -630,35 +637,31 @@ export default function AdminMaintenanceRequests() {
 													Детали
 												</Button>
 
-												<Popover width={220} position="bottom-end" opened={openedPopoverId === m.id}
-													onChange={(open) => {
-														setOpenedPopoverId(open ? m.id : null);
-													}}>
-													<Popover.Target>
-														<Button variant="subtle" size="sm" radius="md" px={8}
-															onClick={() =>
-																setOpenedPopoverId((current) => (current === m.id ? null : m.id))
-															}>
+												<Menu position="bottom-end" radius="md" trigger="click-hover" openDelay={100} closeDelay={400} shadow="sm" width={220}>
+													<Menu.Target>
+														<Button variant="subtle" size="sm" radius="md" px={8}>
 															<IconDotsVertical size={18} />
 														</Button>
-													</Popover.Target>
-													<Popover.Dropdown
+													</Menu.Target>
+													<Menu.Dropdown
 														style={{
 															borderRadius: 'var(--mantine-radius-lg)',
 															boxShadow: '0 6px 24px rgba(0, 0, 0, 0.35)',
 															padding: 'var(--mantine-spacing-sm)',
 														}}
 													>
-														{handleActions(m.id, m.status, {
-															bicycle_name: m.bicycle_name,
-															finish_date: m.finish_date,
-															admin_message: m.admin_message || '',
-															price: m.price || 0,
-														},
-															() => setOpenedPopoverId(null)
+														{handleActions(
+															m.id,
+															m.status,
+															{
+																bicycle_name: m.bicycle_name,
+																finish_date: m.finish_date,
+																admin_message: m.admin_message || '',
+																price: m.price || 0,
+															}
 														)}
-													</Popover.Dropdown>
-												</Popover>
+													</Menu.Dropdown>
+												</Menu>
 											</Group>
 										</Group>
 
@@ -690,11 +693,11 @@ export default function AdminMaintenanceRequests() {
 													}
 												</Group>
 											)}
-																					{m.admin_message && (
-											<Text size="md" lineClamp={1} title={m.admin_message}>
-												Ваш комментарий: {m.admin_message}
-											</Text>
-										)}
+											{m.admin_message && (
+												<Text size="md" lineClamp={1} title={m.admin_message}>
+													Ваш комментарий: {m.admin_message}
+												</Text>
+											)}
 										</Stack>
 										<Group mt="auto" mb="8" align="flex-end">
 											<Text size="md" fw={700} title={m.status}>

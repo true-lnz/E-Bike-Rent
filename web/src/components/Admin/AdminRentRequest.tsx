@@ -10,11 +10,11 @@ import {
 	HoverCard,
 	Image,
 	LoadingOverlay,
+	Menu,
 	Modal,
 	NumberInput,
 	Paper,
 	Pill,
-	Popover,
 	ScrollArea,
 	SegmentedControl,
 	Select,
@@ -27,7 +27,7 @@ import {
 import { DateInput } from "@mantine/dates";
 import { modals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
-import { IconBike, IconCalendar, IconDotsVertical, IconPhoneCall, IconUser } from "@tabler/icons-react";
+import { IconBike, IconCalendar, IconCheck, IconCheckupList, IconDotsVertical, IconPhoneCall, IconRefresh, IconUser, IconX } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -41,13 +41,10 @@ export default function AdminRentRequests() {
 	const [statusFilter, setStatusFilter] = useState("в обработке");
 	const [selectedRent, setSelectedRent] = useState<Rent | null>(null);
 	const [loadingRents, setLoadingRents] = useState(false);
-	const [openedPopoverId, setOpenedPopoverId] = useState<number | null>(null);
 	const [modalOpened, setModalOpened] = useState(false);
 	const [updateData, setUpdateData] = useState<UpdateRentRequest | null>(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [editingRent, setEditingRent] = useState<Rent | null>(null);
-
-
 
 	const refreshRents = async () => {
 		setLoadingRents(true);
@@ -82,55 +79,68 @@ export default function AdminRentRequests() {
 	const handleActions = (
 		id: number,
 		status: string,
-		onClose: () => void
-	) => {
+	): React.ReactNode => {
 		const actions: React.ReactNode[] = [];
 
 		if (status === 'в обработке') {
 			actions.push(
-				<Button
-					fullWidth
+				<Menu.Item
+					key="accept"
 					color="green"
-					onClick={() => { handleAccept(id); onClose(); }}
-					radius="md"
+					leftSection={<IconCheck size={16} />}
+					onClick={() => {
+						handleAccept(id);
+					}}
 				>
 					Подтвердить
-				</Button>,
-				<Button
-					fullWidth
-					variant="default"
-					onClick={() => { handleReject(id); onClose(); }}
-					radius="md"
+				</Menu.Item>,
+				<Menu.Item
+					key="reject"
+					color="red"
+					leftSection={<IconX size={16} />}
+					onClick={() => {
+						handleReject(id);
+					}}
 				>
 					Отказать
-				</Button>
+				</Menu.Item>
 			);
 		} else if (status === 'арендован' || status === 'аренда продлена') {
 			actions.push(
-				<Button
-					fullWidth
+				<Menu.Item
+					key="complete"
 					color="blue"
-					onClick={() => { handleComplete(id); onClose(); }}
-					radius="md"
+					leftSection={<IconCheckupList size={16} />}
+					onClick={() => {
+						handleComplete(id);
+					}}
 				>
 					Завершить аренду
-				</Button>,
-				<Button
-					fullWidth
-					variant="default"
-					onClick={() => { handleExtend(id); onClose(); }}
-					radius="md"
+				</Menu.Item>,
+				<Menu.Item
+					key="extend"
+					color="orange"
+					leftSection={<IconRefresh size={16} />}
+					onClick={() => {
+						handleExtend(id);
+					}}
 				>
 					Продлить аренду
-				</Button>
+				</Menu.Item>
 			);
 		}
-		return (
-			<Stack p="xs" style={{ width: 200 }}>
-				{actions.length > 0 ? actions : <Text size="sm" c="dimmed">Нет доступных действий</Text>}
-			</Stack>
-		);
+
+		if (actions.length === 0) {
+			actions.push(
+				<Menu.Item key="no-actions" disabled>
+					<Text size="sm" c="dimmed">Нет доступных действий</Text>
+				</Menu.Item>
+			);
+		}
+
+		return actions;
 	};
+
 
 	const handleEditRent = (rent: Rent) => {
 		setEditingRent(rent);
@@ -141,7 +151,6 @@ export default function AdminRentRequests() {
 		});
 		setIsModalOpen(true);
 	};
-
 
 	const handleAccept = async (rentId: number) => {
 		modals.openConfirmModal({
@@ -424,28 +433,32 @@ export default function AdminRentRequests() {
 														Детали
 													</Button>
 
-													<Popover width={220} position="bottom-end" opened={openedPopoverId === r.id}>
-														<Popover.Target>
-															<Button variant="subtle" size="sm" radius="md" px={8}
-																onClick={() =>
-																	setOpenedPopoverId((prev) => {
-																		if (typeof r.id === "undefined") return prev; // или null, по логике
-																		return prev === r.id ? null : r.id;
-																	})
-																}>
+													<Menu position="bottom-end" radius="md" trigger="click-hover" openDelay={100} closeDelay={400} shadow="sm" width={220}
+													>
+														<Menu.Target>
+															<Button
+																variant="subtle"
+																size="sm"
+																radius="md"
+																px={8}
+															>
 																<IconDotsVertical size={18} />
 															</Button>
-														</Popover.Target>
-														<Popover.Dropdown
+														</Menu.Target>
+														<Menu.Dropdown
 															style={{
 																borderRadius: 'var(--mantine-radius-lg)',
 																boxShadow: '0 6px 24px rgba(0, 0, 0, 0.35)',
 																padding: 'var(--mantine-spacing-sm)',
 															}}
 														>
-															{handleActions(r.id!, r.status, () => setOpenedPopoverId(null))}
-														</Popover.Dropdown>
-													</Popover>
+															{handleActions(
+																r.id!,
+																r.status
+															)}
+														</Menu.Dropdown>
+													</Menu>
+
 												</Group>
 											</Group>
 

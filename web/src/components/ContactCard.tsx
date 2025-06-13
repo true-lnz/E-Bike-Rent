@@ -108,21 +108,21 @@ export default function ContactCard() {
 									</Text>
 								</Anchor>
 								<Anchor
-									href="https://t.me/FulGaz_Ufa"
-									underline="never"
-									c="dimmed"
-								>
-									<Text size="lg" fz={isMobile ? "md" : "xl"}>
-										@FulGaz_Ufa
-									</Text>
-								</Anchor>
-								<Anchor
 									href="tel:+79047382666"
 									underline="never"
 									c="dimmed"
 								>
 									<Text size="lg" fz={isMobile ? "md" : "xl"}>
 										+7 (904) 738-26-66
+									</Text>
+								</Anchor>
+								<Anchor
+									href="https://t.me/FulGaz_Ufa"
+									underline="never"
+									c="dimmed"
+								>
+									<Text size="lg" fz={isMobile ? "md" : "xl"}>
+										@FulGaz_Ufa
 									</Text>
 								</Anchor>
 							</Box>
