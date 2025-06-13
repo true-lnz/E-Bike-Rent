@@ -167,7 +167,7 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 													Детализация
 												</Button>
 												<ActionIcon size="lg" radius="md" color="blue.7" component="a"
-													href="tel:+79649512810">
+													href="tel:+79047382666">
 													<IconPhone size={20} />
 												</ActionIcon>
 											</Group>

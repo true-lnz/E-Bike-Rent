@@ -137,20 +137,20 @@ export default function ContactPage() {
 							<Stack gap={4} mt="xs">
 								<Group gap="xs" wrap='nowrap'>
 									<IconMail size={18} />
-									<Anchor href="mailto:fulgaz@gmail.com" underline="never" c="white">
-										<Text size="md"><b>Почта:</b> fulgaz@gmail.com</Text>
+									<Anchor href="mailto:thebearonegey@gmail.com" underline="never" c="white">
+										<Text size="md"><b>Почта:</b> thebearonegey@gmail.com</Text>
 									</Anchor>
 								</Group>
 								<Group gap="xs" wrap='nowrap'>
 									<IconMail size={18} />
-									<Anchor href="mailto:help-fulgaz@gmail.com" underline="never" c="white">
-										<Text size="md"><b>Тех. поддержка:</b> fulgaz@gmail.com</Text>
+									<Anchor href="https://t.me/FulGaz_Ufa" underline="never" c="white">
+										<Text size="md"><b>Менеджер:</b> @FulGaz_Ufa</Text>
 									</Anchor>
 								</Group>
 								<Group gap="xs">
 									<IconPhone size={18} />
-									<Anchor href="tel:+79649512810" underline="never" c="white">
-										<Text size="md"><b>Телефон:</b> +7 (964) 951-28-10</Text>
+									<Anchor href="tel:+79047382666" underline="never" c="white">
+										<Text size="md"><b>Телефон:</b> +7 (904) 738-26-66</Text>
 									</Anchor>
 								</Group>
 							</Stack>

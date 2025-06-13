@@ -12,7 +12,7 @@ import {
 	Text,
 	Title
 } from '@mantine/core';
-import { IconBrandTelegram, IconBrandVk, IconPlus } from '@tabler/icons-react';
+import { IconBrandTelegram, IconPlus, IconUser } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 import heroImg from "./../assets/images/kugoo-v3-max-1.png";
 import RentStats from './RentStats';
@@ -68,7 +68,7 @@ export default function HeroWithStats() {
 									h="60"
 									bg="orange.5"
 									component={Link}
-									to={"https://t.me/lansonz"}
+									to={"https://t.me/fulgaz_ebike_rent"}
 									style={{ borderRadius: '50%' }}
 								>
 									<Center h={60}>
@@ -80,11 +80,11 @@ export default function HeroWithStats() {
 									h="60"
 									bg="orange.5"
 									component={Link}
-									to={"https://vk.com/true_lnz"}
+									to={"https://t.me/FulGaz_Ufa"}
 									style={{ borderRadius: '50%' }}
 								>
 									<Center h={60}>
-										<IconBrandVk color="white" size={32} />
+										<IconUser color="white" size={32} />
 									</Center>
 								</Box>
 							</Group>

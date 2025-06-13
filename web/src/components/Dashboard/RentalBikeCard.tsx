@@ -233,18 +233,18 @@ export function RentalBikeCard({
 											<Stack gap="xs">
 												<Group gap="xs">
 													<IconMail size={18} />
-													<Text size="sm">Почта: <b>fulgaz@gmail.com</b></Text>
+													<Text size="sm" component="a" href="mailto:thebearonegey@gmail.com">Почта: <b>thebearonegey@gmail.com</b></Text>
 												</Group>
 												<Group gap="xs">
 													<IconHelp size={18} />
-													<Text size="sm">Тех. поддержка: <b>help-fulgaz@gmail.com</b></Text>
+													<Text size="sm" component="a" href="tel:+79047382666">Тел.: <b>+7 (904) 738-26-66</b></Text>
 												</Group>
 												<Group gap="xs">
 													<IconPhone size={18} />
-													<Text size="sm">Телефон: <b>+7 (964) 951-28-10</b></Text>
+													<Text size="sm" component="a" href="tel:+79047382666">Тел.: <b>+7 (904) 738-26-66</b></Text>
 												</Group>
 												<Divider my="xs" />
-												<Button fullWidth variant="light" color="blue" component="a" href="tel:+79649512810" onClick={() => modals.closeAll()}>
+												<Button fullWidth variant="light" color="blue" component="a" href="tel:+79047382666" onClick={() => modals.closeAll()}>
 													Позвонить
 												</Button>
 											</Stack>

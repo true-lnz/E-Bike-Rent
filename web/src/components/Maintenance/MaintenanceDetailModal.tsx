@@ -209,13 +209,12 @@ export function MaintenanceDetailModal({
 								</Card>
 							</Group>
 
-
 							<Button
 								fullWidth
 								color="blue.7"
 								radius="md"
 								component="a"
-								href="tel:+79649512810"
+								href="tel:+79047382666"
 							>
 								Связаться с мастером
 							</Button>

@@ -125,7 +125,7 @@ export default function Header() {
 					{!isMobile ? (
 						<>
 							<Anchor
-								href="tel:+79649512810"
+								href="tel:+79047382666"
 								underline="never"
 								color="black"
 								onClick={close}
@@ -133,7 +133,7 @@ export default function Header() {
 								visibleFrom='md'
 							>
 								<Text fw={700} size="lg" className="nobr">
-									+7 (964) 951-28-10
+									+7 (904) 738-26-66
 								</Text>
 							</Anchor>
 
@@ -190,14 +190,14 @@ export default function Header() {
 					<Divider mt='xl'></Divider>
 
 					<Anchor
-						href="tel:+79649512810"
+						href="tel:+79047382666"
 						underline="never"
 						color="black"
 						onClick={close}
 						className="nobr"
 					>
 						<Text fw={700} size="lg" className="nobr">
-							+7 (964) 951-28-10
+							+7 (904) 738-26-66
 						</Text>
 					</Anchor>
 
