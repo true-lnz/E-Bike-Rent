@@ -3,6 +3,7 @@ import {
 	Center,
 	Container,
 	LoadingOverlay,
+	rem,
 	SimpleGrid,
 	Stack,
 	Text,
@@ -57,7 +58,18 @@ export default function AccessoriesList({
 			) : (
 				<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>
 					Добавь в свою подписку
-					<Text fz="inherit" c="orange.5" fw={700}>акссесуары</Text>
+					<Text fz="inherit" c="orange.5" fw={700}
+					px={rem(10)}
+					pb={rem(12)}
+					my={10}
+					bg="orange.0"
+					w="max-content"
+					style={{
+						borderRadius: "12px",
+						lineHeight: ".9",
+						border: "3px solid var(--mantine-color-orange-5)"
+					}}
+					>акссесуары</Text>
 				</Title>
 			)}
 

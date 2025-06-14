@@ -17,6 +17,7 @@ import {
 } from '@mantine/core';
 import {
 	IconBolt,
+	IconBrandTelegram,
 	IconCheck,
 	IconDeviceDesktopCog,
 	IconMail,
@@ -116,7 +117,7 @@ export default function ContactPage() {
 				{/* Левая колонка */}
 				<Grid.Col span={{ base: 12, md: 5 }}>
 					{/* Информация о компании */}
-					<Card shadow="sm" radius="xl" p={{base: "lg", sm: "xl"}} mb="md" withBorder bg="orange.5" c="white">
+					<Card shadow="sm" radius="xl" p={{ base: "lg", sm: "xl" }} mb="md" withBorder bg="orange.5" c="white">
 						<Stack gap="sm">
 							<Group align="center">
 								<Box
@@ -141,16 +142,16 @@ export default function ContactPage() {
 										<Text size="md"><b>Почта:</b> thebearonegey@gmail.com</Text>
 									</Anchor>
 								</Group>
-								<Group gap="xs" wrap='nowrap'>
-									<IconMail size={18} />
-									<Anchor href="https://t.me/FulGaz_Ufa" underline="never" c="white">
-										<Text size="md"><b>Менеджер:</b> @FulGaz_Ufa</Text>
-									</Anchor>
-								</Group>
 								<Group gap="xs">
 									<IconPhone size={18} />
 									<Anchor href="tel:+79047382666" underline="never" c="white">
 										<Text size="md"><b>Телефон:</b> +7 (904) 738-26-66</Text>
+									</Anchor>
+								</Group>
+								<Group gap="xs" wrap='nowrap'>
+									<IconBrandTelegram size={18} />
+									<Anchor href="https://t.me/FulGaz_Ufa" underline="never" c="white">
+										<Text size="md"><b>Менеджер:</b> @FulGaz_Ufa</Text>
 									</Anchor>
 								</Group>
 							</Stack>
@@ -158,7 +159,7 @@ export default function ContactPage() {
 					</Card>
 
 					{/* Адрес */}
-					<Card shadow="sm" radius="xl" p={{base: "lg", sm: "xl"}} mb="md" withBorder>
+					<Card shadow="sm" radius="xl" p={{ base: "lg", sm: "xl" }} mb="md" withBorder>
 						<Group gap="xs" mb="xs">
 							<IconMapPin size={20} />
 							<Text fw={600} fz="lg">
@@ -172,7 +173,7 @@ export default function ContactPage() {
 					</Card>
 
 					{/* Услуги */}
-					<Card shadow="sm" radius="xl" p={{base: "lg", sm: "xl"}} withBorder>
+					<Card shadow="sm" radius="xl" p={{ base: "lg", sm: "xl" }} withBorder>
 						<Text fw={600} fz="lg" mb="sm">
 							Услуги
 						</Text>
@@ -212,7 +213,7 @@ export default function ContactPage() {
 					</Card>
 
 					{/* Обратная связь */}
-					<Card shadow="sm" radius="xl" p={{base: "lg", sm: "xl"}} withBorder>
+					<Card shadow="sm" radius="xl" p={{ base: "lg", sm: "xl" }} withBorder>
 						<Text fw={600} fz="lg" mb="sm">
 							Форма обратной связи
 						</Text>

@@ -1,5 +1,4 @@
 import {
-	Anchor,
 	Box,
 	Button,
 	Center,
@@ -9,10 +8,11 @@ import {
 	rem,
 	Stack,
 	Text,
-	Title,
+	ThemeIcon,
+	Title
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconBrandTelegram } from "@tabler/icons-react";
+import { IconBrandTelegram, IconMail, IconPhone } from "@tabler/icons-react";
 import logo from "../assets/images/Logo512x512.png";
 
 export default function ContactCard() {
@@ -98,41 +98,63 @@ export default function ContactCard() {
 							</Text>
 
 							<Box my={{ base: "sm", md: "xl" }}>
-								<Anchor
-									href="mailto:thebearonegey@gmail.com"
-									underline="never"
-									c="dimmed"
-								>
-									<Text size="lg" fz={isMobile ? "md" : "xl"}>
+								<Group gap="xs" mb="xs">
+									<ThemeIcon color="gray.5" variant="light">
+										<IconMail size={20} />
+									</ThemeIcon>
+									<Text
+										component="a"
+										href="mailto:thebearonegey@gmail.com"
+										size="lg"
+										fz={isMobile ? "md" : "xl"}
+										c="dimmed"
+										style={{ textDecoration: "none" }}
+									>
 										thebearonegey@gmail.com
 									</Text>
-								</Anchor>
-								<Anchor
-									href="tel:+79047382666"
-									underline="never"
-									c="dimmed"
-								>
-									<Text size="lg" fz={isMobile ? "md" : "xl"}>
+								</Group>
+
+								<Group gap="xs" mb="xs">
+									<ThemeIcon color="gray.5" variant="light">
+										<IconPhone size={20} />
+									</ThemeIcon>
+									<Text
+										component="a"
+										href="tel:+79047382666"
+										size="lg"
+										fz={isMobile ? "md" : "xl"}
+										c="dimmed"
+										style={{ textDecoration: "none" }}
+									>
 										+7 (904) 738-26-66
 									</Text>
-								</Anchor>
-								<Anchor
-									href="https://t.me/FulGaz_Ufa"
-									underline="never"
-									c="dimmed"
-								>
-									<Text size="lg" fz={isMobile ? "md" : "xl"}>
+								</Group>
+
+								<Group gap="xs">
+									<ThemeIcon color="gray.5" variant="light">
+										<IconBrandTelegram size={20} />
+									</ThemeIcon>
+									<Text
+										component="a"
+										href="https://t.me/FulGaz_Ufa"
+										target="_blank"
+										rel="noopener noreferrer"
+										size="lg"
+										fz={isMobile ? "md" : "xl"}
+										c="dimmed"
+										style={{ textDecoration: "none" }}
+									>
 										@FulGaz_Ufa
 									</Text>
-								</Anchor>
+								</Group>
 							</Box>
+
 
 							<Group mt="xs" justify={isTablet ? "center" : "flex-start"}>
 								<Button
 									color="orange.5"
 									radius="xl"
 									size={isMobile ? "md" : "lg"}
-									w={isMobile ? 200 : 250}
 									leftSection={<IconBrandTelegram />}
 								>
 									Написать в Телеграм
