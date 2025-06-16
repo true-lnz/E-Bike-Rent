@@ -119,7 +119,7 @@ export default function DashboardHeader() {
 								<HoverCard.Target>
 									<Avatar size={45} name={fullName} radius="xl" />
 								</HoverCard.Target>
-								<HoverCard.Dropdown>
+								<HoverCard.Dropdown p="lg">
 									<Stack gap="xs">
 										<Title order={4}>{fullName}</Title>
 										<Text size="sm" c="dimmed" lineClamp={2}>

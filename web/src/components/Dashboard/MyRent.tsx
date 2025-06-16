@@ -34,7 +34,7 @@ export default function MyRent() {
 						<Paper radius="lg" withBorder>
 							<Center style={{ minHeight: 100 }}>
 								<Stack p="xl" gap="xs" align="center">
-									<Text c="dimmed" size="lg">У вас сейчас нет активных заявок на аренду</Text>
+									<Text c="dimmed" size="lg" ta="center">У вас сейчас нет активных заявок на аренду</Text>
 									<Button radius="xl" component={Link} to="/dashboard/bikes">Перейти к выбору Устройств</Button>
 								</Stack>
 							</Center>
