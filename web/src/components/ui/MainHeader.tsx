@@ -142,8 +142,8 @@ export default function Header() {
 								size="md"
 								to="/dashboard"
 								radius="xl"
+								pl="8"
 								color="orange.5"
-								fullWidth
 								onClick={close}
 							>
 								{user && (
