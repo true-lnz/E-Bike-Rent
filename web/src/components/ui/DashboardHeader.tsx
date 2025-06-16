@@ -45,7 +45,7 @@ export default function DashboardHeader() {
 		{ path: 'contact', label: 'Контакты' },
 	];
 
-dayjs.locale('ru');
+	dayjs.locale('ru');
 
 	useEffect(() => {
 		const currentPath = location.pathname.split('/').pop() || 'bikes';
@@ -213,60 +213,60 @@ dayjs.locale('ru');
 
 					<Divider my="sm" />
 
-					{/* Пользовательская информация */}
-					<Text size="sm" fw={500}>
-						{fullName}
-					</Text>
-					<Text size="xs" c="dimmed">
-						{user?.email}
-					</Text>
-					<Text size="xs" c="dimmed">
-						Телефон: {user?.phone_number}
-					</Text>
-					<Text size="xs" c="dimmed">
-						Дата рождения: {dayjs(user?.birthday).format("DD MMMM YYYY")} г.
-					</Text>
+					<Stack gap={8}>
+						{/* Пользовательская информация */}
+						<Text size="sm" fw={500}>
+							{fullName}
+						</Text>
+						<Text size="xs" c="dimmed">
+							{user?.email}
+						</Text>
+						<Text size="xs" c="dimmed">
+							Телефон: {user?.phone_number}
+						</Text>
+						<Text size="xs" c="dimmed">
+							Дата рождения: {dayjs(user?.birthday).format("DD MMMM YYYY")} г.
+						</Text>
 
-					{user?.company && (
-						<Group gap="sm" align="center" mt="xs">
-							<Box
-								style={{
-									width: 32,
-									height: 32,
-									borderRadius: 6,
-									overflow: 'hidden',
-									boxShadow: '0 0 5px rgba(0,0,0,0.1)',
-									flexShrink: 0,
-								}}
-							>
-								<Image
-									src={BASE_IMAGE_URL + 'companies/' + user?.company.image_url}
-									alt={user?.company.name}
-									width={32}
-									height={32}
-									fit="cover"
-								/>
-							</Box>
-							<Text size="sm" fw={500}>
-								{user?.company.name}
-							</Text>
-						</Group>
-					)}
-
-					<Text size="xs" c={user?.is_verified ? 'teal' : 'red'}>
-						{user?.is_verified ? 'Подтвержденный аккаунт' : 'Пользователь не подтверждён'}
-					</Text>
-					<Text size="xs" c="dimmed">
-						Роль: {user?.role === 'user' ? 'пользователь' : 'администратор'}
-					</Text>
-
-					<Divider my="sm" />
+						{user?.company && (
+							<Group gap="sm" align="center" mt="xs">
+								<Box
+									style={{
+										width: 32,
+										height: 32,
+										borderRadius: 6,
+										overflow: 'hidden',
+										boxShadow: '0 0 5px rgba(0,0,0,0.1)',
+										flexShrink: 0,
+									}}
+								>
+									<Image
+										src={BASE_IMAGE_URL + 'companies/' + user?.company.image_url}
+										alt={user?.company.name}
+										width={32}
+										height={32}
+										fit="cover"
+									/>
+								</Box>
+								<Text size="sm" fw={500}>
+									{user?.company.name}
+								</Text>
+							</Group>
+						)}
+						<Text size="xs" c={user?.is_verified ? 'teal' : 'red'}>
+							{user?.is_verified ? 'Подтвержденный аккаунт' : 'Пользователь не подтверждён'}
+						</Text>
+						<Text size="xs" c="dimmed">
+							Роль: {user?.role === 'user' ? 'пользователь' : 'администратор'}
+						</Text>
+					</Stack>
 
 					<Button
 						fullWidth
 						variant="light"
 						color="orange.5"
 						radius="xl"
+						mt="md"
 						onClick={() => {
 							handleLogout();
 							close();

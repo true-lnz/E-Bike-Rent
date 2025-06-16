@@ -6,6 +6,7 @@ import AdminAllBikes from "../components/Admin/AdminAllBikes";
 import AdminMaintenanceRequests from "../components/Admin/AdminMaintenanceRequests";
 import AdminRentRequests from "../components/Admin/AdminRentRequest";
 import BikeList from "../components/Bikes/BikeList";
+import Contacts from "../components/Dashboard/Contacts";
 import MyRent from "../components/Dashboard/MyRent";
 import Maintenance from "../components/Maintenance/Maintenance";
 import { ProtectedRoute } from "../components/ProtectedRoute";
@@ -14,7 +15,6 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import MainLayout from "../layouts/MainLayout";
 import AuthPage from "../pages/Auth/AuthPage";
 import { BikeDetailPage } from "../pages/BikeDetailPage";
-import ContactPage from "../pages/ContactPage";
 import HomePage from "../pages/HomePage";
 import PolicyPage from "../pages/PolicyPage";
 
@@ -41,7 +41,7 @@ export const router = createBrowserRouter([
 					{ path: "bikes", element: <BikeList onlyAvailableByDefault={true} /> },
 					{ path: "maintenances", element: <Maintenance /> },
 					{ path: "my-rents", element: <MyRent /> },
-					{ path: "contact", element: <ContactPage /> },
+					{ path: "contact", element: <Contacts /> },
 				],
 			},
 		],

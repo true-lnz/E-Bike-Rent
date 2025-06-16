@@ -195,7 +195,7 @@ export default function RegistrationStep() {
 
 				{step === 1 ? (
 					<Stack gap="xl" bg="white">
-						<Title order={2}>Выберите компанию</Title>
+						<Title fz={{ base: "24px", sm: "26px" }}  >Выберите компанию</Title>
 						<Input
 							placeholder="Поиск компании..."
 							leftSection={<IconSearch size={20} />}
@@ -220,7 +220,7 @@ export default function RegistrationStep() {
 								loaderProps={{ color: 'blue.5', type: 'bars' }}
 							/>
 						) : (
-							<SimpleGrid cols={5} spacing="lg">
+							<SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 5 }} spacing="lg">
 								{filteredCompanies.map((company) => (
 									<CompanyCard
 										key={company.id}
@@ -238,9 +238,8 @@ export default function RegistrationStep() {
 									onClick={() => setSelectedId(null)}
 									style={{
 										cursor: "pointer",
+										aspectRatio: '1',
 										border: selectedId === null ? "1px solid #228be6" : undefined,
-										width: 200,
-										height: 200,
 										display: "flex",
 										flexDirection: "column",
 										alignItems: "center",
@@ -248,7 +247,7 @@ export default function RegistrationStep() {
 										textAlign: "center",
 									}}
 								>
-									<Title order={5}>Без компании</Title>
+									<Title fz={{ base: "sm", sm: "lg", lg: "sm" }}>Без компании</Title>
 									<Text size="xs" color="dimmed" mt="xs">
 										Частное лицо
 									</Text>
@@ -266,7 +265,7 @@ export default function RegistrationStep() {
 					</Stack>
 				) : (
 					<Stack gap="md">
-						<Title order={2}>Заполните обязательные поля</Title>
+						<Title fz={{ base: "24px", sm: "26px" }}>Заполните обязательные поля</Title>
 
 						<SimpleGrid
 							cols={{ base: 1, sm: 2, md: 3 }}
@@ -321,6 +320,7 @@ export default function RegistrationStep() {
 								label="Дата рождения"
 								placeholder="Нажмите для выбора даты"
 								radius="md"
+								clearable
 								value={birthday}
 								required
 								onChange={handleBirthdayChange as (value: any) => void}

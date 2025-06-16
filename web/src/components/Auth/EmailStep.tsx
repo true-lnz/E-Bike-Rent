@@ -8,8 +8,8 @@ import { useAuth } from '../../hooks/useAuth';
 import { logout, sendCode } from '../../services/authService';
 
 const validateEmail = (email: string): boolean => {
-  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return regex.test(email);
+	const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	return regex.test(email);
 };
 
 export default function EmailStep({ onNext }: { onNext: () => void }) {
@@ -56,7 +56,14 @@ export default function EmailStep({ onNext }: { onNext: () => void }) {
 
 	return (
 		<Center h="72vh">
-			<Card withBorder shadow="sm" padding={rem(45)} radius="lg" w={420}>
+			<Card
+				withBorder
+				shadow="sm"
+				mx="sm"
+				p={{ base: "xl", sm: rem(45) }}
+				radius="lg"
+				w={420}
+			>
 				<Stack gap="md">
 					{user ? (
 						<Stack>

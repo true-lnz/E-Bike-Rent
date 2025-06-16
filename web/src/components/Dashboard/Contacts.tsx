@@ -29,10 +29,10 @@ import {
 } from '@tabler/icons-react';
 import { useState } from 'react';
 import { IMaskInput } from 'react-imask';
-import logo from '../assets/images/Logo512x512.png';
-import { sendFeedback } from '../services/feedbackService';
+import { sendFeedback } from '../../services/feedbackService';
+import logo from '../../assets/images/Logo512x512.png';
 
-export default function ContactPage() {
+export default function Contacts() {
 	const [formData, setFormData] = useState({
 		phone: '',
 		message: '',

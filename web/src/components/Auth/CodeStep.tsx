@@ -73,11 +73,18 @@ export default function CodeStep({ onNext }: { onNext: () => void }) {
 	return (
 		<>
 			<Center h="72vh">
-				<Card withBorder shadow="sm" padding={rem(45)} radius="lg" w={500}>
+				<Card
+					withBorder
+					shadow="sm"
+					mx="sm"
+					p={{ base: "xl", sm: rem(45) }}
+					radius="lg"
+					w={500}
+				>
 					<Stack gap="md">
 						{/* Заголовки */}
 						<Stack gap={rem(4)}>
-							<Title order={1} ta="center">
+							<Title order={1} fz={{base: "24px", sm: "34px"}} ta="center" mb="xs">
 								Код подтверждения отправлен на почту
 							</Title>
 
