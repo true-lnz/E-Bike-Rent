@@ -1,6 +1,6 @@
 import { Outlet, ScrollRestoration } from "react-router-dom";
-import Footer from "../components/Footer";
-import DashboardHeader from "../components/Headers/DashboardHeader";
+import DashboardHeader from "../components/ui/DashboardHeader";
+import Footer from "../components/ui/Footer";
 
 export default function DashboardLayout() {
 	return (

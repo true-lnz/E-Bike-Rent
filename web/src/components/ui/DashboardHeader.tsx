@@ -17,12 +17,12 @@ import {
 } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { IconLogout } from '@tabler/icons-react';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { BASE_IMAGE_URL } from '../../constants';
 import { useAuth } from '../../hooks/useAuth';
 import { logout } from '../../services/authService';
-import { formatBirthday } from '../../utils/formatDate';
 import logo from './../../assets/images/Logo512x512.png';
 import { NavLink } from './NavLink';
 
@@ -44,6 +44,8 @@ export default function DashboardHeader() {
 		{ path: 'maintenances', label: 'Обслуживание' },
 		{ path: 'contact', label: 'Контакты' },
 	];
+
+dayjs.locale('ru');
 
 	useEffect(() => {
 		const currentPath = location.pathname.split('/').pop() || 'bikes';
@@ -127,7 +129,7 @@ export default function DashboardHeader() {
 											Телефон: {user?.phone_number}
 										</Text>
 										<Text size="sm" c="dimmed">
-											Дата рождения: {formatBirthday(user?.birthday)}
+											Дата рождения: {dayjs(user?.birthday).format("DD MMMM YYYY")} г.
 										</Text>
 
 										{user?.company && (
@@ -222,7 +224,7 @@ export default function DashboardHeader() {
 						Телефон: {user?.phone_number}
 					</Text>
 					<Text size="xs" c="dimmed">
-						Дата рождения: {formatBirthday(user?.birthday)}
+						Дата рождения: {dayjs(user?.birthday).format("DD MMMM YYYY")} г.
 					</Text>
 
 					{user?.company && (

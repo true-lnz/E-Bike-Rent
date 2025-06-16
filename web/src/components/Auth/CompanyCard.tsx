@@ -1,6 +1,6 @@
 import { Card, Image, Stack, Text } from "@mantine/core";
-import { BASE_IMAGE_URL } from "../constants";
-import type { Company } from "../types/company";
+import { BASE_IMAGE_URL } from "../../constants";
+import type { Company } from "../../types/company";
 
 interface CompanyCardProps {
   company: Company;

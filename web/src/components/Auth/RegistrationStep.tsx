@@ -20,12 +20,12 @@ import { IconAlertSquareRounded, IconSearch } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import 'dayjs/locale/ru';
 import { useEffect, useState } from "react";
+import { IMaskInput } from "react-imask";
 import { useAuth } from "../../hooks/useAuth";
 import { completeRegistration } from "../../services/authService";
 import { companyService } from "../../services/companyService";
 import type { Company } from "../../types/company";
-import CompanyCard from "../CompanyCard";
-import { PhoneInput } from "./PhoneInput";
+import CompanyCard from "./CompanyCard";
 
 export default function RegistrationStep() {
 	const { email } = useAuth();
@@ -266,7 +266,7 @@ export default function RegistrationStep() {
 					</Stack>
 				) : (
 					<Stack gap="md">
-						<Title order={2}>Заполните данные</Title>
+						<Title order={2}>Заполните обязательные поля</Title>
 
 						<SimpleGrid
 							cols={{ base: 1, sm: 2, md: 3 }}
@@ -276,6 +276,7 @@ export default function RegistrationStep() {
 							<TextInput
 								radius="md"
 								label="Фамилия"
+								placeholder="Например, Иванов"
 								value={lastName}
 								required
 								onChange={(e) => setLastName(e.currentTarget.value)}
@@ -283,6 +284,7 @@ export default function RegistrationStep() {
 							<TextInput
 								radius="md"
 								label="Имя"
+								placeholder="Например, Владимир"
 								value={firstName}
 								required
 								onChange={(e) => setFirstName(e.currentTarget.value)}
@@ -290,6 +292,7 @@ export default function RegistrationStep() {
 							<TextInput
 								radius="md"
 								label="Отчество"
+								placeholder="(не обязательно)"
 								value={patronymic}
 								onChange={(e) => setPatronymic(e.currentTarget.value)}
 							/>
@@ -301,18 +304,22 @@ export default function RegistrationStep() {
 							spacing={{ base: 'sm', sm: 'md' }}
 							verticalSpacing="md"
 						>
-							<TextInput
-								label="Телефон"
-								radius="md"
-								size="sm"
-								value={phone}
-								required
-								onChange={(e) => setPhone(e.currentTarget.value)}
-								component={PhoneInput}
-							/>
+							<Input.Wrapper label="Телефон" required>
+								<Input
+									size="sm"
+									radius="md"
+									value={phone}
+									required
+									placeholder="+7 (800) 123-45-67"
+									onChange={(e) => setPhone(e.currentTarget.value)}
+									component={IMaskInput}
+									mask="+7 (000) 000-00-00"
+								/>
+							</Input.Wrapper>
 							<DatePickerInput
 								locale="ru"
 								label="Дата рождения"
+								placeholder="Нажмите для выбора даты"
 								radius="md"
 								value={birthday}
 								required

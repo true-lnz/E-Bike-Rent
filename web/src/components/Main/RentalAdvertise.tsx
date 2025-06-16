@@ -1,6 +1,6 @@
 import { Box, Button, Container, Image, Stack, Text, Title } from '@mantine/core';
-import vel2Img from "./../assets/images/kolyan-2.png";
-import vel1Img from "./../assets/images/liming-v8-1.png";
+import vel2Img from "../../assets/images/kolyan-2.png";
+import vel1Img from "../../assets/images/liming-v8-1.png";
 
 export default function RentalAdvertise() {
 	return (

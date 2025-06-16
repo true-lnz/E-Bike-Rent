@@ -6,7 +6,11 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { logout, sendCode } from '../../services/authService';
-import { validateEmail } from '../../utils/validateEmail';
+
+const validateEmail = (email: string): boolean => {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+};
 
 export default function EmailStep({ onNext }: { onNext: () => void }) {
 	const { user, setEmail, setUser, setIsVerified } = useAuth();

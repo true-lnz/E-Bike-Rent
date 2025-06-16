@@ -18,8 +18,8 @@ import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { NavLink } from '../Headers/NavLink';
 import logo from './../../assets/images/Logo512x512.png';
+import { NavLink } from './NavLink';
 
 type NavItem = {
 	path: string;

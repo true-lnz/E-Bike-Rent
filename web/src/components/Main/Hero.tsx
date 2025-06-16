@@ -14,8 +14,8 @@ import {
 } from '@mantine/core';
 import { IconBrandTelegram, IconPlus, IconUser } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
-import heroImg from "./../assets/images/kugoo-v3-max-1.png";
 import RentStats from './RentStats';
+import heroImg from "../../assets/images/kugoo-v3-max-1.png";
 
 export default function HeroWithStats() {
 	return (

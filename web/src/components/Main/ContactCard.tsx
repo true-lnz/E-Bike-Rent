@@ -13,7 +13,7 @@ import {
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconBrandTelegram, IconMail, IconPhone } from "@tabler/icons-react";
-import logo from "../assets/images/Logo512x512.png";
+import logo from "../../assets/images/Logo512x512.png";
 
 export default function ContactCard() {
 	// Медиа-запросы
