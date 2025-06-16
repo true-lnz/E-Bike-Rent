@@ -32,7 +32,9 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { BASE_IMAGE_URL } from "../../constants";
+import { companyService } from "../../services/companyService";
 import { getAllRents, updateRent } from "../../services/rentService";
+import type { Company } from "../../types/company";
 import type { Rent, UpdateRentRequest } from "../../types/rent";
 import AccessorySelectCardList from "../Accessory/AccessorySelectCardList";
 
@@ -45,7 +47,23 @@ export default function AdminRentRequests() {
 	const [updateData, setUpdateData] = useState<UpdateRentRequest | null>(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [editingRent, setEditingRent] = useState<Rent | null>(null);
+	const [companiesDict, setCompaniesDict] = useState<Record<number, Company>>({});
 
+	useEffect(() => {
+		const fetchCompanies = async () => {
+			try {
+				const data = await companyService.getAllCompanies();
+				const dict = data.reduce((acc, company) => {
+					acc[company.id] = company;
+					return acc;
+				}, {} as Record<number, Company>);
+				setCompaniesDict(dict);
+			} catch (err) {
+				console.error("Ошибка загрузки компаний:", err);
+			}
+		};
+		fetchCompanies();
+	}, []);
 	const refreshRents = async () => {
 		setLoadingRents(true);
 		try {
@@ -364,11 +382,31 @@ export default function AdminRentRequests() {
 
 												<HoverCard.Dropdown>
 													<Stack gap={4}>
-														<Text size="sm" fw={500}>{r.user?.last_name} {r.user?.first_name} {r.user?.patronymic} </Text>
+														<Text size="md" fw={500}>{r.user?.last_name} {r.user?.first_name} {r.user?.patronymic} </Text>
+														<Divider my="xs" />
+														{r.user?.company_id && companiesDict[r.user.company_id] && (
+															<>
+																<Group gap="sm" align="center">
+																	<Box>
+																		<Image
+																			src={BASE_IMAGE_URL + 'companies/' + companiesDict[r.user.company_id].image_url}
+																			alt={companiesDict[r.user.company_id].name}
+																			width={40}
+																			height={40}
+																			fit="cover"
+																		/>
+																	</Box>
+																	<Text size="sm" fw={500}>
+																		{companiesDict[r.user.company_id].name}
+																	</Text>
+																</Group>
+																<Divider my="xs" />
+															</>
+														)}
 														<Text size="sm">📧 Почта: {r.user?.email}</Text>
 														<Text size="sm">
-															🎂 Дата рождения: {r.user?.birthday && dayjs(r.user.birthday).format('DD.MM.YYYY')} (
-															{r.user?.birthday && dayjs().diff(r.user.birthday, 'year')} лет)
+															🎂 Дата рождения: {dayjs(r.user?.birthday).format('DD.MM.YYYY')} (
+															Возраст: {dayjs().diff(r.user?.birthday, 'year')})
 														</Text>
 														<Button
 															variant="light"

@@ -1,11 +1,13 @@
 import {
 	Avatar,
+	Box,
 	Button,
 	Card,
 	Container,
 	Divider,
 	Group,
 	HoverCard,
+	Image,
 	LoadingOverlay,
 	Menu,
 	NumberInput,
@@ -25,7 +27,10 @@ import { IconCheck, IconCheckupList, IconDotsVertical, IconEdit, IconPhoneCall, 
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { BASE_IMAGE_URL } from "../../constants";
+import { companyService } from "../../services/companyService";
 import { maintenanceService } from "../../services/maintenanceService";
+import type { Company } from "../../types/company";
 import type { Maintenance } from "../../types/maintenance";
 import { MaintenanceDetailModal } from "../Maintenance/MaintenanceDetailModal";
 
@@ -35,6 +40,23 @@ export default function AdminMaintenanceRequests() {
 	const [selectedMaintenance, setSelectedMaintenance] = useState<Maintenance | null>(null);
 	const [modalOpened, setModalOpened] = useState(false);
 	const [loadingMaintenance, setLoadingMaintenance] = useState(false);
+	const [companiesDict, setCompaniesDict] = useState<Record<number, Company>>({});
+
+	useEffect(() => {
+		const fetchCompanies = async () => {
+			try {
+				const data = await companyService.getAllCompanies();
+				const dict = data.reduce((acc, company) => {
+					acc[company.id] = company;
+					return acc;
+				}, {} as Record<number, Company>);
+				setCompaniesDict(dict);
+			} catch (err) {
+				console.error("Ошибка загрузки компаний:", err);
+			}
+		};
+		fetchCompanies();
+	}, []);
 
 	const refreshMaintenances = async () => {
 		setLoadingMaintenance(true);
@@ -559,7 +581,7 @@ export default function AdminMaintenanceRequests() {
 								<Group align="start" gap="xl" justify="space-between" wrap="nowrap" style={{ width: '100%' }}>
 									{/* Левый столбец */}
 									<Stack gap={4} w={200} align="center" style={{ height: '100%' }}>
-										<HoverCard width={260} shadow="md" withArrow position="right-start">
+										<HoverCard width={260} shadow="md" radius="md" withArrow position="right-start">
 											<HoverCard.Target>
 												<Group gap="sm" justify="center" style={{ cursor: 'pointer' }}>
 													<Avatar
@@ -575,11 +597,31 @@ export default function AdminMaintenanceRequests() {
 
 											<HoverCard.Dropdown>
 												<Stack gap={4}>
-													<Text size="sm" fw={500}>{m.user.last_name} {m.user.first_name} {m.user.patronymic} </Text>
+													<Text size="md" fw={500}>{m.user.last_name} {m.user.first_name} {m.user.patronymic} </Text>
+													<Divider my="xs" />
+													{m.user?.company_id && companiesDict[m.user.company_id] && (
+														<>
+															<Group gap="sm" align="center">
+																<Box>
+																	<Image
+																		src={BASE_IMAGE_URL + 'companies/' + companiesDict[m.user.company_id].image_url}
+																		alt={companiesDict[m.user.company_id].name}
+																		width={40}
+																		height={40}
+																		fit="cover"
+																	/>
+																</Box>
+																<Text size="sm" fw={500}>
+																	{companiesDict[m.user.company_id].name}
+																</Text>
+															</Group>
+															<Divider my="xs" />
+														</>
+													)}
 													<Text size="sm">📧 Почта: {m.user.email}</Text>
 													<Text size="sm">
 														🎂 Дата рождения: {dayjs(m.user.birthday).format('DD.MM.YYYY')} (
-														{dayjs().diff(m.user.birthday, 'year')} лет)
+														Возраст: {dayjs().diff(m.user.birthday, 'year')})
 													</Text>
 													<Button
 														variant="light"
