@@ -26,8 +26,8 @@ export default function ContactCard() {
 				<Box
 					pos="relative"
 					px="xl"
-					py={{ base: 0, md: 'xl' }}
-					h={isMobile ? 500 : 600}
+					py={{ base: "0", md: 'xl' }}
+					h={600}
 					style={{
 						margin: "auto",
 						display: "flex",
