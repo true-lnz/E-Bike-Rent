@@ -7,7 +7,7 @@ export default function Footer() {
 			<Center>
 				<Flex gap="xl">
 					<Text size="sm" color="dimmed">
-						&copy; {new Date().getFullYear()} «ФулГаз». Все права защищены.
+						&copy; {new Date().getFullYear()} Все права защищены.
 					</Text>
 					<Text size="sm" color="dimmed" component={Link} to="/policy">
 						Политика конфиденциальности
