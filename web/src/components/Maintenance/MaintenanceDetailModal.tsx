@@ -168,7 +168,7 @@ export function MaintenanceDetailModal({
 							<Box>
 								<Text fw={500} mb="xs">Описание проблемы</Text>
 								<Card withBorder p="sm" radius="md">
-									<Text>{maintenance.details || "—"}</Text>
+									<Text style={{whiteSpace: 'pre-wrap'}}>{maintenance.details || "—"}</Text>
 								</Card>
 							</Box>
 

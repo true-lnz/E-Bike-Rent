@@ -156,7 +156,7 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 											</Badge>
 										</Table.Td>
 										<Table.Td>
-											<Group gap="xs">
+											<Group gap="xs" wrap="nowrap">
 												<Button
 													variant="outline"
 													radius="md"

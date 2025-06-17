@@ -67,7 +67,7 @@ export function MaintenanceCard({
 					position: "relative",
 				}}
 			>
-				<Text c={textColor} size="md" mb="auto">
+				<Text c={textColor} fz={{base: "sm", sm: "md"}} mb="auto">
 					{description}
 				</Text>
 

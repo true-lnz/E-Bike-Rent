@@ -84,7 +84,6 @@ export function MaintenanceList({ onCreated }: MaintenanceListProps) {
 		try {
 			await maintenanceService.createMaintenance(form);
 			onCreated();
-			setOpened(false);
 		} catch (err) {
 			console.error(err);
 		}
