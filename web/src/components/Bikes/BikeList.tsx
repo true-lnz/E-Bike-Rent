@@ -1,4 +1,5 @@
 import {
+	Box,
 	Card,
 	Center,
 	Container,
@@ -39,11 +40,11 @@ export default function BikeListPage({
 	}, []);
 
 	if (loading) return
-		<LoadingOverlay
-			visible
-			overlayProps={{ radius: 'sm', blur: 2 }}
-			loaderProps={{ color: 'blue.5', type: 'bars' }}
-		/>;
+	<LoadingOverlay
+		visible
+		overlayProps={{ radius: 'sm', blur: 2 }}
+		loaderProps={{ color: 'blue.5', type: 'bars' }}
+	/>;
 
 	const visibleBikes = onlyAvailable
 		? bikes.filter((bike) => bike.available_quantity > 0)
@@ -58,7 +59,26 @@ export default function BikeListPage({
 			) : (
 				<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>
 					Выбери свою идеальную модель
-					<Text fz="inherit" c="orange.5" fw={700}>электровелосипеда</Text>
+					<Box
+						px={8}
+						mt="xs"
+						w="max-content"
+						bg="orange.0"
+						style={{
+							borderRadius: 14,
+							border: "3px solid var(--mantine-color-orange-5)"
+						}}>
+						<Title
+							fz="inherit"
+							c="orange.5"
+							lh={1.1}
+							style={{
+								transform: "translateY(-4px)",
+							}}
+						>
+							электровелосипеда
+						</Title>
+					</Box>
 				</Title>
 			)}
 

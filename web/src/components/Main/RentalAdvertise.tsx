@@ -26,21 +26,39 @@ export default function RentalAdvertise() {
 					>
 						<Image w={1000} src={vel2Img} style={{ transform: "translateX(-150px) translateY(-100px)  rotate(-55deg)" }}></Image>
 
-						</Box>
+					</Box>
 
 					<Container size="md">
 						<Box pos="relative" maw={500} mt={80}>
 							<Text size="xl">🚴 Арендуйте — и зарабатывайте больше!</Text>
-							<Title fz={45} mt="sm">
+							<Title fz={45} my="4">
 								Долгосрочная аренда
 							</Title>
-							<Title fz={45} c="blue.7">от 3 месяцев</Title>
+							<Box
+								px={8}
+								w="max-content"
+								bg="blue.0"
+								style={{
+									borderRadius: "14px",
+									border: "3px solid var(--mantine-color-blue-7)"
+								}}>
+								<Title
+									fz={45}
+									c="blue.7"
+									lh={1.1}
+									style={{
+										transform: "translateY(-4px)",
+									}}
+								>
+									от 3 месяцев
+								</Title>
+							</Box>
 							<Text mt="md" c="dimmed">
 								Платите в 2 раза меньше, чем за бензин и ремонт — и успевайте больше заказов без
 								усталости. Ваш надежный транспорт всегда под рукой!
 							</Text>
 							<Button mt="lg" size="md" radius="xl" color='gray' variant='light' component='a' href='#bikes'>
-								Оставить заявку
+								Перейти к каталогу
 							</Button>
 						</Box>
 					</Container>
@@ -70,17 +88,38 @@ export default function RentalAdvertise() {
 					</Box>
 
 					<Box pos="relative" maw={520} ml="auto" mr="auto" pb={40}>
-						<Text size="xl">⚡ Попробуйте — и убедитесь сами!</Text>
-						<Title fz={45} mt="sm">
-							Краткосрочная аренда
+						<Text size="xl">⚡ Вернём вашему байку — скорость!</Text>
+						<Title fz={45} my="4">
+							Техобслуживание
 						</Title>
-						<Title fz={45} c="orange.5">от 1 дня</Title>
+						<Title fz={45} c="orange.5"></Title>
+						<Box
+							px={8}
+							w="max-content"
+							bg="orange.0"
+							style={{
+								borderRadius: "14px",
+								border: "3px solid var(--mantine-color-orange-5)"
+							}}>
+							<Title
+								fz={45}
+								c="orange.5"
+								lh={1.1}
+								style={{
+									transform: "translateY(-4px)",
+								}}
+							>
+								электробайка
+							</Title>
+						</Box>
 						<Text mt="md" c="dimmed">
-							Идеально для теста или подработки: платите только за дни использования, а мы обеспечим
-							исправный байк и быструю поддержку 24/7!
+							Техническое обслуживание, замена комплектующих и настройка электроники по доступным ценам — с гарантией качества.
 						</Text>
-						<Button mt="lg" size="md" radius="xl" color='gray' variant='light' component='a' href='#bikes'>
-							Забронировать на неделю
+						<Text fz="sm" c="dimmed" fs="italic">
+							* Цены могут меняться в зависимости от сложности работ. Точную стоимость уточняйте у мастера.
+						</Text>
+						<Button mt="lg" size="md" radius="xl" color='gray' variant='light' component='a' href='#maintenance'>
+							Оставить заявку
 						</Button>
 					</Box>
 				</Box>
