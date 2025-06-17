@@ -152,6 +152,8 @@ export default function ContactCard() {
 
 							<Group mt="xs" justify={isTablet ? "center" : "flex-start"}>
 								<Button
+									component="a"
+									href="https://t.me/FulGaz_Ufa"
 									color="orange.5"
 									radius="xl"
 									size={isMobile ? "md" : "lg"}
