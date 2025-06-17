@@ -26,6 +26,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { completeRegistration } from "../../services/authService";
 import { companyService } from "../../services/companyService";
 import type { Company } from "../../types/company";
+import { CityPicker } from "./CityPicker";
 import CompanyCard from "./CompanyCard";
 
 export default function RegistrationStep() {
@@ -328,13 +329,9 @@ export default function RegistrationStep() {
 								required
 								onChange={handleBirthdayChange as (value: any) => void}
 							/>
-							<TextInput
-								radius="md"
-								label="Город"
-								required
-								placeholder="Например, Уфа"
+							<CityPicker
 								value={city}
-								onChange={(e) => setCity(e.currentTarget.value)}
+								onChange={(value) => setCity(value)}
 							/>
 						</SimpleGrid>
 
