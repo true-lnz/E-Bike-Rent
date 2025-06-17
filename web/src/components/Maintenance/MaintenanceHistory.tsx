@@ -79,107 +79,106 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 	return (
 		<Container size="lg" py="xl">
 			<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>Заявки на обслуживание</Title>
-			<ScrollArea>
 				<Paper radius="lg" withBorder>
-					<Table striped highlightOnHover withColumnBorders>
-						<Table.Thead>
-							<Table.Tr>
-								<Table.Th>ID</Table.Th>
-								<Table.Th>Дата заявки</Table.Th>
-								<Table.Th>Ваше устройство</Table.Th>
-								<Table.Th>Дата принятия</Table.Th>
-								<Table.Th>Время ремонта</Table.Th>
-								<Table.Th>Стоимость</Table.Th>
-								<Table.Th>Статус</Table.Th>
-								<Table.Th>Действия</Table.Th>
-							</Table.Tr>
-						</Table.Thead>
+					<ScrollArea type="scroll" offsetScrollbars>
+						<Table striped highlightOnHover withColumnBorders miw={900}>
+							<Table.Thead>
+								<Table.Tr>
+									<Table.Th>ID</Table.Th>
+									<Table.Th>Дата заявки</Table.Th>
+									<Table.Th>Ваше устройство</Table.Th>
+									<Table.Th>Дата принятия</Table.Th>
+									<Table.Th>Время ремонта</Table.Th>
+									<Table.Th>Стоимость</Table.Th>
+									<Table.Th>Статус</Table.Th>
+									<Table.Th>Действия</Table.Th>
+								</Table.Tr>
+							</Table.Thead>
 
-						<Table.Tbody>
-							{data.map((item) => {
-								const formatDate = (dateStr: string) => {
+							<Table.Tbody>
+								{data.map((item) => {
+									const formatDate = (dateStr: string) => {
+										if (
+											!dateStr ||
+											dateStr === "0001-01-01T00:00:00Z" ||
+											!dayjs(dateStr).isValid()
+										) {
+											return "—";
+										}
+										return dayjs(dateStr).format("DD.MM.YYYY");
+									};
+
+									const createdAt = formatDate(item.created_at);
+									const startDate = formatDate(item.start_date);
+
+									let repairDuration = "—";
 									if (
-										!dateStr ||
-										dateStr === "0001-01-01T00:00:00Z" ||
-										!dayjs(dateStr).isValid()
+										dayjs(item.start_date).isValid() &&
+										dayjs(item.finish_date).isValid() &&
+										item.start_date !== "0001-01-01T00:00:00Z" &&
+										item.finish_date !== "0001-01-01T00:00:00Z"
 									) {
-										return "—";
+										const start = dayjs(item.start_date);
+										const end = dayjs(item.finish_date);
+										const days = end.diff(start, "day");
+										repairDuration = `до ${end.format("DD.MM.YYYY")} (${days} дн.)`;
 									}
-									return dayjs(dateStr).format("DD.MM.YYYY");
-								};
 
-								const createdAt = formatDate(item.created_at);
-								const startDate = formatDate(item.start_date);
-
-								let repairDuration = "—";
-								if (
-									dayjs(item.start_date).isValid() &&
-									dayjs(item.finish_date).isValid() &&
-									item.start_date !== "0001-01-01T00:00:00Z" &&
-									item.finish_date !== "0001-01-01T00:00:00Z"
-								) {
-									const start = dayjs(item.start_date);
-									const end = dayjs(item.finish_date);
-									const days = end.diff(start, "day");
-									repairDuration = `до ${end.format("DD.MM.YYYY")} (${days} дн.)`;
-								}
-
-								return (
-									<Table.Tr key={item.id}>
-										<Table.Td>{item.id}</Table.Td>
-										<Table.Td>{createdAt}</Table.Td>
-										<Table.Td>
-											<Tooltip label={item.bicycle_name || "—"}>
-												<Text
-													style={{
-														maxWidth: 180,
-														whiteSpace: "nowrap",
-														overflow: "hidden",
-														textOverflow: "ellipsis",
-														display: "block",
-													}}
+									return (
+										<Table.Tr key={item.id}>
+											<Table.Td>{item.id}</Table.Td>
+											<Table.Td>{createdAt}</Table.Td>
+											<Table.Td>
+												<Tooltip label={item.bicycle_name || "—"}>
+													<Text
+														style={{
+															maxWidth: 180,
+															whiteSpace: "nowrap",
+															overflow: "hidden",
+															textOverflow: "ellipsis",
+															display: "block",
+														}}
+													>
+														{item.bicycle_name || "—"}
+													</Text>
+												</Tooltip>
+											</Table.Td>
+											<Table.Td>{startDate}</Table.Td>
+											<Table.Td>{repairDuration}</Table.Td>
+											<Table.Td>{item.price ? `${(item.price/100).toLocaleString()} ₽` : "—"}</Table.Td>
+											<Table.Td>
+												<Badge
+													size="lg"
+													color={statusColors[item.status] || "gray"}
+													style={{ color: getTextColor(item.status) }}
 												>
-													{item.bicycle_name || "—"}
-												</Text>
-											</Tooltip>
-										</Table.Td>
-										<Table.Td>{startDate}</Table.Td>
-										<Table.Td>{repairDuration}</Table.Td>
-										<Table.Td>{item.price ? `${item.price} ₽` : "—"}</Table.Td>
-										<Table.Td>
-											<Badge
-												size="lg"
-												color={statusColors[item.status] || "gray"}
-												style={{ color: getTextColor(item.status) }}
-											>
-												{item.status}
-											</Badge>
-										</Table.Td>
-										<Table.Td>
-											<Group gap="xs" wrap="nowrap">
-												<Button
-													variant="outline"
-													radius="md"
-													size="sm"
-													color="blue.7"
-													onClick={() => openDetailModal(item.id)}
-												>
-													Детализация
-												</Button>
-												<ActionIcon size="lg" radius="md" color="blue.7" component="a"
-													href="tel:+79047382666">
-													<IconPhone size={20} />
-												</ActionIcon>
-											</Group>
-										</Table.Td>
-									</Table.Tr>
-								);
-							})}
-						</Table.Tbody>
-
-					</Table>
+													{item.status}
+												</Badge>
+											</Table.Td>
+											<Table.Td>
+												<Group gap="xs" wrap="nowrap">
+													<Button
+														variant="outline"
+														radius="md"
+														size="sm"
+														color="blue.7"
+														onClick={() => openDetailModal(item.id)}
+													>
+														Детализация
+													</Button>
+													<ActionIcon size="lg" radius="md" color="blue.7" component="a"
+														href="tel:+79047382666">
+														<IconPhone size={20} />
+													</ActionIcon>
+												</Group>
+											</Table.Td>
+										</Table.Tr>
+									);
+								})}
+							</Table.Tbody>
+						</Table>
+					</ScrollArea>
 				</Paper>
-			</ScrollArea>
 
 			{/* Модальное окно детализации */}
 			<MaintenanceDetailModal
