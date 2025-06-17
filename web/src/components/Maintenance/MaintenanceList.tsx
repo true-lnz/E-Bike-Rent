@@ -15,6 +15,7 @@ import { MaintenanceModal } from "./MaintenanceModal";
 
 const mockServices = [
 	{
+		type: 1,
 		title: "Тормоза – безопасность прежде всего",
 		description: "Проверка состояния и полная замена тормозных систем, дисков, ручек и колодок.",
 		icon: bike,
@@ -23,26 +24,31 @@ const mockServices = [
 		btnVariant: "white"
 	},
 	{
+		type: 2,
 		title: "Аккумуляторы и защита",
 		description: "Обслуживание аккумуляторов, ремонт корпуса, замена крышек и замков зажигания.",
 		icon: battery
 	},
 	{
+		type: 3,
 		title: "Рама, трансмиссия и мелочи",
 		description: "Сварка трещин, замена цепи, шатунов, педалей и защиты рамы.",
 		icon: whench
 	},
 	{
+		type: 4,
 		title: "Колёса, подвеска и рулевое управление",
 		description: "Восстановление вилки, руля, подшипников, установка новых ободов и седла.",
 		icon: settings
 	},
 	{
+		type: 5,
 		title: "Электроника и управление",
 		description: "Настройка контроллера, ручки газа, освещения и других электронных компонентов.",
 		icon: lightning,
 	},
 		{
+		type: 6,
 		title: "Дополнительные услуги",
 		description: "Вскрытие контроллера, нестандартный ремонт и мелкие доработки байка.",
 		icon: whench2,
@@ -62,12 +68,14 @@ export function MaintenanceList({ onCreated }: MaintenanceListProps) {
 	const [opened, setOpened] = useState(false);
 	const [authModalOpened, setAuthModalOpened] = useState(false);
 	const [selectedTitle, setSelectedTitle] = useState("");
+	const [selectedType, setSelectedType] = useState(0);
 
-	const handleApply = (title: string) => {
+	const handleApply = (type: number, title: string) => {
 		if (!user) {
 			setAuthModalOpened(true);
 			return;
 		}
+		setSelectedType(type);
 		setSelectedTitle(title);
 		setOpened(true);
 	};
@@ -101,7 +109,7 @@ export function MaintenanceList({ onCreated }: MaintenanceListProps) {
 							textColor={service.textColor}
 							background={service.bgColor}
 							btnVariant={service.btnVariant}
-							onApplyClick={() => handleApply(service.title)}
+							onApplyClick={() => handleApply(service.type, service.title)}
 						/>
 					</Grid.Col>
 				))}
@@ -113,6 +121,7 @@ export function MaintenanceList({ onCreated }: MaintenanceListProps) {
 				onClose={() => setOpened(false)}
 				onCreate={handleCreate}
 				defaultTitle={selectedTitle}
+				type={selectedType}
 			/>
 
 			{/* Модальное окно для неавторизованных пользователей */}

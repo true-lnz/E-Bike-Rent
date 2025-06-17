@@ -1,4 +1,4 @@
-import { Button, Center, Container, Paper, Stack, Text, Title } from "@mantine/core";
+import { Button, Center, Container, LoadingOverlay, Paper, Stack, Text, Title } from "@mantine/core";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -16,7 +16,12 @@ export default function MyRent() {
 			.finally(() => setLoading(false));
 	}, []);
 
-	if (loading) return <div>Загрузка...</div>;
+	if (loading) return
+	<LoadingOverlay
+		visible
+		overlayProps={{ radius: 'sm', blur: 2 }}
+		loaderProps={{ color: 'blue.5', type: 'bars' }}
+	/>;
 
 	const isActiveStatus = (status: string) =>
 		status === "арендован" || status === "аренда продлена";
@@ -27,8 +32,8 @@ export default function MyRent() {
 	return (
 		<Container py="xl" size="lg">
 			<Stack gap="xl">
-				<Title order={1} mb="sm" fz={{base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px"}}>Мои аренды</Title>
-				
+				<Title order={1} mb="sm" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>Мои аренды</Title>
+
 				{rents.length === 0 ? (
 					<>
 						<Paper radius="lg" withBorder>
