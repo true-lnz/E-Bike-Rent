@@ -9,10 +9,12 @@ import {
 	Group,
 	Modal,
 	Paper,
+	SimpleGrid,
 	Stack,
 	Text,
 	Timeline,
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import {
 	IconCheck,
 	IconClock,
@@ -61,7 +63,7 @@ export function MaintenanceDetailModal({
 	maintenance,
 }: Props) {
 	if (!maintenance) return null;
-
+	const isMobile = useMediaQuery("(max-width: 576px)");
 	const isRejected = maintenance.status === "отказано";
 	const statusData =
 		STATUS_CONFIG[maintenance.status as keyof typeof STATUS_CONFIG] || {
@@ -75,13 +77,14 @@ export function MaintenanceDetailModal({
 			onClose={onClose}
 			title={`Заявка id: ${maintenance.id}`}
 			centered
+			fullScreen={isMobile}
 			size="xl"
 			radius="lg"
 		>
 			<Paper withBorder p="md" radius="md">
 				<Grid gutter="xl">
 					{/* Таймлайн */}
-					<Grid.Col span={4}>
+					<Grid.Col span={{ base: 12, xs: 4 }}>
 						{!isRejected ? (
 							<Timeline
 								active={getStatusIndex(maintenance.status)}
@@ -149,7 +152,7 @@ export function MaintenanceDetailModal({
 					</Grid.Col>
 
 					{/* Основная информация */}
-					<Grid.Col span={8}>
+					<Grid.Col span={{ base: 12, xs: 8 }}>
 						<Stack gap="md">
 							<Group gap="xs">
 								<Avatar color={statusData.color} radius="xl" size="lg">
@@ -168,7 +171,7 @@ export function MaintenanceDetailModal({
 							<Box>
 								<Text fw={500} mb="xs">Описание проблемы</Text>
 								<Card withBorder p="sm" radius="md">
-									<Text style={{whiteSpace: 'pre-wrap'}}>{maintenance.details || "—"}</Text>
+									<Text style={{ whiteSpace: 'pre-wrap' }}>{maintenance.details || "—"}</Text>
 								</Card>
 							</Box>
 
@@ -188,12 +191,12 @@ export function MaintenanceDetailModal({
 								</Box>
 							)}
 
-							<Group grow>
+							<SimpleGrid cols={{ base: 1, sm: 3 }}>
 								<Card withBorder p="sm" radius="md">
 									<Text size="sm" c="dimmed">Стоимость</Text>
 									<Text fw={500}>
 										{maintenance.price
-											? `${(maintenance.price/100).toLocaleString()} ₽`
+											? `${(maintenance.price / 100).toLocaleString()} ₽`
 											: "—"}
 									</Text>
 								</Card>
@@ -207,17 +210,34 @@ export function MaintenanceDetailModal({
 									<Text size="sm" c="dimmed">Дата завершения</Text>
 									<Text fw={500}>{formatDate(maintenance.finish_date)}</Text>
 								</Card>
+							</SimpleGrid>
+
+							<Group>
+								<Button
+									color="blue.7"
+									radius="md"
+									component="a"
+									href="tel:+79047382666"
+									style={{
+										flexGrow: 1
+									}}
+								>
+									Связаться с мастером
+								</Button>
+								<Button
+									color="gray"
+									variant="light"
+									radius="md"
+									w="max-content"
+									onClick={onClose}
+									style={{
+										flexGrow: 1
+									}}
+								>
+									Закрыть
+								</Button>
 							</Group>
 
-							<Button
-								fullWidth
-								color="blue.7"
-								radius="md"
-								component="a"
-								href="tel:+79047382666"
-							>
-								Связаться с мастером
-							</Button>
 						</Stack>
 					</Grid.Col>
 				</Grid>
