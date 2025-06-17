@@ -598,6 +598,7 @@ export default function AdminMaintenanceRequests() {
 											<HoverCard.Dropdown>
 												<Stack gap={4}>
 													<Text size="md" fw={500}>{m.user.last_name} {m.user.first_name} {m.user.patronymic} </Text>
+													<Text size="md">Город: {m.user.city}</Text>
 													<Divider my="xs" />
 													{m.user?.company_id && companiesDict[m.user.company_id] && (
 														<>
@@ -618,9 +619,9 @@ export default function AdminMaintenanceRequests() {
 															<Divider my="xs" />
 														</>
 													)}
-													<Text size="sm">📧 Почта: {m.user.email}</Text>
+													<Text size="sm">Почта: {m.user.email}</Text>
 													<Text size="sm">
-														🎂 Дата рождения: {dayjs(m.user.birthday).format('DD.MM.YYYY')} (
+														Дата рождения: {dayjs(m.user.birthday).format('DD.MM.YYYY')} (
 														Возраст: {dayjs().diff(m.user.birthday, 'year')})
 													</Text>
 													<Button

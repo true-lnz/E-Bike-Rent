@@ -142,7 +142,7 @@ export default function Header() {
 								size="md"
 								to="/dashboard"
 								radius="xl"
-								pl="8"
+								pl={user ? "8" : 'lg'}
 								color="orange.5"
 								onClick={close}
 							>

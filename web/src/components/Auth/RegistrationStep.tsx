@@ -12,11 +12,12 @@ import {
 	Stack,
 	Text,
 	TextInput,
+	ThemeIcon,
 	Title
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { modals } from "@mantine/modals";
-import { IconAlertSquareRounded, IconSearch } from "@tabler/icons-react";
+import { IconAlertSquareRounded, IconBolt, IconSearch } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import 'dayjs/locale/ru';
 import { useEffect, useState } from "react";
@@ -34,6 +35,7 @@ export default function RegistrationStep() {
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [patronymic, setPatronymic] = useState("");
+	const [city, setCity] = useState("");
 	const [phone, setPhone] = useState("");
 	const [birthday, setBirthday] = useState<Date | null>(null);
 	const [searchQuery, setSearchQuery] = useState("");
@@ -61,9 +63,10 @@ export default function RegistrationStep() {
 			firstName.trim() !== "" &&
 			lastName.trim() !== "" &&
 			phone.trim() !== "" &&
+			city.trim() !== "" &&
 			birthday !== null
 		);
-	}, [firstName, lastName, phone, birthday]);
+	}, [firstName, lastName, phone, city, birthday]);
 
 	const filteredCompanies = companies.filter((company) =>
 		company.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -112,7 +115,7 @@ export default function RegistrationStep() {
 	};
 
 	const handleSubmit = async () => {
-		if (!firstName || !lastName || !phone || !birthday) return;
+		if (!firstName || !lastName || !phone || !city || !birthday) return;
 
 		const modalId = modals.open({
 			title: 'Регистрация',
@@ -139,17 +142,22 @@ export default function RegistrationStep() {
 				patronymic,
 				phone_number: phone,
 				birthday: dayjs(birthday).format("YYYY-MM-DD"),
+				city: city,
 				company_id: selectedId,
 			});
 
 			modals.updateModal({
 				modalId,
-				title: 'Регистрация успешна',
-				withCloseButton: true,
+				title: 'Регистрация завершена!',
 				radius: 'md',
 				children: (
-					<Stack gap="md">
-						<Text>Вы успешно зарегистрированы!</Text>
+					<Stack gap="md" justify="center">
+						<Group wrap="nowrap">
+							<ThemeIcon variant="light" color="green" size="80px" radius="50%">
+								<IconBolt style={{ width: '60%', height: '60%' }} />
+							</ThemeIcon>
+							<Text size="sm">Теперь вы можете арендовать любой электровелосипед в пару кликов</Text>
+						</Group>
 						<Button
 							onClick={() => {
 								modals.closeAll();
@@ -169,8 +177,13 @@ export default function RegistrationStep() {
 				withCloseButton: true,
 				radius: 'md',
 				children: (
-					<Stack gap="md">
-						<Text c="red">Произошла ошибка при регистрации. Попробуйте позже.</Text>
+					<Stack gap="md" justify="center">
+						<Group wrap="nowrap">
+							<ThemeIcon variant="light" color="red" size="80px" radius="50%">
+								<IconAlertSquareRounded style={{ width: '60%', height: '60%' }} />
+							</ThemeIcon>
+							<Text size="sm" c="red">Произошла ошибка при регистрации, или сайт сейчас не доступен. Попробуйте позже.</Text>
+						</Group>
 						<Button
 							color="red"
 							onClick={() => {
@@ -186,8 +199,6 @@ export default function RegistrationStep() {
 			});
 		}
 	};
-
-
 
 	return (
 		<Container size="lg" py="xl">
@@ -295,14 +306,6 @@ export default function RegistrationStep() {
 								value={patronymic}
 								onChange={(e) => setPatronymic(e.currentTarget.value)}
 							/>
-						</SimpleGrid>
-
-
-						<SimpleGrid
-							cols={{ base: 1, sm: 2 }}
-							spacing={{ base: 'sm', sm: 'md' }}
-							verticalSpacing="md"
-						>
 							<Input.Wrapper label="Телефон" required>
 								<Input
 									size="sm"
@@ -324,6 +327,14 @@ export default function RegistrationStep() {
 								value={birthday}
 								required
 								onChange={handleBirthdayChange as (value: any) => void}
+							/>
+							<TextInput
+								radius="md"
+								label="Город"
+								required
+								placeholder="Например, Уфа"
+								value={city}
+								onChange={(e) => setCity(e.currentTarget.value)}
 							/>
 						</SimpleGrid>
 

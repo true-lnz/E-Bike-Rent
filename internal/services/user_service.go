@@ -63,6 +63,7 @@ func (s *UserService) ChangeCredentials(c context.Context, userID uint, newCrede
 	user.LastName = newCredentials.NewLastName
 	user.Patronymic = newCredentials.NewPatronymic
 	user.PhoneNumber = newCredentials.NewPhoneNumber
+	user.City = newCredentials.NewCity
 
 	_, err = s.repo.Update(c, user)
 	return err
@@ -122,6 +123,7 @@ func (s *UserService) CompleteRegistration(c context.Context, req dto.CompleteRe
 	user.LastName = req.LastName
 	user.Patronymic = req.Patronymic
 	user.PhoneNumber = req.PhoneNumber
+	user.City = req.City
 	user.IsVerified = true
 
 	t, err := time.Parse("2006-01-02", req.Birthday)

@@ -126,6 +126,9 @@ export default function DashboardHeader() {
 											{user?.email}
 										</Text>
 										<Text size="sm" c="dimmed">
+											Город: {user?.city ? user?.city : "нет информации"}
+										</Text>
+										<Text size="sm" c="dimmed">
 											Телефон: {user?.phone_number}
 										</Text>
 										<Text size="sm" c="dimmed">
@@ -220,6 +223,9 @@ export default function DashboardHeader() {
 						</Text>
 						<Text size="xs" c="dimmed">
 							{user?.email}
+						</Text>
+						<Text size="sm" c="dimmed">
+							Город: {user?.city ? user?.city : "нет информации"}
 						</Text>
 						<Text size="xs" c="dimmed">
 							Телефон: {user?.phone_number}

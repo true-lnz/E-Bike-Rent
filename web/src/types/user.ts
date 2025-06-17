@@ -8,6 +8,7 @@ export interface User {
 	patronymic: string;
 	phone_number: string;
 	birthday: string;
+	city: string;
 	company?: Company;
 	company_id?: number;
 	is_verified: boolean;

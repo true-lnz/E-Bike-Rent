@@ -383,6 +383,7 @@ export default function AdminRentRequests() {
 												<HoverCard.Dropdown>
 													<Stack gap={4}>
 														<Text size="md" fw={500}>{r.user?.last_name} {r.user?.first_name} {r.user?.patronymic} </Text>
+														<Text size="md">Город: {r.user?.city}</Text>
 														<Divider my="xs" />
 														{r.user?.company_id && companiesDict[r.user.company_id] && (
 															<>
@@ -403,9 +404,9 @@ export default function AdminRentRequests() {
 																<Divider my="xs" />
 															</>
 														)}
-														<Text size="sm">📧 Почта: {r.user?.email}</Text>
+														<Text size="sm">Почта: {r.user?.email}</Text>
 														<Text size="sm">
-															🎂 Дата рождения: {dayjs(r.user?.birthday).format('DD.MM.YYYY')} (
+															Дата рождения: {dayjs(r.user?.birthday).format('DD.MM.YYYY')} (
 															Возраст: {dayjs().diff(r.user?.birthday, 'year')})
 														</Text>
 														<Button

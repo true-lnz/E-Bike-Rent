@@ -9,6 +9,7 @@ type CompleteRegistrationRequest struct {
 	Patronymic  string `json:"patronymic"`
 	PhoneNumber string `json:"phone_number"`
 	Birthday    string `json:"birthday"`
+	City        string `json:"city"`
 	CompanyID   *uint  `json:"company_id"`
 }
 
@@ -27,6 +28,7 @@ type ChangeCredentialsRequest struct {
 	NewFirstName   string `json:"new_first_name"`
 	NewPatronymic  string `json:"new_patronymic"`
 	NewEmail       string `json:"new_email"`
+	NewCity        string `json:"new_city"`
 }
 
 type CreateMaintenanceRequest struct {
