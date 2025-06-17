@@ -138,7 +138,6 @@ export default function ContactCard() {
 										component="a"
 										href="https://t.me/FulGaz_Ufa"
 										target="_blank"
-										rel="noopener noreferrer"
 										size="lg"
 										fz={isMobile ? "md" : "xl"}
 										c="dimmed"
@@ -154,6 +153,7 @@ export default function ContactCard() {
 								<Button
 									component="a"
 									href="https://t.me/FulGaz_Ufa"
+									target="_blank"
 									color="orange.5"
 									radius="xl"
 									size={isMobile ? "md" : "lg"}

@@ -6,8 +6,8 @@ import battery from "../../assets/icons/battery.png";
 import bike from "../../assets/icons/bike.png";
 import lightning from "../../assets/icons/lightning.png";
 import settings from "../../assets/icons/settings.png";
-import wash from "../../assets/icons/wash.png";
 import whench from "../../assets/icons/whench.png";
+import whench2 from "../../assets/icons/whench2.png";
 import { useAuth } from "../../hooks/useAuth";
 import { maintenanceService } from "../../services/maintenanceService";
 import { MaintenanceCard } from "./MaintenanceCard";
@@ -15,37 +15,37 @@ import { MaintenanceModal } from "./MaintenanceModal";
 
 const mockServices = [
 	{
-		title: "Комплексная диагностика электровелосипеда",
-		description: "Проверка состояния основных узлов: тормоза, цепь, звёзды, переключатели, колёса.",
+		title: "Тормоза – безопасность прежде всего",
+		description: "Проверка состояния и полная замена тормозных систем, дисков, ручек и колодок.",
 		icon: bike,
 		textColor: "white",
 		bgColor: "orange.5",
 		btnVariant: "white"
 	},
 	{
-		title: "Диагностика электросистемы",
-		description: "Проверка состояния аккумулятора, контроллера, дисплея и электропроводки.",
+		title: "Аккумуляторы и защита",
+		description: "Обслуживание аккумуляторов, ремонт корпуса, замена крышек и замков зажигания.",
 		icon: battery
 	},
 	{
-		title: "Регулировка тормозов и переключателей",
-		description: "Настройка переднего и заднего переключателей, тормозных ручек, колодок или дисков.",
+		title: "Рама, трансмиссия и мелочи",
+		description: "Сварка трещин, замена цепи, шатунов, педалей и защиты рамы.",
 		icon: whench
 	},
 	{
-		title: "Комплексная мойка и смазка",
-		description: "Полная очистка велосипеда, чистка цепи, смазка подвижных узлов.",
-		icon: wash
-	},
-	{
-		title: "Замена цепи и кассеты",
-		description: "Снятие изношенных элементов трансмиссии и установка новых.",
+		title: "Колёса, подвеска и рулевое управление",
+		description: "Восстановление вилки, руля, подшипников, установка новых ободов и седла.",
 		icon: settings
 	},
 	{
-		title: "Прошивка и обновление ПО",
-		description: "Установка обновлений для бортового компьютера, дисплея и контроллера.",
+		title: "Электроника и управление",
+		description: "Настройка контроллера, ручки газа, освещения и других электронных компонентов.",
 		icon: lightning,
+	},
+		{
+		title: "Дополнительные услуги",
+		description: "Вскрытие контроллера, нестандартный ремонт и мелкие доработки байка.",
+		icon: whench2,
 		textColor: "white",
 		bgColor: "blue.7",
 		btnVariant: "white"
