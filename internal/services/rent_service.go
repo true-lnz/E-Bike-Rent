@@ -20,7 +20,7 @@ func NewRentService(repo repositories.RentRepository, bicycleRepo repositories.B
 }
 
 func (s *RentService) CreateRent(c context.Context, req dto.CreateRentRequest, userID uint) (resp *models.Rent, err error) {
-	if req.RentalDays < 1 {
+	if !(req.RentalDays == 7 || req.RentalDays == 14 || req.RentalDays == 30) {
 		return nil, fmt.Errorf("некорректное количество дней: %d", req.RentalDays)
 	}
 	bicycle, err := s.bicycleRepo.GetByID(c, req.BicycleID)
@@ -127,7 +127,6 @@ func (s *RentService) UpdateRent(c context.Context, req dto.UpdateRentRequest, r
 		start := existingRent.StartDate
 		end := existingRent.ExpireDate
 		days := int(end.Sub(*start).Hours() / 24)
-		fmt.Println("Количество дней:", days)
 		totalRentPrice := func(duration int) int {
 			switch duration {
 			case 7:

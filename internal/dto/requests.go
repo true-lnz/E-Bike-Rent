@@ -45,7 +45,7 @@ type UpdateMaintenanceRequest struct {
 }
 
 type CreateRentRequest struct {
-	RentalDays  int    `json:"rental_days"`
+	RentalDays  int    `json:"rental_days"` // 7, 14, 30
 	BicycleID   uint   `json:"bicycle_id,omitempty"`
 	Accessories []uint `json:"accessories"`
 }
