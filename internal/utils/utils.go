@@ -80,11 +80,6 @@ func ParseUint(v string) uint {
 	return uint(i)
 }
 
-func ParseFloat(v string) float64 {
-	f, _ := strconv.ParseFloat(v, 64)
-	return f
-}
-
 func ParseByte(s string) byte {
 	i, _ := strconv.Atoi(s)
 	return byte(i)
