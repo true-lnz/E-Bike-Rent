@@ -1,4 +1,5 @@
 import { Flex, Progress, Text, Tooltip } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 
 interface AdminBikeAvailabilityProps {
   rented: number;
@@ -11,8 +12,10 @@ export const AdminBikeAvailability = ({
   available,
   total,
 }: AdminBikeAvailabilityProps) => {
-  const MIN_PERCENT = 15;
-  const FIXED_TOTAL_PERCENT = 15;
+	const isMobile = useMediaQuery("(max-width: 576px)");
+	
+  const MIN_PERCENT = isMobile ? 40 : 15;
+  const FIXED_TOTAL_PERCENT = isMobile ? 20 : 15;
 
   const rentedPercent = (rented / total) * 100;
   const availablePercent = (available / total) * 100;

@@ -3,12 +3,14 @@ import {
 	Button,
 	Card,
 	Divider,
+	Flex,
 	Group,
 	Image,
 	Stack,
 	Text,
 	Title
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import { BASE_IMAGE_URL } from "../../constants";
 import type { Bike } from "../../types/bike";
@@ -22,18 +24,18 @@ interface Props {
 
 export function AdminBikeCard({ bike, onEdit, onDelete }: Props) {
 	const { name, image_url, max_speed, max_range, power, battery, quantity, available_quantity } = bike;
-
+	const isMobile = useMediaQuery("(max-width: 576px)");
 	const rented = quantity - available_quantity;
 
 	return (
 		<Card shadow="sm" radius="xl" withBorder p="xl">
-			<Group wrap="nowrap" align="flex-start">
+			<Flex align="flex-start" gap="md" direction={isMobile ? "column" : "row"}>
 				{/* Картинка слева */}
 				<Image
 					src={BASE_IMAGE_URL + image_url}
 					alt={name}
-					w={200}
-					h={180}
+					w={{ base: "100%", sm: 200 }}
+					h={{ base: "100%", sm: 180 }}
 					fit="contain"
 					radius="md"
 				/>
@@ -41,18 +43,27 @@ export function AdminBikeCard({ bike, onEdit, onDelete }: Props) {
 				{/* Справа всё остальное */}
 				<Divider orientation="vertical" />
 
-				<Stack gap="xs" style={{ flex: 1 }}>
+				<Stack gap="4" style={{ flex: 1 }}>
 					<Group justify="space-between" align="center" gap="xl">
 						<Title order={2}>{name}</Title>
-						<Box style={{ flex: 1 }}>
+						<Box style={{ flex: 1 }} visibleFrom="sm">
 							<AdminBikeAvailability rented={rented} available={available_quantity} total={quantity} />
 						</Box>
 					</Group>
 
 					<Text size="sm" c="dimmed">
-						Макс. скорость: до {max_speed} км/ч <br />
-						Пробег: до {max_range} км <br />
-						Мощность: {power} Вт <br />
+						Макс. скорость: до {max_speed} км/ч
+					</Text>
+
+					<Text size="sm" c="dimmed">
+						Пробег: до {max_range} км
+					</Text>
+
+					<Text size="sm" c="dimmed">
+						Мощность: {power} Вт
+					</Text>
+
+					<Text size="sm" c="dimmed">
 						Батарея: {battery}
 					</Text>
 
@@ -61,7 +72,7 @@ export function AdminBikeCard({ bike, onEdit, onDelete }: Props) {
 							variant="light"
 							color="blue"
 							radius="xl"
-							size="md"
+							size={isMobile ? "xs" : "md"}
 							leftSection={<IconEdit size={16} />}
 							onClick={onEdit}
 						>
@@ -72,6 +83,7 @@ export function AdminBikeCard({ bike, onEdit, onDelete }: Props) {
 							color="gray"
 							radius="xl"
 							size="md"
+							visibleFrom="sm"
 							leftSection={<IconTrash size={16} />}
 							onClick={onDelete}
 						>
@@ -79,7 +91,7 @@ export function AdminBikeCard({ bike, onEdit, onDelete }: Props) {
 						</Button>
 					</Group>
 				</Stack>
-			</Group>
+			</Flex>
 		</Card>
 	);
 }

@@ -113,7 +113,7 @@ export default function AdminHeader() {
       <Drawer
         opened={opened}
         onClose={close}
-        title="Меню"
+        title="Админ-панель"
         padding="md"
         size="250px"
         position="right"
@@ -135,6 +135,8 @@ export default function AdminHeader() {
             fullWidth
             variant="light"
             color="orange.5"
+						radius="xl"
+						mt="xl"
             onClick={() => {
               handleLogout();
               close();

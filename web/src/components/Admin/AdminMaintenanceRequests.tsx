@@ -1,13 +1,10 @@
 import {
-	Avatar,
-	Box,
 	Button,
 	Card,
 	Container,
 	Divider,
+	Flex,
 	Group,
-	HoverCard,
-	Image,
 	LoadingOverlay,
 	Menu,
 	NumberInput,
@@ -21,18 +18,19 @@ import {
 	Title
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
+import { useMediaQuery } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
-import { IconCheck, IconCheckupList, IconDotsVertical, IconEdit, IconPhoneCall, IconTool, IconX } from "@tabler/icons-react";
+import { IconCheck, IconCheckupList, IconDotsVertical, IconEdit, IconInfoCircle, IconPhoneCall, IconTool, IconX } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { BASE_IMAGE_URL } from "../../constants";
 import { companyService } from "../../services/companyService";
 import { maintenanceService } from "../../services/maintenanceService";
 import type { Company } from "../../types/company";
 import type { Maintenance } from "../../types/maintenance";
 import { MaintenanceDetailModal } from "../Maintenance/MaintenanceDetailModal";
+import { UserCard } from "./UserCard";
 
 export default function AdminMaintenanceRequests() {
 	const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
@@ -41,6 +39,7 @@ export default function AdminMaintenanceRequests() {
 	const [modalOpened, setModalOpened] = useState(false);
 	const [loadingMaintenance, setLoadingMaintenance] = useState(false);
 	const [companiesDict, setCompaniesDict] = useState<Record<number, Company>>({});
+	const isMobile = useMediaQuery("(max-width: 576px)");
 
 	useEffect(() => {
 		const fetchCompanies = async () => {
@@ -556,6 +555,7 @@ export default function AdminMaintenanceRequests() {
 					fullWidth
 					radius="xl"
 					size="md"
+					orientation={isMobile ? "vertical" : "horizontal"}
 					color="blue.7"
 					value={statusFilter}
 					onChange={setStatusFilter}
@@ -577,69 +577,11 @@ export default function AdminMaintenanceRequests() {
 						<Text c="dimmed">Нет заявок для отображения.</Text>
 					) : (
 						filtered.map((m) => (
-							<Card withBorder radius="xl" key={m.id} shadow="sm" h={265} p="xl">
-								<Group align="start" gap="xl" justify="space-between" wrap="nowrap" style={{ width: '100%' }}>
+							<Card withBorder radius="xl" key={m.id} shadow="sm" h={{ base: "auto", sm: 265 }} p="xl">
+								<Flex align={isMobile ? "center" : "start"} gap="xl" justify="space-between" wrap="nowrap" direction={isMobile ? "column" : "row"} style={{ width: '100%' }}>
 									{/* Левый столбец */}
 									<Stack gap={4} w={200} align="center" style={{ height: '100%' }}>
-										<HoverCard width={260} shadow="md" radius="md" withArrow position="right-start">
-											<HoverCard.Target>
-												<Group gap="sm" justify="center" style={{ cursor: 'pointer' }}>
-													<Avatar
-														size={80}
-														name={`${m.user.first_name} ${m.user.last_name}`}
-														radius={9999}
-													/>
-													<Text fw={700} fz="xl" style={{ whiteSpace: 'nowrap' }}>
-														{m.user.last_name} {m.user.first_name[0]}.{m.user.patronymic?.[0] || ''}.
-													</Text>
-												</Group>
-											</HoverCard.Target>
-
-											<HoverCard.Dropdown>
-												<Stack gap={4}>
-													<Text size="md" fw={500}>{m.user.last_name} {m.user.first_name} {m.user.patronymic} </Text>
-													<Text size="md">Город: {m.user.city}</Text>
-													<Divider my="xs" />
-													{m.user?.company_id && companiesDict[m.user.company_id] && (
-														<>
-															<Group gap="sm" align="center">
-																<Box>
-																	<Image
-																		src={BASE_IMAGE_URL + 'companies/' + companiesDict[m.user.company_id].image_url}
-																		alt={companiesDict[m.user.company_id].name}
-																		width={40}
-																		height={40}
-																		fit="cover"
-																	/>
-																</Box>
-																<Text size="sm" fw={500}>
-																	{companiesDict[m.user.company_id].name}
-																</Text>
-															</Group>
-															<Divider my="xs" />
-														</>
-													)}
-													<Text size="sm">Почта: {m.user.email}</Text>
-													<Text size="sm">
-														Дата рождения: {dayjs(m.user.birthday).format('DD.MM.YYYY')} (
-														Возраст: {dayjs().diff(m.user.birthday, 'year')})
-													</Text>
-													<Button
-														variant="light"
-														color="gray"
-														size="xs"
-														radius="md"
-														fullWidth
-														component={Link}
-														to={`tel:${m.user.phone_number}`}
-														leftSection={<IconPhoneCall size={14} />}
-													>
-														Позвонить
-													</Button>
-												</Stack>
-											</HoverCard.Dropdown>
-										</HoverCard>
-
+										<UserCard r={m} companiesDict={companiesDict} />
 										<Text size="sm">Тел.: {m.user.phone_number}</Text>
 										<Button
 											variant="light"
@@ -659,7 +601,7 @@ export default function AdminMaintenanceRequests() {
 									<Divider orientation="vertical" />
 
 									{/* Правый столбец */}
-									<Stack gap={8} style={{ flexGrow: 1, height: '200px' }}>
+									<Stack gap={8} h={{ base: "auto", sm: '200px' }} style={{ flexGrow: 1 }}>
 										<Group justify="space-between" align="start">
 											<Stack gap={0}>
 												<Text fz="28" lh={1.2} fw={700} lineClamp={1} title={m.bicycle_name}>
@@ -675,6 +617,7 @@ export default function AdminMaintenanceRequests() {
 													variant="default"
 													size="sm"
 													radius="md"
+													visibleFrom="sm"
 													onClick={() => handleDetails(m.id)}
 												>
 													Детали
@@ -693,6 +636,15 @@ export default function AdminMaintenanceRequests() {
 															padding: 'var(--mantine-spacing-sm)',
 														}}
 													>
+														<Menu.Item
+															key="info"
+															variant="default"
+															hiddenFrom="sm"
+															leftSection={<IconInfoCircle size={18} />}
+															onClick={() => handleDetails(m.id)}
+														>
+															Детали
+														</Menu.Item>
 														{handleActions(
 															m.id,
 															m.status,
@@ -751,7 +703,7 @@ export default function AdminMaintenanceRequests() {
 											</Pill>
 										</Group>
 									</Stack>
-								</Group>
+								</Flex>
 							</Card>
 						))
 					)}

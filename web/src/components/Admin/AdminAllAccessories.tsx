@@ -164,7 +164,7 @@ export default function AdminAllAccessories() {
 	return (
 		<Container id="accessories" py="xl" size="lg">
 			<Group justify="space-between" mb="xl">
-				<Title fz={45}>Управление аксессуарами</Title>
+				<Title mb="md" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>Управление аксессуарами</Title>
 				<Button
 					variant="outline"
 					radius="xl"
@@ -266,12 +266,14 @@ export default function AdminAllAccessories() {
 							<Button
 								color="red"
 								variant="outline"
+								visibleFrom="sm"
 								onClick={handleDeleteConfirm}
 								radius="md"
 							>
 								Удалить аксессуар
 							</Button>
 							<Group>
+							
 								<Button variant="outline" radius="md" onClick={() => setEditModalOpened(false)}>
 									Отмена
 								</Button>
@@ -326,7 +328,6 @@ export default function AdminAllAccessories() {
 				centered
 			>
 				<Stack gap="md">
-					{/* Превью */}
 					<Box>
 						<Text size="sm" fw={500} mb="xs">Изображение:</Text>
 
@@ -398,7 +399,7 @@ export default function AdminAllAccessories() {
 
 					{/* Кнопки */}
 					<Group justify="flex-end" mt="md">
-						<Button radius="md" variant="outline" onClick={() => setAddModalOpened(false)}>
+						<Button visibleFrom="sm" radius="md" variant="outline" onClick={() => setAddModalOpened(false)}>
 							Отмена
 						</Button>
 						<Button radius="md" onClick={handleCreate} disabled={!newAccessory?.name}>

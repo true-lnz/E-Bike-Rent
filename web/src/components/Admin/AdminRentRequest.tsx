@@ -6,6 +6,7 @@ import {
 	Card,
 	Container,
 	Divider,
+	Flex,
 	Group,
 	HoverCard,
 	Image,
@@ -25,9 +26,10 @@ import {
 	Title
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
+import { useMediaQuery } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
-import { IconBike, IconCalendar, IconCheck, IconCheckupList, IconDotsVertical, IconPhoneCall, IconRefresh, IconUser, IconX } from "@tabler/icons-react";
+import { IconBike, IconCalendar, IconCheck, IconCheckupList, IconDotsVertical, IconInfoCircle, IconPhoneCall, IconRefresh, IconUser, IconX } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -37,6 +39,7 @@ import { getAllRents, updateRent } from "../../services/rentService";
 import type { Company } from "../../types/company";
 import type { Rent, UpdateRentRequest } from "../../types/rent";
 import AccessorySelectCardList from "../Accessory/AccessorySelectCardList";
+import { UserCard } from "./UserCard";
 
 export default function AdminRentRequests() {
 	const [rents, setRents] = useState<Rent[]>([]);
@@ -48,6 +51,7 @@ export default function AdminRentRequests() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [editingRent, setEditingRent] = useState<Rent | null>(null);
 	const [companiesDict, setCompaniesDict] = useState<Record<number, Company>>({});
+	const isMobile = useMediaQuery("(max-width: 576px)");
 
 	useEffect(() => {
 		const fetchCompanies = async () => {
@@ -341,6 +345,7 @@ export default function AdminRentRequests() {
 					radius="xl"
 					size="md"
 					color="blue.7"
+					orientation={isMobile ? "vertical" : "horizontal"}
 					value={statusFilter}
 					onChange={setStatusFilter}
 					data={[
@@ -362,11 +367,12 @@ export default function AdminRentRequests() {
 						filtered.map((r) => (
 							<Box style={{ borderRadius: "xl", overflow: "hidden" }}>
 
-								<Card withBorder radius="xl" key={r.id} h={265} p="xl">
-									<Group align="start" gap="xl" justify="space-between" wrap="nowrap" style={{ width: '100%' }}>
+								<Card withBorder radius="xl" key={r.id} h={{ base: "auto", sm: "265px" }} p="xl">
+									<Flex align={isMobile ? "center" : "start"} direction={isMobile ? "column" : "row"} gap="xl" justify="space-between" wrap="nowrap" style={{ width: '100%' }}>
 										{/* Левый столбец */}
 										<Stack gap={4} w={200} align="center" style={{ height: '100%' }}>
-											<HoverCard width={260} shadow="md" withArrow position="right-start">
+											<UserCard r={r} companiesDict={companiesDict} />
+											{/* <HoverCard width={260} shadow="md" withArrow position="right-start">
 												<HoverCard.Target>
 													<Group gap="sm" justify="center" style={{ cursor: 'pointer' }}>
 														<Avatar
@@ -423,7 +429,7 @@ export default function AdminRentRequests() {
 														</Button>
 													</Stack>
 												</HoverCard.Dropdown>
-											</HoverCard>
+											</HoverCard> */}
 
 											<Text size="sm">Тел.: {r.user?.phone_number}</Text>
 											<Button
@@ -444,10 +450,10 @@ export default function AdminRentRequests() {
 										<Divider orientation="vertical" />
 
 										{/* Правый столбец */}
-										<Stack gap={8} style={{ flexGrow: 1, height: '200px' }}>
-											<Group justify="space-between" align="start">
+										<Stack gap={8} h={{ base: "auto", sm: "200px" }} style={{ flexGrow: 1 }}>
+											<Group justify="space-between" align="start"  wrap="nowrap">
 												<Stack gap={4}>
-													<Group gap="xs">
+													<Group gap="xs" wrap="nowrap">
 														<Avatar variant="default">
 															<Image
 																src={`${BASE_IMAGE_URL}/${r.bicycle.image_url}`}
@@ -466,6 +472,7 @@ export default function AdminRentRequests() {
 													<Button
 														variant="default"
 														size="sm"
+														visibleFrom="sm"
 														radius="md"
 														onClick={() => handleDetails(r)}
 													>
@@ -491,6 +498,15 @@ export default function AdminRentRequests() {
 																padding: 'var(--mantine-spacing-sm)',
 															}}
 														>
+															<Menu.Item
+																key="info"
+																variant="default"
+																hiddenFrom="sm"
+																leftSection={<IconInfoCircle size={18} />}
+																onClick={() => handleDetails(r)}
+															>
+																Детали
+															</Menu.Item>
 															{handleActions(
 																r.id!,
 																r.status
@@ -546,7 +562,7 @@ export default function AdminRentRequests() {
 											</Group>
 
 										</Stack>
-									</Group>
+									</Flex>
 								</Card>
 								{/* Блок аксессуаров — серая подложка снизу */}
 								{r.accessories.length > 0 && (
@@ -601,6 +617,7 @@ export default function AdminRentRequests() {
 				opened={modalOpened}
 				onClose={() => setModalOpened(false)}
 				size="lg"
+				fullScreen={isMobile}
 				title={'Детали аренды id: ' + selectedRent?.id}
 				centered
 				padding="md"

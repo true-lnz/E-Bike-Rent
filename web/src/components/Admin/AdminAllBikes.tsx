@@ -9,7 +9,6 @@ import {
 	LoadingOverlay,
 	Modal,
 	NumberInput,
-	rem,
 	ScrollArea,
 	SimpleGrid,
 	Stack,
@@ -18,6 +17,7 @@ import {
 	TextInput,
 	Title
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { IconPhoto, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { BASE_IMAGE_URL } from "../../constants";
@@ -40,6 +40,7 @@ export default function AdminAllBikes() {
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
 
 	const [saving, setSaving] = useState(false); // для блокировки кнопок сохранения/создания
+	const isMobile = useMediaQuery("(max-width: 576px)");
 
 	useEffect(() => {
 		loadBikes();
@@ -292,7 +293,7 @@ export default function AdminAllBikes() {
 	return (
 		<Container size="lg" py="md">
 			<Group justify="space-between" mb="xl">
-				<Title fz={45} mb="md">Управление велосипедами</Title>
+				<Title mb="md" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>Управление велосипедами</Title>
 				<Button
 					variant="outline"
 					radius="xl"
@@ -320,6 +321,7 @@ export default function AdminAllBikes() {
 
 			<Modal
 				opened={addModalOpened}
+				fullScreen={isMobile}
 				onClose={() => {
 					setAddModalOpened(false);
 					setNewBike(null);
@@ -330,8 +332,8 @@ export default function AdminAllBikes() {
 				size="xl"
 				centered
 			>
-				<Flex gap="lg" align="start">
-					<Stack w={240} align="center" gap="sm">
+				<Flex gap="lg" align="start" direction={isMobile ? "column" : "row"}>
+					<Stack px="sm" w={{ base: "100%", sm:240}} align="center" gap="sm">
 						{imagePreview ? (
 							<Image
 								src={imagePreview.startsWith('data:') || imagePreview.startsWith('http')
@@ -341,14 +343,15 @@ export default function AdminAllBikes() {
 								fit="contain"
 							/>
 						) : (
-							<Group h={200} w={200} bg="gray.1" justify="center" align="center" style={{ borderRadius: 8 }}>
+							<Group h={200} w={{ base: "100%", sm: 200}} bg="gray.1" justify="center" align="center" style={{ borderRadius: 8 }}>
 								<IconPhoto size={48} color="gray" />
 							</Group>
 						)}
 						<FileInput
 							placeholder={newImage?.name || "Выберите изображение"}
-							rightSection={<IconPhoto size={rem(14)} />}
+							rightSection={<IconPhoto size={20} />}
 							value={newImage}
+							radius="md"
 							onChange={(file) => {
 								handleImageChange(file);
 								setNewImage(file);
@@ -359,7 +362,7 @@ export default function AdminAllBikes() {
 						/>
 					</Stack>
 
-					<Box style={{ flex: 1 }}>
+					<Box style={{ flex: 1 }}  w="100%">
 						{newBike && renderBikeFields(newBike, setNewBike)}
 						<Group justify="flex-end" mt="md">
 							<Button
@@ -391,6 +394,7 @@ export default function AdminAllBikes() {
 
 			<Modal
 				opened={editModalOpened}
+				fullScreen={isMobile}
 				onClose={() => {
 					setEditModalOpened(false);
 					setSelectedBike(null);
@@ -401,25 +405,26 @@ export default function AdminAllBikes() {
 				size="xl"
 				centered
 			>
-				<Flex gap="lg" align="start">
-					<Stack w={240} align="center" gap="sm">
+				<Flex gap="lg" align="start" direction={isMobile ? "column" : "row"}>
+					<Stack px="sm" w={{base: "100%", sm: 240}} align="center" gap="sm">
 						{imagePreview ? (
 							<Image
 								src={imagePreview.startsWith('data:')
 									? imagePreview
 									: `${BASE_IMAGE_URL}/${imagePreview}`}
-								h={160}
+								h={{base: "100%", sm: 200}} w={{base: "100%", sm: 200}}
 								fit="contain"
 							/>
 						) : (
-							<Group h={200} w={200} bg="gray.1" justify="center" align="center" style={{ borderRadius: 8 }}>
+							<Group h={{base: "100%", sm: 200}} w={{base: "100%", sm: 200}} bg="gray.1" justify="center" align="center" style={{ borderRadius: 8 }}>
 								<IconPhoto size={48} color="gray" />
 							</Group>
 						)}
 						<FileInput
 							placeholder={newImage?.name || selectedBike?.image_url || "Выберите изображение"}
-							rightSection={<IconPhoto size={rem(14)} />}
+							rightSection={<IconPhoto size="20" />}
 							value={newImage}
+							radius="md"
 							onChange={(file) => {
 								handleImageChange(file);
 								setNewImage(file);
@@ -430,7 +435,7 @@ export default function AdminAllBikes() {
 						/>
 					</Stack>
 
-					<Box style={{ flex: 1 }}>
+					<Box style={{ flex: 1 }} w="100%">
 						{selectedBike && renderBikeFields(selectedBike, (b) => setSelectedBike(b as Bike))}
 						<Group justify="space-between" mt="md">
 							<Button
