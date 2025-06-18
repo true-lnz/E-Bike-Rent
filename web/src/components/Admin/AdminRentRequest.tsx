@@ -4,11 +4,11 @@ import {
 	Box,
 	Button,
 	Card,
+	Collapse,
 	Container,
 	Divider,
 	Flex,
 	Group,
-	HoverCard,
 	Image,
 	LoadingOverlay,
 	Menu,
@@ -22,14 +22,15 @@ import {
 	SimpleGrid,
 	Stack,
 	Text,
+	TextInput,
 	ThemeIcon,
 	Title
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
-import { useMediaQuery } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
-import { IconBike, IconCalendar, IconCheck, IconCheckupList, IconDotsVertical, IconInfoCircle, IconPhoneCall, IconRefresh, IconUser, IconX } from "@tabler/icons-react";
+import { IconBike, IconCalendar, IconCheck, IconCheckupList, IconDotsVertical, IconFilter, IconHome, IconInfoCircle, IconPhone, IconPhoneCall, IconRefresh, IconUser, IconX } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -43,7 +44,15 @@ import { UserCard } from "./UserCard";
 
 export default function AdminRentRequests() {
 	const [rents, setRents] = useState<Rent[]>([]);
+
 	const [statusFilter, setStatusFilter] = useState("в обработке");
+	const [phoneFilter, setPhoneFilter] = useState<string>('');
+	const [startDateFilter, setStartDateFilter] = useState<Date | null>(null);
+	const [endDateFilter, setEndDateFilter] = useState<Date | null>(null);
+	const [bicycleModelFilter, setBicycleModelFilter] = useState<string>('');
+	const [cityFilter, setCityFilter] = useState<string>('');
+	const [filtersContainerOpened, { toggle }] = useDisclosure(false);
+
 	const [selectedRent, setSelectedRent] = useState<Rent | null>(null);
 	const [loadingRents, setLoadingRents] = useState(false);
 	const [modalOpened, setModalOpened] = useState(false);
@@ -88,15 +97,61 @@ export default function AdminRentRequests() {
 		refreshRents();
 	}, []);
 
+	/* 	const filtered = rents.filter((r) => {
+			if (statusFilter === "done") {
+				return ["завершен", "отказано"].includes(r.status);
+			}
+			if (statusFilter === "processing") {
+				return ["арендован", "аренда продлена"].includes(r.status);
+			}
+			return r.status === statusFilter;
+		}); */
+
 	const filtered = rents.filter((r) => {
-		if (statusFilter === "done") {
-			return ["завершен", "отказано"].includes(r.status);
+		// Фильтр по статусу
+		if (statusFilter === "done" && !["завершен", "отказано"].includes(r.status)) return false;
+		if (statusFilter === "processing" && !["арендован", "аренда продлена"].includes(r.status)) return false;
+		if (statusFilter !== "all" && statusFilter !== "done" && statusFilter !== "processing" && r.status !== statusFilter) return false;
+
+		// Фильтр по телефону
+		if (phoneFilter && r.user?.phone_number) {
+			const cleanPhoneFilter = phoneFilter.replace(/\D/g, '');
+			const cleanPhone = r.user.phone_number.replace(/\D/g, '');
+			if (!cleanPhone.includes(cleanPhoneFilter)) return false;
 		}
-		if (statusFilter === "processing") {
-			return ["арендован", "аренда продлена"].includes(r.status);
+
+		// Фильтр по дате начала аренды
+		if (startDateFilter && r.start_date) {
+			const rentalStart = new Date(r.start_date);
+			if (rentalStart < startDateFilter) return false;
 		}
-		return r.status === statusFilter;
+
+		// Фильтр по дате окончания аренды
+		if (endDateFilter && r.expire_date) {
+			const rentalEnd = new Date(r.expire_date);
+			if (rentalEnd > endDateFilter) return false;
+		}
+
+		// Фильтр по модели велосипеда
+		if (bicycleModelFilter && r.bicycle?.name !== bicycleModelFilter) return false;
+
+		// Фильтр по городу
+		if (cityFilter && r.user?.city) {
+			if (!r.user.city.toLowerCase().includes(cityFilter.toLowerCase())) return false;
+		}
+
+		return true;
 	});
+
+	const clearAllFilters = () => {
+		setPhoneFilter('');
+		setStartDateFilter(null);
+		setEndDateFilter(null);
+		setBicycleModelFilter('');
+		setCityFilter('');
+	};
+
+	const bicycleModels = Array.from(new Set(rents.map(r => r.bicycle?.name).filter(Boolean)));
 
 	const handleActions = (
 		id: number,
@@ -114,7 +169,7 @@ export default function AdminRentRequests() {
 						handleAccept(id);
 					}}
 				>
-					Подтвердить
+					Выдать велосипед
 				</Menu.Item>,
 				<Menu.Item
 					key="reject"
@@ -163,7 +218,6 @@ export default function AdminRentRequests() {
 		return actions;
 	};
 
-
 	const handleEditRent = (rent: Rent) => {
 		setEditingRent(rent);
 		setUpdateData({
@@ -180,7 +234,7 @@ export default function AdminRentRequests() {
 			centered: true,
 			children: (
 				<Text size="sm">
-					Вы уверены, что хотите подтвердить эту аренду? Статус будет изменён на <b>арендован</b>.
+					Вы уверены, что хотите выдать этот велосипед в аренду? Статус будет изменён на <b>арендован</b>.
 				</Text>
 			),
 			labels: { confirm: 'Подтвердить', cancel: 'Отмена' },
@@ -193,7 +247,7 @@ export default function AdminRentRequests() {
 					});
 					showNotification({
 						title: 'Успешно',
-						message: 'Аренда подтверждена',
+						message: 'Аренда подтверждена. Велосипед выдан',
 						color: 'green',
 					});
 					await refreshRents();
@@ -339,21 +393,104 @@ export default function AdminRentRequests() {
 		<Container size="lg" mb={80}>
 			<Stack gap="md">
 				<Title order={2}>Запросы на аренду</Title>
+				<Stack gap="8">
+					<Group w="100%">
+						<Button
+							radius="md"
+							size="sm"
+							fullWidth={isMobile}
+							color="orange.5"
+							onClick={toggle}
+							leftSection={<IconFilter size={18} />}
+						>
+							Все фильтры
+						</Button>
+						<SegmentedControl
+							fullWidth
+							radius="md"
+							size="md"
+							color="blue.7"
+							orientation={isMobile ? "vertical" : "horizontal"}
+							value={statusFilter}
+							onChange={setStatusFilter}
+							data={[
+								{ label: 'Ожидают подтверждения', value: 'в обработке' },
+								{ label: 'Активные аренды', value: 'processing' },
+								{ label: 'Завершенные', value: 'done' },
+							]}
+							style={{ flexGrow: 1 }}
+						/>
+					</Group>
 
-				<SegmentedControl
-					fullWidth
-					radius="xl"
-					size="md"
-					color="blue.7"
-					orientation={isMobile ? "vertical" : "horizontal"}
-					value={statusFilter}
-					onChange={setStatusFilter}
-					data={[
-						{ label: 'Ожидают подтверждения', value: 'в обработке' },
-						{ label: 'Активные аренды', value: 'processing' },
-						{ label: 'Завершенные', value: 'done' },
-					]}
-				/>
+					<Collapse in={filtersContainerOpened}>
+						<Flex gap="lg" rowGap="xs" wrap="wrap">
+							<TextInput
+								leftSection={<IconPhone size={16} />}
+								placeholder="Поиск по телефону"
+								radius="md"
+								w={{ base: "100%", xs: "auto" }}
+								value={phoneFilter}
+								onChange={(e) => setPhoneFilter(e.target.value || '')}
+							/>
+							<TextInput
+								leftSection={<IconHome size={16} />}
+								placeholder="Город клиента"
+								radius="md"
+								w={{ base: "100%", xs: "auto" }}
+								value={cityFilter}
+								onChange={(e) => setCityFilter(e.target.value || '')}
+							/>
+							<Select
+								radius="md"
+								placeholder="Модель велосипеда"
+								clearable
+								searchable
+								w={{ base: "100%", xs: "max-content" }}
+								data={bicycleModels}
+								value={bicycleModelFilter}
+								onChange={(value) => setBicycleModelFilter(value || '')}
+								nothingFoundMessage="Ничего не найдено..."
+							/>
+							<Group gap="xs" wrap="nowrap">
+								<Text style={{ whiteSpace: "nowrap" }}>Дата бронирования:</Text>
+								<DateInput
+									placeholder="От"
+									radius="md"
+									value={startDateFilter}
+									onChange={(date) => {
+										if (date) {
+											const yyyyMmDd = (new Date(date));
+											setStartDateFilter(yyyyMmDd);
+										}
+									}}
+								/>
+								<Text>—</Text>
+								<DateInput
+									placeholder="До"
+									radius="md"
+									value={endDateFilter}
+									onChange={(date) => {
+										if (date) {
+											const yyyyMmDd = (new Date(date));
+											setEndDateFilter(yyyyMmDd);
+										}
+									}}
+								/>
+							</Group>
+							<Button
+								radius="md"
+								size="sm"
+								variant="light"
+								fullWidth={isMobile}
+								leftSection={<IconX size={18} />}
+								onClick={clearAllFilters}
+							>
+								Сбросить фильтры
+							</Button>
+						</Flex>
+					</Collapse>
+				</Stack>
+
 
 				<Stack pos="relative" gap="xl">
 					<LoadingOverlay
@@ -372,65 +509,6 @@ export default function AdminRentRequests() {
 										{/* Левый столбец */}
 										<Stack gap={4} w={200} align="center" style={{ height: '100%' }}>
 											<UserCard r={r} companiesDict={companiesDict} />
-											{/* <HoverCard width={260} shadow="md" withArrow position="right-start">
-												<HoverCard.Target>
-													<Group gap="sm" justify="center" style={{ cursor: 'pointer' }}>
-														<Avatar
-															size={80}
-															name={`${r.user?.first_name} ${r.user?.last_name}`}
-															radius={9999}
-														/>
-														<Text fw={700} fz="xl" style={{ whiteSpace: 'nowrap' }}>
-															{r.user?.last_name} {r.user?.first_name?.[0]}.{r.user?.patronymic?.[0] || ''}.
-														</Text>
-													</Group>
-												</HoverCard.Target>
-
-												<HoverCard.Dropdown>
-													<Stack gap={4}>
-														<Text size="md" fw={500}>{r.user?.last_name} {r.user?.first_name} {r.user?.patronymic} </Text>
-														<Text size="md">Город: {r.user?.city}</Text>
-														<Divider my="xs" />
-														{r.user?.company_id && companiesDict[r.user.company_id] && (
-															<>
-																<Group gap="sm" align="center">
-																	<Box>
-																		<Image
-																			src={BASE_IMAGE_URL + 'companies/' + companiesDict[r.user.company_id].image_url}
-																			alt={companiesDict[r.user.company_id].name}
-																			width={40}
-																			height={40}
-																			fit="cover"
-																		/>
-																	</Box>
-																	<Text size="sm" fw={500}>
-																		{companiesDict[r.user.company_id].name}
-																	</Text>
-																</Group>
-																<Divider my="xs" />
-															</>
-														)}
-														<Text size="sm">Почта: {r.user?.email}</Text>
-														<Text size="sm">
-															Дата рождения: {dayjs(r.user?.birthday).format('DD.MM.YYYY')} (
-															Возраст: {dayjs().diff(r.user?.birthday, 'year')})
-														</Text>
-														<Button
-															variant="light"
-															color="gray"
-															size="xs"
-															radius="md"
-															fullWidth
-															component={Link}
-															to={`tel:${r.user?.phone_number}`}
-															leftSection={<IconPhoneCall size={14} />}
-														>
-															Позвонить
-														</Button>
-													</Stack>
-												</HoverCard.Dropdown>
-											</HoverCard> */}
-
 											<Text size="sm">Тел.: {r.user?.phone_number}</Text>
 											<Button
 												variant="light"
@@ -451,7 +529,7 @@ export default function AdminRentRequests() {
 
 										{/* Правый столбец */}
 										<Stack gap={8} h={{ base: "auto", sm: "200px" }} style={{ flexGrow: 1 }}>
-											<Group justify="space-between" align="start"  wrap="nowrap">
+											<Group justify="space-between" align="start" wrap="nowrap">
 												<Stack gap={4}>
 													<Group gap="xs" wrap="nowrap">
 														<Avatar variant="default">

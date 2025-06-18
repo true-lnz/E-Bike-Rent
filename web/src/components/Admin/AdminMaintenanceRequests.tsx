@@ -1,6 +1,7 @@
 import {
 	Button,
 	Card,
+	Collapse,
 	Container,
 	Divider,
 	Flex,
@@ -18,10 +19,10 @@ import {
 	Title
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
-import { useMediaQuery } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
-import { IconCheck, IconCheckupList, IconDotsVertical, IconEdit, IconInfoCircle, IconPhoneCall, IconTool, IconX } from "@tabler/icons-react";
+import { IconCheck, IconCheckupList, IconDotsVertical, IconEdit, IconFilter, IconHome, IconInfoCircle, IconPhone, IconPhoneCall, IconTool, IconX } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -35,11 +36,18 @@ import { UserCard } from "./UserCard";
 export default function AdminMaintenanceRequests() {
 	const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
 	const [statusFilter, setStatusFilter] = useState("заявка в обработке");
+	const [phoneFilter, setPhoneFilter] = useState<string>('');
+	const [startDateFilter, setStartDateFilter] = useState<Date | null>(null);
+	const [endDateFilter, setEndDateFilter] = useState<Date | null>(null);
+	const [cityFilter, setCityFilter] = useState<string>('');
+	const [filtersContainerOpened, { toggle }] = useDisclosure(false);
+
 	const [selectedMaintenance, setSelectedMaintenance] = useState<Maintenance | null>(null);
 	const [modalOpened, setModalOpened] = useState(false);
 	const [loadingMaintenance, setLoadingMaintenance] = useState(false);
 	const [companiesDict, setCompaniesDict] = useState<Record<number, Company>>({});
 	const isMobile = useMediaQuery("(max-width: 576px)");
+
 
 	useEffect(() => {
 		const fetchCompanies = async () => {
@@ -77,12 +85,47 @@ export default function AdminMaintenanceRequests() {
 		refreshMaintenances();
 	}, []);
 
+	/* 	const filtered = maintenances.filter((m) => {
+			if (statusFilter === "done") {
+				return ["завершен", "отказано"].includes(m.status);
+			}
+			return m.status === statusFilter;
+		}); */
+
 	const filtered = maintenances.filter((m) => {
 		if (statusFilter === "done") {
 			return ["завершен", "отказано"].includes(m.status);
 		}
-		return m.status === statusFilter;
+
+		if (phoneFilter && m.user?.phone_number) {
+			const cleanPhoneFilter = phoneFilter.replace(/\D/g, '');
+			const cleanPhone = m.user.phone_number.replace(/\D/g, '');
+			if (!cleanPhone.includes(cleanPhoneFilter)) return false;
+		}
+
+		if (startDateFilter && m.start_date) {
+			const rentalStart = new Date(m.start_date);
+			if (rentalStart < startDateFilter) return false;
+		}
+
+		if (endDateFilter && m.finish_date) {
+			const rentalEnd = new Date(m.finish_date);
+			if (rentalEnd > endDateFilter) return false;
+		}
+
+		if (cityFilter && m.user?.city) {
+			if (!m.user.city.toLowerCase().includes(cityFilter.toLowerCase())) return false;
+		}
+
+		return true;
 	});
+
+	const clearAllFilters = () => {
+		setPhoneFilter('');
+		setStartDateFilter(null);
+		setEndDateFilter(null);
+		setCityFilter('');
+	};
 
 	const handleActions = (
 		id: number,
@@ -551,21 +594,88 @@ export default function AdminMaintenanceRequests() {
 			<Stack gap="md">
 				<Title order={2}>Заявки на обслуживание</Title>
 
-				<SegmentedControl
-					fullWidth
-					radius="xl"
-					size="md"
-					orientation={isMobile ? "vertical" : "horizontal"}
-					color="blue.7"
-					value={statusFilter}
-					onChange={setStatusFilter}
-					data={[
-						{ label: 'Не обработанные', value: 'заявка в обработке' },
-						{ label: 'Ремонтируется', value: 'ремонтируется' },
-						{ label: 'Готов к выдаче', value: 'готов к выдаче' },
-						{ label: 'Завершенные', value: 'done' },
-					]}
-				/>
+				<Group w="100%">
+					<Button
+						radius="md"
+						size="sm"
+						fullWidth={isMobile}
+						color="orange.5"
+						onClick={toggle}
+						leftSection={<IconFilter size={18} />}
+					>
+						Все фильтры
+					</Button>
+					<SegmentedControl
+						fullWidth
+						radius="md"
+						size="md"
+						orientation={isMobile ? "vertical" : "horizontal"}
+						color="blue.7"
+						value={statusFilter}
+						onChange={setStatusFilter}
+						data={[
+							{ label: 'Не обработанные', value: 'заявка в обработке' },
+							{ label: 'Ремонтируется', value: 'ремонтируется' },
+							{ label: 'Готов к выдаче', value: 'готов к выдаче' },
+							{ label: 'Завершенные', value: 'done' },
+						]}
+						style={{ flexGrow: 1 }}
+					/>
+				</Group>
+				<Collapse in={filtersContainerOpened}>
+					<Flex gap="lg" rowGap="xs" wrap="wrap">
+						<TextInput
+							leftSection={<IconPhone size={16} />}
+							placeholder="Поиск по телефону"
+							radius="md"
+							w={{ base: "100%", xs: "auto" }}
+							value={phoneFilter}
+							onChange={(e) => setPhoneFilter(e.target.value || '')}
+						/>
+						<TextInput
+							leftSection={<IconHome size={16} />}
+							placeholder="Город клиента"
+							radius="md"
+							w={{ base: "100%", xs: "auto" }}
+							value={cityFilter}
+							onChange={(e) => setCityFilter(e.target.value || '')}
+						/>
+						<DateInput
+							placeholder="Дата заявки"
+							radius="md"
+							w={{ base: "100%", xs: "auto" }}
+							value={startDateFilter}
+							onChange={(date) => {
+								if (date) {
+									const yyyyMmDd = (new Date(date));
+									setStartDateFilter(yyyyMmDd);
+								}
+							}}
+						/>
+						<DateInput
+							placeholder="Дата окончания ремонта"
+							radius="md"
+							w={{ base: "100%", xs: "auto" }}
+							value={endDateFilter}
+							onChange={(date) => {
+								if (date) {
+									const yyyyMmDd = (new Date(date));
+									setEndDateFilter(yyyyMmDd);
+								}
+							}}
+						/>
+						<Button
+							radius="md"
+							size="sm"
+							variant="light"
+							fullWidth={isMobile}
+							leftSection={<IconX size={18} />}
+							onClick={clearAllFilters}
+						>
+							Сбросить фильтры
+						</Button>
+					</Flex>
+				</Collapse>
 
 				<Stack pos="relative">
 					<LoadingOverlay
