@@ -1,4 +1,5 @@
 import {
+	Alert,
 	Avatar,
 	Badge,
 	Box,
@@ -23,14 +24,13 @@ import {
 	Stack,
 	Text,
 	TextInput,
-	ThemeIcon,
 	Title
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
-import { IconBike, IconCalendar, IconCheck, IconCheckupList, IconDotsVertical, IconFilter, IconHome, IconInfoCircle, IconPhone, IconPhoneCall, IconRefresh, IconUser, IconX } from "@tabler/icons-react";
+import { IconCheck, IconCheckupList, IconDotsVertical, IconFilter, IconHome, IconInfoCircle, IconPhone, IconPhoneCall, IconRefresh, IconX } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -699,54 +699,60 @@ export default function AdminRentRequests() {
 				title={'Детали аренды id: ' + selectedRent?.id}
 				centered
 				padding="md"
-				radius="md"
+				radius="lg"
 				overlayProps={{ blur: 4, opacity: 0.2 }}
 			>
 				{selectedRent && (
-					<ScrollArea h={400}>
+					<ScrollArea h="80%">
+						{selectedRent.status == "арендован" &&
+							<Alert color="gray" mb="sm" radius="md">Транспорт забронирован до {dayjs(selectedRent.expire_date).format('DD.MM.YYYY')}</Alert>
+						}
+						{selectedRent.status == "аренда продлена" &&
+							<Alert color="gray" mb="sm" radius="md">Аренда продлена до {dayjs(selectedRent.expire_date).format('DD.MM.YYYY')}</Alert>
+						}
 						<Paper radius="md" p="md" withBorder>
 							<Stack gap="xs">
-								<Group gap="xs">
-									<ThemeIcon variant="light" color="blue" radius="xl">
-										<IconUser size={18} />
-									</ThemeIcon>
-									<Text size="sm"><b>Пользователь:</b> {selectedRent.user?.last_name} {selectedRent.user?.first_name}</Text>
-								</Group>
-
-								<Group gap="xs">
-									<ThemeIcon variant="light" color="green" radius="xl">
-										<IconBike size={18} />
-									</ThemeIcon>
-									<Text size="sm"><b>Велосипед:</b> {selectedRent.bicycle.name}</Text>
-								</Group>
-
-								<Group gap="xs">
-									<ThemeIcon variant="light" color="violet" radius="xl">
-										<IconCalendar size={18} />
-									</ThemeIcon>
-									<Text size="md">
-										Период:{" "}
-										{selectedRent.start_date && selectedRent.start_date !== '0001-01-01T00:00:00Z'
-											? dayjs(selectedRent.start_date).format('DD.MM.YYYY')
-											: '—'}{" "}
-										-{" "}
-										{selectedRent.expire_date && selectedRent.expire_date !== '0001-01-01T00:00:00Z'
-											? dayjs(selectedRent.expire_date).format('DD.MM.YYYY')
-											: '—'}
-										{selectedRent.start_date && selectedRent.expire_date &&
-											selectedRent.start_date !== '0001-01-01T00:00:00Z' &&
-											selectedRent.expire_date !== '0001-01-01T00:00:00Z' && (
-												<> ({dayjs(selectedRent.expire_date).diff(dayjs(selectedRent.start_date), 'day') + 1} дней)</>
-											)}
-									</Text>
-								</Group>
+								<Text c="dimmed">
+									Клиент: <Text span c="black" fw={500}>{selectedRent.user?.last_name} {selectedRent.user?.first_name} {selectedRent.user?.patronymic}</Text>
+								</Text>
+								<Text c="dimmed">
+									Телефон: <Text span c="black" fw={500}>{selectedRent.user?.phone_number}</Text>
+								</Text>
+								<Text c="dimmed">
+									Почта: <Text span c="black" fw={500}>{selectedRent.user?.email}</Text>
+								</Text>
+								<Text c="dimmed">
+									Дата рождения: <Text span c="black" fw={500}>{dayjs(selectedRent.user?.birthday).format('DD.MM.YYYY')}, {dayjs().diff(selectedRent.user?.birthday, 'year')} лет (года)</Text>
+								</Text>
 
 								<Divider my="xs" />
 
-								<Text size="sm"><b>ID аренды:</b> {selectedRent.id}</Text>
+								<Text c="dimmed">ID аренды: <Text span c="black" fw={500}>{selectedRent.id}</Text></Text>
+
+								<Stack gap="xs">
+									<Text c="dimmed">Велосипед: <Text span c="black" fw={500}>{selectedRent.bicycle.name}</Text> </Text>
+									<Text c="dimmed" size="md">
+										Период аренды:{" "}
+										<Text span c="black" fw={500}>
+											{selectedRent.start_date && selectedRent.start_date !== '0001-01-01T00:00:00Z'
+												? dayjs(selectedRent.start_date).format('DD.MM.YYYY')
+												: '—'}{" "}
+											-{" "}
+											{selectedRent.expire_date && selectedRent.expire_date !== '0001-01-01T00:00:00Z'
+												? dayjs(selectedRent.expire_date).format('DD.MM.YYYY')
+												: '—'}
+											{selectedRent.start_date && selectedRent.expire_date &&
+												selectedRent.start_date !== '0001-01-01T00:00:00Z' &&
+												selectedRent.expire_date !== '0001-01-01T00:00:00Z' && (
+													<> ({dayjs(selectedRent.expire_date).diff(dayjs(selectedRent.start_date), 'day') + 1} дней)</>
+												)}
+										</Text>
+
+									</Text>
+								</Stack>
 
 								<Group gap="xs">
-									<Text size="sm"><b>Статус:</b></Text>
+									<Text c="dimmed">Статус:</Text>
 									<Badge color={
 										(selectedRent.status === 'арендован' || selectedRent.status === 'аренда продлена') ? 'green' :
 											selectedRent.status === 'в обработке' ? 'yellow' :
@@ -757,24 +763,23 @@ export default function AdminRentRequests() {
 									</Badge>
 								</Group>
 
-								<Group gap="xs">
-									<Text size="sm"><b>Полная сумма:</b> {(selectedRent.rent_price / 100 + selectedRent.accessory_price / 100).toLocaleString()} ₽</Text>
-								</Group>
+								<Text c="dimmed">Полная сумма: <Text span c="black" fw={500}>{(selectedRent.rent_price / 100 + selectedRent.accessory_price / 100).toLocaleString()} ₽</Text></Text>
+
 
 								{selectedRent.accessories.length > 0 && (
 									<Box>
-										<Text size="sm" fw={500}>Аксессуары:</Text>
-										<Text size="sm" c="dimmed">{selectedRent.accessories.map(a => a.name).join(', ')}</Text>
+										<Text c="dimmed">Аксессуары:</Text>
+										<Text fw={500}>{selectedRent.accessories.map(a => a.name).join(', ')}</Text>
 									</Box>
 								)}
 							</Stack>
 						</Paper>
 
 						<Group justify="flex-end" mt="md">
-							<Button variant="outline" color="gray" onClick={() => setModalOpened(false)}>
+							<Button variant="outline" radius="md" color="gray" onClick={() => setModalOpened(false)}>
 								Закрыть
 							</Button>
-							<Button onClick={() => {
+							<Button radius="md" color="blue.7" onClick={() => {
 								setModalOpened(false);
 								handleEditRent(selectedRent);
 							}}>
@@ -791,11 +796,13 @@ export default function AdminRentRequests() {
 					onClose={() => setIsModalOpen(false)}
 					title="Редактировать аренду"
 					size="lg"
+					radius="lg"
 					centered
 				>
 					<Stack>
 						<DateInput
 							label="Дата начала"
+							radius="md"
 							placeholder="Выберите дату"
 							valueFormat="YYYY-MM-DD"
 							value={
@@ -815,6 +822,7 @@ export default function AdminRentRequests() {
 
 						<Select
 							label="Статус"
+							radius="md"
 							data={[
 								{ value: 'в обработке', label: 'В обработке' },
 								{ value: 'арендован', label: 'Арендован' },
@@ -840,8 +848,10 @@ export default function AdminRentRequests() {
 							}}
 						/>
 
-						<Group mt="md">
+						<Group justify="flex-end" mt="md">
 							<Button
+								radius="md"
+								color="blue.7"
 								onClick={async () => {
 									try {
 										setLoadingRents(true);
@@ -866,7 +876,7 @@ export default function AdminRentRequests() {
 							>
 								Сохранить
 							</Button>
-							<Button variant="outline" onClick={() => setIsModalOpen(false)}>
+							<Button radius="md" variant="outline" onClick={() => setIsModalOpen(false)}>
 								Отмена
 							</Button>
 						</Group>
