@@ -32,7 +32,7 @@ export default function HeroWithStats() {
 							fz={{ base: "36px", xs: "50px", sm: "60px", md: "70px", lg: "80px", xxl: "120px" }} fw={900}
 						>
 							Аренда велосипедов
-							<Text fz="inherit" lh="inherit" fw={900} c="orange.5">для курьеров в Уфе</Text>
+							<Text fz="inherit" lh="inherit" fw={900} c="orange.5">для курьеров в Уфе</Text>
 						</Title>
 						<Center hiddenFrom='sm' my={40}>
 							<Box

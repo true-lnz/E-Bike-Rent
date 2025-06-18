@@ -9,7 +9,7 @@ import {
 	Text,
 	rem
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import { BASE_IMAGE_URL } from "../../constants.ts";
@@ -22,6 +22,7 @@ interface BikeCardProps {
 
 export default function BikeCard({ bike }: BikeCardProps) {
 	const [opened, { open, close }] = useDisclosure(false);
+	const isMobile = useMediaQuery("(max-width: 576px)");
 
 	return (
 		<>
@@ -77,7 +78,7 @@ export default function BikeCard({ bike }: BikeCardProps) {
 							flexWrap: 'wrap',
 						}}
 					>
-						<Group justify="space-between" gap="md" wrap="nowrap" w="100%">
+						<Group justify="space-between" gap={isMobile ? "0" : "md"} wrap="nowrap" w="100%">
 							<Box>
 								<Text size="xs" c="dimmed" className="nobr">
 									1 неделя

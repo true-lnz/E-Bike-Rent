@@ -21,7 +21,7 @@ export default function RentStats() {
 							>
 								{stat.value}
 							</Text>
-							<Text size="lg" ta="center" maw={300}>{stat.label}</Text>
+							<Text fz={{base: "sm",sm: "lg"}} ta="center" maw={300}>{stat.label}</Text>
 						</Center>
 					))}
 				</Group>
