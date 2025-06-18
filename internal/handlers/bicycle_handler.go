@@ -51,7 +51,11 @@ func CreateBicycle(bicycleService *services.BicycleService) fiber.Handler {
 		maxRange := utils.ParseInt(get("max_range"))
 		maxLoad := utils.ParseInt(get("max_load"))
 		power := utils.ParseInt(get("power"))
-		dayPrice := utils.ParseInt(get("day_price"))
+
+		oneWeekPrice := utils.ParseInt(get("one_week_price"))
+		twoWeekPrice := utils.ParseInt(get("one_week_price"))
+		monthPrice := utils.ParseInt(get("month_price"))
+
 		quantity := utils.ParseInt(get("quantity"))
 		suspension := utils.ParseBool(get("suspension"))
 		wheelSize := utils.ParseByte(get("wheel_size"))
@@ -72,7 +76,9 @@ func CreateBicycle(bicycleService *services.BicycleService) fiber.Handler {
 			WheelType:       get("wheel_type"),
 			Drive:           get("drive"),
 			BrakeSystem:     get("brake_system"),
-			DayPrice:        dayPrice,
+			OneWeekPrice:    oneWeekPrice,
+			TwoWeekPrice:    twoWeekPrice,
+			MonthPrice:      monthPrice,
 			Quantity:        quantity,
 		}
 
@@ -117,7 +123,9 @@ func UpdateBicycle(bicycleService *services.BicycleService) fiber.Handler {
 			WheelType:       utils.ToPtr(get("wheel_type")),
 			Drive:           utils.ToPtr(get("drive")),
 			BrakeSystem:     utils.ToPtr(get("brake_system")),
-			DayPrice:        utils.ToIntPtr(get("day_price")),
+			OneWeekPrice:    utils.ToIntPtr(get("one_week_price")),
+			TwoWeekPrice:    utils.ToIntPtr(get("two_week_price")),
+			MonthPrice:      utils.ToIntPtr(get("month_price")),
 			Quantity:        utils.ToIntPtr(get("quantity")),
 		}
 
