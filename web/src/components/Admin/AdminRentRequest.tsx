@@ -232,6 +232,7 @@ export default function AdminRentRequests() {
 		modals.openConfirmModal({
 			title: 'Подтвердить аренду',
 			centered: true,
+			radius: "lg",
 			children: (
 				<Text size="sm">
 					Вы уверены, что хотите выдать этот велосипед в аренду? Статус будет изменён на <b>арендован</b>.
@@ -271,6 +272,7 @@ export default function AdminRentRequests() {
 			labels: { confirm: 'Отказать', cancel: 'Назад' },
 			confirmProps: { color: 'red' },
 			centered: true,
+			radius: "lg",
 			children: (
 				<Text size="sm">
 					Вы уверены, что хотите <b>отклонить</b> аренду #{rentId}? Это действие нельзя отменить.
@@ -307,6 +309,7 @@ export default function AdminRentRequests() {
 		modals.openConfirmModal({
 			title: 'Завершить аренду',
 			centered: true,
+			radius: "lg",
 			children: (
 				<Text size="sm">
 					Вы уверены, что хотите завершить эту аренду? Статус будет изменён на <b>завершена</b>.
@@ -348,10 +351,12 @@ export default function AdminRentRequests() {
 			labels: { confirm: 'Продлить', cancel: 'Отмена' },
 			closeOnConfirm: false,
 			centered: true,
+			radius: "lg",
 			children: (
 				<NumberInput
 					label="Количество дней продления"
 					defaultValue={1}
+					radius="md"
 					min={1}
 					max={30}
 					onChange={(val) => days = Number(val)}

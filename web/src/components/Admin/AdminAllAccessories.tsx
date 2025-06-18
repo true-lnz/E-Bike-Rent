@@ -189,7 +189,7 @@ export default function AdminAllAccessories() {
 				onClose={() => { setEditModalOpened(false); setNewImage(null); }}
 				title={`Редактирование: ${selectedAccessory?.name || ''}`}
 				size="lg"
-				radius="xl"
+				radius="lg"
 				centered
 			>
 				{selectedAccessory && (
@@ -228,7 +228,6 @@ export default function AdminAllAccessories() {
 								</Box>
 							)}
 						</Box>
-
 
 						{/* FileInput */}
 						<FileInput
@@ -292,7 +291,7 @@ export default function AdminAllAccessories() {
 				onClose={() => { setDeleteModalOpened(false); setNewImage(null); }}
 				title="Подтверждение удаления"
 				size="md"
-				radius="xl"
+				radius="lg"
 				centered
 			>
 				<Stack>
@@ -324,7 +323,7 @@ export default function AdminAllAccessories() {
 				onClose={() => setAddModalOpened(false)}
 				title="Добавление нового аксессуара"
 				size="lg"
-				radius="xl"
+				radius="lg"
 				centered
 			>
 				<Stack gap="md">

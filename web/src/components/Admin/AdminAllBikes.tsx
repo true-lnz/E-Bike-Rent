@@ -340,6 +340,7 @@ export default function AdminAllBikes() {
 			<Modal
 				opened={addModalOpened}
 				fullScreen={isMobile}
+				radius="lg"
 				onClose={() => {
 					setAddModalOpened(false);
 					setNewBike(null);
@@ -384,6 +385,7 @@ export default function AdminAllBikes() {
 						{newBike && renderBikeFields(newBike, setNewBike)}
 						<Group justify="flex-end" mt="md">
 							<Button
+								radius="md"
 								onClick={async () => {
 									if (!newBike) return;
 									setSaving(true);
@@ -413,6 +415,7 @@ export default function AdminAllBikes() {
 			<Modal
 				opened={editModalOpened}
 				fullScreen={isMobile}
+				radius="lg"
 				onClose={() => {
 					setEditModalOpened(false);
 					setSelectedBike(null);
@@ -459,6 +462,7 @@ export default function AdminAllBikes() {
 							<Button
 								variant="outline"
 								color="red"
+								radius="md"
 								leftSection={<IconTrash size={16} />}
 								onClick={async () => {
 									if (!selectedBike?.id) return;
@@ -482,6 +486,7 @@ export default function AdminAllBikes() {
 							</Button>
 
 							<Button
+								radius="md"
 								onClick={async () => {
 									if (!selectedBike?.id) return;
 									setSaving(true);
@@ -510,9 +515,7 @@ export default function AdminAllBikes() {
 				</Flex>
 			</Modal>
 
-
-
-			<Modal opened={deleteModalOpened} onClose={() => setDeleteModalOpened(false)} title="Удалить велосипед?" centered>
+			<Modal opened={deleteModalOpened} radius="lg" onClose={() => setDeleteModalOpened(false)} title="Удалить велосипед?" centered>
 				<Text>Вы уверены, что хотите удалить {selectedBike?.name}?</Text>
 				<Flex justify="flex-end" gap="md" mt="md">
 					<Button variant="default" onClick={() => setDeleteModalOpened(false)}>Отмена</Button>

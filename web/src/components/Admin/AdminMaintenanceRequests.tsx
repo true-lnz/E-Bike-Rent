@@ -117,7 +117,7 @@ export default function AdminMaintenanceRequests() {
 			if (!m.user.city.toLowerCase().includes(cityFilter.toLowerCase())) return false;
 		}
 
-		return true;
+		return m.status === statusFilter;;
 	});
 
 	const clearAllFilters = () => {
@@ -220,17 +220,20 @@ export default function AdminMaintenanceRequests() {
 			size: 'lg',
 			centered: true,
 			closeOnConfirm: false,
+			radius: "lg",
 			labels: { confirm: 'Сохранить', cancel: 'Отмена' },
 			children: (
 				<Stack>
 					<TextInput
 						label="Название велосипеда"
+						radius="md"
 						defaultValue={state.bicycle_name}
 						onChange={(e) => (state.bicycle_name = e.currentTarget.value)}
 					/>
 
 					<Select
 						label="Статус"
+						radius="md"
 						data={[
 							{ value: 'заявка в обработке', label: 'Заявка в обработке' },
 							{ value: 'ремонтируется', label: 'Ремонтируется' },
@@ -246,6 +249,7 @@ export default function AdminMaintenanceRequests() {
 						label="Дата завершения"
 						placeholder="Выберите дату"
 						valueFormat="YYYY-MM-DD"
+						radius="md"
 						value={state.finish_date ? new Date(state.finish_date) : null}
 						onChange={(date) => {
 							if (date) {
@@ -260,6 +264,7 @@ export default function AdminMaintenanceRequests() {
 						defaultValue={state.price}
 						min={0}
 						step={100}
+						radius="md"
 						onChange={(value) => {
 							state.price = Number(value) || 0;
 						}}
@@ -270,6 +275,7 @@ export default function AdminMaintenanceRequests() {
 						defaultValue={state.admin_message}
 						autosize
 						minRows={4}
+						radius="md"
 						onChange={(e) => (state.admin_message = e.currentTarget.value)}
 					/>
 				</Stack>
@@ -317,6 +323,7 @@ export default function AdminMaintenanceRequests() {
 		modals.openConfirmModal({
 			title: 'Завершить заявку',
 			centered: true,
+			radius: "lg",
 			children: (
 				<Text size="sm">
 					{mode === 1 ? (
@@ -375,11 +382,13 @@ export default function AdminMaintenanceRequests() {
 			labels: { confirm: 'Сохранить', cancel: 'Отмена' },
 			closeOnConfirm: false,
 			centered: true,
+			radius: "lg",
 			children: (
 				<DateInput
 					label="Новая дата завершения"
 					defaultValue={newDate}
 					valueFormat="DD.MM.YYYY"
+					radius="md"
 					onChange={(date) => {
 						if (date) newDate = date;
 					}}
@@ -432,11 +441,13 @@ export default function AdminMaintenanceRequests() {
 			labels: { confirm: 'Далее', cancel: 'Отмена' },
 			closeOnConfirm: false,
 			centered: true,
+			radius: "lg",
 			children: (
 				<Textarea
 					label="Комментарий"
 					placeholder="Укажите причину отказа"
 					autosize
+					radius="md"
 					minRows={3}
 					onChange={(e) => {
 						adminMessage = e.currentTarget.value;
@@ -448,6 +459,7 @@ export default function AdminMaintenanceRequests() {
 					title: 'Подтвердите отказ от заявки',
 					labels: { confirm: 'Отказать', cancel: 'Назад' },
 					confirmProps: { color: 'red' },
+					radius: "lg",
 					centered: true,
 					children: (
 						<Text size="sm">
@@ -496,12 +508,14 @@ export default function AdminMaintenanceRequests() {
 			labels: { confirm: 'Далее', cancel: 'Отмена' },
 			closeOnConfirm: false,
 			centered: true,
+			radius: "lg",
 			children: (
 				<Textarea
 					label="Комментарий администратора"
 					placeholder="Введите комментарий..."
 					autosize
 					required
+					radius="md"
 					onChange={(e) => {
 						adminMessage = e.currentTarget.value;
 					}}
@@ -513,11 +527,13 @@ export default function AdminMaintenanceRequests() {
 					labels: { confirm: 'Далее', cancel: 'Назад' },
 					closeOnConfirm: false,
 					centered: true,
+					radius: "lg",
 					children: (
 						<NumberInput
 							label="Стоимость"
 							placeholder="Введите стоимость ремонта"
 							min={0}
+							radius="md"
 							required
 							onChange={(val) => {
 								price = Number(val);
@@ -530,12 +546,14 @@ export default function AdminMaintenanceRequests() {
 							labels: { confirm: 'Подтвердить', cancel: 'Назад' },
 							closeOnConfirm: false,
 							centered: true,
+							radius: "lg",
 							children: (
 								<DateInput
 									label="Дата завершения"
 									placeholder="Выберите дату"
 									valueFormat="YYYY-MM-DD"
 									required
+									radius="md"
 									onChange={(date) => {
 										if (date) finishDate = date;
 									}}
@@ -777,7 +795,7 @@ export default function AdminMaintenanceRequests() {
 											{m.finish_date && (
 												<Group>
 													<Text size="md">
-														Дата окончания: {m.finish_date && dayjs(m.finish_date).year() > 1
+														Дата окончания ремонта: {m.finish_date && dayjs(m.finish_date).year() > 1
 															? dayjs(m.finish_date).format('DD.MM.YYYY')
 															: '—'}
 													</Text>
