@@ -129,8 +129,8 @@ func ToBytePtr(s string) *byte {
 }
 
 func GenerateCode() string {
-	rand.Seed(time.Now().UnixNano())
-	code := fmt.Sprintf("%04d", rand.Intn(10000))
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	code := fmt.Sprintf("%04d", r.Intn(10000))
 	fmt.Printf(code)
 	return code
 }

@@ -14,7 +14,9 @@ func ImportBicycles(db *gorm.DB) error {
 	if err != nil {
 		log.Fatalf("Не удалось открыть файл: %v", err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		_ = file.Close()
+	}(file)
 
 	// Декодирование JSON
 	var bicycles []models.Bicycle
@@ -65,7 +67,9 @@ func ImportAccessories(db *gorm.DB) error {
 	if err != nil {
 		log.Fatalf("Не удалось открыть файл: %v", err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		_ = file.Close()
+	}(file)
 
 	// Декодирование JSON
 	var accessories []models.Accessory
