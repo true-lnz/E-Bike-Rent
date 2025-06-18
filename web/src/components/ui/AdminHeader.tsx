@@ -5,6 +5,7 @@ import {
 	Button,
 	Container,
 	Drawer,
+	Flex,
 	Group,
 	Image,
 	Stack,
@@ -74,7 +75,7 @@ export default function AdminHeader() {
 
         {/* Центр: навигация */}
         {!isMobile && (
-          <Group gap="sm">
+          <Flex gap="sm" rowGap="2" wrap="wrap" mr="auto" ml="xl">
             {navItems.map(item => (
               <NavLink
                 key={item.path}
@@ -84,14 +85,14 @@ export default function AdminHeader() {
                 {item.label}
               </NavLink>
             ))}
-          </Group>
+          </Flex>
         )}
 
         {/* Правая часть: бургер или действия */}
-        <Group gap="sm">
+        <Group gap="sm" wrap='nowrap'>
           {!isMobile ? (
             <>
-              <Badge variant="outline">Админ-панель</Badge>
+              <Badge visibleFrom='md' variant="outline">Админ-панель</Badge>
               <Button
                 size="md"
                 onClick={handleLogout}
