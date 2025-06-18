@@ -1,4 +1,5 @@
 import {
+	Alert,
 	AspectRatio,
 	Button,
 	Card,
@@ -17,14 +18,15 @@ import {
 	Tooltip
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { IconArrowLeft, IconMoodSad } from "@tabler/icons-react";
+import { IconArrowLeft, IconInfoCircle, IconMoodSad, IconX } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AccessorySelectCardList from "../components/Accessory/AccessorySelectCardList";
-import { BASE_IMAGE_URL } from "../constants";
+import { BASE_IMAGE_URL, BASE_URL } from "../constants";
 import { useAuth } from "../hooks/useAuth";
 import { getBikeById } from "../services/bikeService";
 import { createRent } from "../services/rentService";
+import type { Accessory } from "../types/accessory";
 import type { Bike } from "../types/bike";
 
 export function BikeDetailPage() {
@@ -38,6 +40,8 @@ export function BikeDetailPage() {
 	const [expanded, setExpanded] = useState(true);
 	const { user } = useAuth();
 	const [selectedAccessories, setSelectedAccessories] = useState<number[]>([]);
+	const [accessories, setAccessories] = useState<Accessory[]>([]);
+
 
 	useEffect(() => {
 		if (!id) return;
@@ -49,11 +53,42 @@ export function BikeDetailPage() {
 			.finally(() => setLoading(false));
 	}, [id]);
 
+
+	useEffect(() => {
+		fetch(BASE_URL + "api/accessory")
+			.then((res) => res.json())
+			.then((data) => setAccessories(data.items))
+			.catch((err) => console.error("Ошибка загрузки аксессуаров", err));
+	}, []);
+
 	const calculatePrice = () => {
 		if (!bike) return 0;
+
 		const days = Number(rentalPeriod);
-		return (bike.day_price / 100) * days;
+		let bikePrice = 0;
+
+		if (days === 7) {
+			bikePrice = bike.one_week_price / 100;
+		} else if (days === 14) {
+			bikePrice = bike.two_week_price / 100;
+		} else {
+			bikePrice = bike.month_price / 100;
+		}
+
+		// Найдем выбранные аксессуары
+		const selectedAccessoryObjects = accessories.filter(acc =>
+			selectedAccessories.includes(acc.id)
+		);
+
+		// Суммируем их цену
+		const accessoriesPrice = selectedAccessoryObjects.reduce(
+			(total, acc) => total + acc.price / 100, // делим на 100, если цена в копейках
+			0
+		);
+
+		return bikePrice + accessoriesPrice;
 	};
+
 
 	const handleOrderClick = () => {
 		if (!bike) return;
@@ -199,7 +234,7 @@ export function BikeDetailPage() {
 
 	return (
 		<Container size="lg" py="xl">
-			<Title order={1} mb="sm" fz={{base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px"}}>{bike.name}</Title>
+			<Title order={1} mb="sm" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>{bike.name}</Title>
 
 			<Grid gutter='xl'>
 				<Grid.Col span={{ base: 12, md: 6, lg: 5.5 }}>
@@ -270,6 +305,16 @@ export function BikeDetailPage() {
 								</Button>
 							</div>
 						</Tooltip>
+						{user === null ? (
+							<Alert variant="light" color="blue.7" radius="lg" title="Внимание" icon={<IconInfoCircle />}>
+								Необходимо авторизоваться для бронирования
+							</Alert>
+						) : bike.available_quantity === 0 && (
+							<Alert variant="light" color="red" radius="lg" title="Внимание" icon={<IconX />}>
+								Данный велосипед сейчас недоступен для аренды, попробуйте позже.
+							</Alert>
+						)}
+
 
 						<Stack mt="xl">
 							<Text fw={600}>Выберите аксессуары к заказу</Text>

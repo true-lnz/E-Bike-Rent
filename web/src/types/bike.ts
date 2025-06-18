@@ -16,7 +16,9 @@ export interface Bike {
   wheel_type: string;
   drive: string;
   brake_system: string;
-  day_price: number;
+  one_week_price: number;
+  two_week_price: number;
+  month_price: number;
   quantity: number;
 	available_quantity: number;
 }

@@ -22,7 +22,6 @@ interface BikeDetailsModalProps {
 	onClose: () => void;
 }
 
-
 export default function BikeDetailsModal({
 	bike,
 	opened,
@@ -112,7 +111,7 @@ export default function BikeDetailsModal({
 
 				<Group>
 					<Text size="md" fw={600}>
-						Цена за день: {(bike.day_price / 100).toLocaleString()} ₽
+						Цена за неделю: {(bike.one_week_price / 100).toLocaleString()} ₽
 					</Text>
 					<Button
 						radius="xl"

@@ -33,7 +33,9 @@ export const createBike = async (data: {
 	wheel_type?: string;
 	drive?: string;
 	brake_system?: string;
-	day_price?: number;
+	one_week_price?: number;
+	two_week_price?: number;
+	month_price?: number;
 	quantity?: number;
 	image?: File;
 }): Promise<Bike> => {
@@ -53,7 +55,9 @@ export const createBike = async (data: {
 	if (data.wheel_type) formData.append("wheel_type", data.wheel_type);
 	if (data.drive) formData.append("drive", data.drive);
 	if (data.brake_system) formData.append("brake_system", data.brake_system);
-	if (data.day_price !== undefined) formData.append("day_price", data.day_price.toString());
+	if (data.one_week_price !== undefined) formData.append("one_week_price", data.one_week_price.toString());
+	if (data.two_week_price !== undefined) formData.append("two_week_price", data.two_week_price.toString());
+	if (data.month_price !== undefined) formData.append("month_price", data.month_price.toString());
 	if (data.quantity !== undefined) formData.append("quantity", data.quantity.toString());
 	if (data.image) formData.append("image", data.image);
 
@@ -84,7 +88,9 @@ export const updateBike = async (
 	if (data.wheel_type) formData.append("wheel_type", data.wheel_type);
 	if (data.drive) formData.append("drive", data.drive);
 	if (data.brake_system) formData.append("brake_system", data.brake_system);
-	if (data.day_price !== undefined) formData.append("day_price", data.day_price.toString());
+	if (data.one_week_price !== undefined) formData.append("one_week_price", data.one_week_price.toString());
+	if (data.two_week_price !== undefined) formData.append("two_week_price", data.two_week_price.toString());
+	if (data.month_price !== undefined) formData.append("month_price", data.month_price.toString());
 	if (data.quantity !== undefined) formData.append("quantity", data.quantity.toString());
 	if (data.image) formData.append("image", data.image);
 

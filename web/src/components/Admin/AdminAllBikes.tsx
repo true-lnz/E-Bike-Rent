@@ -78,7 +78,9 @@ export default function AdminAllBikes() {
 			wheel_type: '',
 			drive: '',
 			brake_system: '',
-			day_price: 0,
+			one_week_price: 0,
+			two_week_price: 0,
+			month_price: 0,
 			quantity: 1,
 		});
 		setNewImage(null);
@@ -118,7 +120,9 @@ export default function AdminAllBikes() {
 			"max_load",
 			"power",
 			"wheel_size",
-			"day_price",
+			"one_week_price",
+			"two_week_price",
+			"month_price",
 			"quantity",
 		];
 
@@ -272,9 +276,23 @@ export default function AdminAllBikes() {
 					radius="md"
 				/>
 				<NumberInput
-					label="Цена за день (в копейках, ₽)"
-					value={bike.day_price ?? 0}
-					onChange={(v) => setBike(updateBikeField(bike, "day_price", v))}
+					label="Цена за неделю (в копейках, ₽)"
+					value={bike.one_week_price ?? 0}
+					onChange={(v) => setBike(updateBikeField(bike, "one_week_price", v))}
+					radius="md"
+					min={0}
+				/>
+				<NumberInput
+					label="Цена за 2 недели (в копейках, ₽)"
+					value={bike.one_week_price ?? 0}
+					onChange={(v) => setBike(updateBikeField(bike, "one_week_price", v))}
+					radius="md"
+					min={0}
+				/>
+				<NumberInput
+					label="Цена за месяц (в копейках, ₽)"
+					value={bike.month_price ?? 0}
+					onChange={(v) => setBike(updateBikeField(bike, "month_price", v))}
 					radius="md"
 					min={0}
 				/>
@@ -333,7 +351,7 @@ export default function AdminAllBikes() {
 				centered
 			>
 				<Flex gap="lg" align="start" direction={isMobile ? "column" : "row"}>
-					<Stack px="sm" w={{ base: "100%", sm:240}} align="center" gap="sm">
+					<Stack px="sm" w={{ base: "100%", sm: 240 }} align="center" gap="sm">
 						{imagePreview ? (
 							<Image
 								src={imagePreview.startsWith('data:') || imagePreview.startsWith('http')
@@ -343,7 +361,7 @@ export default function AdminAllBikes() {
 								fit="contain"
 							/>
 						) : (
-							<Group h={200} w={{ base: "100%", sm: 200}} bg="gray.1" justify="center" align="center" style={{ borderRadius: 8 }}>
+							<Group h={200} w={{ base: "100%", sm: 200 }} bg="gray.1" justify="center" align="center" style={{ borderRadius: 8 }}>
 								<IconPhoto size={48} color="gray" />
 							</Group>
 						)}
@@ -362,7 +380,7 @@ export default function AdminAllBikes() {
 						/>
 					</Stack>
 
-					<Box style={{ flex: 1 }}  w="100%">
+					<Box style={{ flex: 1 }} w="100%">
 						{newBike && renderBikeFields(newBike, setNewBike)}
 						<Group justify="flex-end" mt="md">
 							<Button
@@ -406,17 +424,17 @@ export default function AdminAllBikes() {
 				centered
 			>
 				<Flex gap="lg" align="start" direction={isMobile ? "column" : "row"}>
-					<Stack px="sm" w={{base: "100%", sm: 240}} align="center" gap="sm">
+					<Stack px="sm" w={{ base: "100%", sm: 240 }} align="center" gap="sm">
 						{imagePreview ? (
 							<Image
 								src={imagePreview.startsWith('data:')
 									? imagePreview
 									: `${BASE_IMAGE_URL}/${imagePreview}`}
-								h={{base: "100%", sm: 200}} w={{base: "100%", sm: 200}}
+								h={{ base: "100%", sm: 200 }} w={{ base: "100%", sm: 200 }}
 								fit="contain"
 							/>
 						) : (
-							<Group h={{base: "100%", sm: 200}} w={{base: "100%", sm: 200}} bg="gray.1" justify="center" align="center" style={{ borderRadius: 8 }}>
+							<Group h={{ base: "100%", sm: 200 }} w={{ base: "100%", sm: 200 }} bg="gray.1" justify="center" align="center" style={{ borderRadius: 8 }}>
 								<IconPhoto size={48} color="gray" />
 							</Group>
 						)}
