@@ -78,7 +78,7 @@ export default function BikeCard({ bike }: BikeCardProps) {
 							flexWrap: 'wrap',
 						}}
 					>
-						<Group justify="space-between" gap={isMobile ? "0" : "md"} wrap="nowrap" w="100%">
+						<Group justify="space-evenly" gap={isMobile ? "0" : "md"} wrap="nowrap" w="100%">
 							<Box>
 								<Text size="xs" c="dimmed" className="nobr">
 									1 неделя
