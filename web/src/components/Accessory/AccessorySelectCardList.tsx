@@ -94,7 +94,7 @@ export default function AccessorySelectCardList({
 								<Image
 									src={`${BASE_IMAGE_URL}${accessory.image_url}`}
 									alt={accessory.name}
-									h={{ base: 120, xs: 150, sm: 80, lg: 120 }}
+									h="80%"
 									fit="contain"
 								/>
 								<Text

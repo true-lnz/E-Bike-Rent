@@ -79,9 +79,6 @@ export default function MyRent() {
 								isDeclined={isDeclined}
 								isArchived={isArchived}
 								isExpired={isExpired}
-								onExtend={() => console.log("Продлить аренду", rent.id)}
-								onContact={() => console.log("Связаться", rent.id)}
-								onAddAccessory={() => console.log("Добавить аксессуар", rent.id)}
 							/>
 						);
 					})

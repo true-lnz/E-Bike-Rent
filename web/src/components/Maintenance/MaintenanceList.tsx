@@ -16,8 +16,8 @@ import { MaintenanceModal } from "./MaintenanceModal";
 const mockServices = [
 	{
 		type: 1,
-		title: "Тормоза – безопасность прежде всего",
-		description: "Проверка состояния и полная замена тормозных систем, дисков, ручек и колодок.",
+		title: "Тормоза – безопасность прежде всего",
+		description: "Проверка состояния и полная замена тормозных систем, дисков, ручек и колодок.",
 		icon: bike,
 		textColor: "white",
 		bgColor: "orange.5",
@@ -32,7 +32,7 @@ const mockServices = [
 	{
 		type: 3,
 		title: "Рама, трансмиссия и мелочи",
-		description: "Сварка трещин, замена цепи, шатунов, педалей и защиты рамы.",
+		description: "Сварка трещин, замена цепи, шатунов, педалей и защиты рамы.",
 		icon: whench
 	},
 	{

@@ -1,4 +1,5 @@
 import {
+	ActionIcon,
 	Badge,
 	Box,
 	Button,
@@ -10,8 +11,9 @@ import {
 	Stack,
 	Text,
 	Title,
-	rem,
+	rem
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import {
 	IconAlertCircle,
@@ -22,7 +24,7 @@ import {
 	IconMail,
 	IconPhone,
 	IconPlus,
-	IconX,
+	IconX
 } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
@@ -77,11 +79,12 @@ export function RentalBikeCard({
 	const [accessoryModalOpen, setAccessoryModalOpen] = useState(false);
 	const [extendRentalModalOpen, setExtendRentalModalOpen] = useState(false);
 	const initialAccessoryIds = useMemo(() => accessories.map((acc) => acc.id), [accessories]);
+	const isMobile = useMediaQuery("(max-width: 576px)");
 
 	const renderStatusSection = () => {
 		if (isPending) {
 			return (
-				<Button variant="outline" color="gray" radius="xl" fullWidth>
+				<Button variant="outline" color="gray" radius="xl" fullWidth={isMobile}>
 					<Group gap="xs" wrap="nowrap">
 						<IconClockHour3 size={20} />
 						Ожидает подтверждения
@@ -91,7 +94,7 @@ export function RentalBikeCard({
 		}
 		if (isDeclined) {
 			return (
-				<Button variant="outline" color="red" radius="xl" fullWidth>
+				<Button variant="outline" color="red" radius="xl" fullWidth={isMobile}>
 					<Group gap="xs" wrap="nowrap">
 						<IconX size={20} />
 						Отказано
@@ -105,7 +108,7 @@ export function RentalBikeCard({
 					variant="filled"
 					color="orange"
 					radius="xl"
-					fullWidth
+					fullWidth={isMobile}
 					onClick={() => {
 						setExtendRentalModalOpen(true);
 						onExtend?.();
@@ -119,7 +122,7 @@ export function RentalBikeCard({
 			);
 		}
 		return (
-			<Button variant="filled" color="blue" radius="xl" fullWidth>
+			<Button variant="filled" color="blue" radius="xl" fullWidth={isMobile}>
 				<Group gap="xs" wrap="nowrap">
 					<IconCheck size={20} />
 					Завершен
@@ -130,10 +133,15 @@ export function RentalBikeCard({
 
 	return (
 		<Box style={{ borderRadius: rem(20), overflow: "hidden" }}>
-			<Card radius="xl" p="lg" withBorder bg="white">
+			<Card radius="xl" p="lg" withBorder bg="white" h={{ base: "100%", sm: 260 }}>
+				{isArchived && (
+					<Badge variant="light" color="gray" size="lg" radius="xl" hiddenFrom="sm" pos="absolute" style={{ right: 20 }}>
+						Архив
+					</Badge>
+				)}
 				<Flex
 					direction={{ base: "column", sm: "row" }}
-					align={{ base: "center", sm: "flex-start" }}
+					align={{ base: "center", xs: "flex-start" }}
 					gap="lg"
 				>
 					<Image
@@ -143,25 +151,24 @@ export function RentalBikeCard({
 						h={220}
 						fit="contain"
 						radius="md"
-						style={{ maxWidth: rem(320) }}
 					/>
 
 					<Divider orientation="vertical" visibleFrom="sm" />
 
-					<Stack gap="xs" style={{ flex: 1, width: "100%" }}>
-						<Group justify="space-between" align="start" wrap="wrap">
-							<Stack gap={4}>
+					<Stack gap="xs" h="100%" w="100%">
+						<Group justify="space-between" align="flex-end" wrap="wrap">
+							<Flex gap="md" rowGap="2" align="flex-end" wrap="wrap">
 								<Title order={2} style={{ wordBreak: "break-word" }}>
 									{name}
 								</Title>
 								<Link to={`/bikes/${bikeId}`}>
-									<Badge variant="light" color="gray" radius="xl" size="lg">
+									<Badge variant="outline" color="gray" radius="xl" size="lg">
 										О модели
 									</Badge>
 								</Link>
-							</Stack>
+							</Flex>
 							{isArchived && (
-								<Badge variant="light" color="gray" size="lg" radius="xl">
+								<Badge variant="light" color="gray" size="lg" radius="xl" visibleFrom="sm">
 									Архив
 								</Badge>
 							)}
@@ -171,7 +178,7 @@ export function RentalBikeCard({
 							Начало аренды: с {rentStart}
 							<br />
 							Срок аренды: до {rentEnd}
-							{isActive && daysLeft !== undefined && <> (осталось {daysLeft} дн.)</>}
+							{isActive && daysLeft !== undefined && <> (осталось {daysLeft} дн.)</>}
 							<br />
 							Аксессуары:{" "}
 							{hasAccessories ? (
@@ -202,7 +209,7 @@ export function RentalBikeCard({
 						</Text>
 
 						{isActive && isExpired && (
-							<Text size="sm" c="orange" fw={500}>
+							<Text size="sm" c="orange" fw={500} style={{ marginTop: "auto" }}>
 								<IconAlertCircle
 									size={16}
 									style={{ verticalAlign: "middle", marginRight: 4 }}
@@ -211,13 +218,13 @@ export function RentalBikeCard({
 							</Text>
 						)}
 
-						<Stack mt="sm" gap="xs" w="100%">
+						<Group mt="auto" gap="xs" w="100%" wrap="nowrap">
 							<Button
 								radius="xl"
 								bg="gray.2"
 								c="black"
 								variant="light"
-								fullWidth
+								visibleFrom="sm"
 								onClick={() => {
 									onContact?.();
 									modals.open({
@@ -236,12 +243,12 @@ export function RentalBikeCard({
 													<Text size="sm" component="a" href="mailto:thebearonegey@gmail.com">Почта: <b>thebearonegey@gmail.com</b></Text>
 												</Group>
 												<Group gap="xs">
-													<IconHelp size={18} />
+													<IconPhone size={18} />
 													<Text size="sm" component="a" href="tel:+79047382666">Тел.: <b>+7 (904) 738-26-66</b></Text>
 												</Group>
 												<Group gap="xs">
-													<IconPhone size={18} />
-													<Text size="sm" component="a" href="tel:+79047382666">Тел.: <b>+7 (904) 738-26-66</b></Text>
+													<IconHelp size={18} />
+													<Text size="sm" component="a" href="https://t.me/FulGaz_Ufa">Менеджер: <b>@FulGaz_ufa</b></Text>
 												</Group>
 												<Divider my="xs" />
 												<Button fullWidth variant="light" color="blue" component="a" href="tel:+79047382666" onClick={() => modals.closeAll()}>
@@ -255,7 +262,44 @@ export function RentalBikeCard({
 								Связаться
 							</Button>
 							{renderStatusSection()}
-						</Stack>
+							<ActionIcon size="40" radius="xl" variant="light" color="gray" hiddenFrom="sm"
+								onClick={() => {
+									onContact?.();
+									modals.open({
+										title: (
+											<Title order={3} ta="center" fw={600}>
+												Связаться с «ФулГаз»
+											</Title>
+										),
+										centered: true,
+										radius: "lg",
+										withCloseButton: true,
+										children: (
+											<Stack gap="xs">
+												<Group gap="xs">
+													<IconMail size={18} />
+													<Text size="sm" component="a" href="mailto:thebearonegey@gmail.com">Почта: <b>thebearonegey@gmail.com</b></Text>
+												</Group>
+												<Group gap="xs">
+													<IconPhone size={18} />
+													<Text size="sm" component="a" href="tel:+79047382666">Тел.: <b>+7 (904) 738-26-66</b></Text>
+												</Group>
+												<Group gap="xs">
+													<IconHelp size={18} />
+													<Text size="sm" component="a" href="https://t.me/FulGaz_Ufa">Менеджер: <b>@FulGaz_ufa</b></Text>
+												</Group>
+												<Divider my="xs" />
+												<Button fullWidth variant="light" color="blue" component="a" href="tel:+79047382666" onClick={() => modals.closeAll()}>
+													Позвонить
+												</Button>
+											</Stack>
+										),
+									});
+								}}
+							>
+								<IconPhone size="18" />
+							</ActionIcon>
+						</Group>
 					</Stack>
 				</Flex>
 			</Card>
@@ -263,9 +307,9 @@ export function RentalBikeCard({
 			{hasAccessories && (
 				<Box
 					bg="gray.1"
+					mt={{ base: "-45px", sm: "-32px" }}
 					style={{
-						marginTop: "-2rem",
-						padding: "3.5rem 1rem 1.5rem 1rem",
+						padding: "3.5rem 1rem 1.35rem 1rem",
 						borderBottomLeftRadius: rem(32),
 						borderBottomRightRadius: rem(32),
 					}}
@@ -274,7 +318,7 @@ export function RentalBikeCard({
 						Аксессуары
 					</Text>
 
-					<Group px="xl" gap="xl" wrap="wrap" justify="center">
+					<Group px={{ base: "6", sm: "xl" }} gap={isMobile ? "sm" : "xl"} wrap="wrap">
 						{accessories.map((item) => (
 							<Stack
 								key={item.id}
@@ -300,7 +344,7 @@ export function RentalBikeCard({
 								</Text>
 							</Stack>
 						))}
-						{isActive && (
+						{1 && (
 							<Stack
 								justify="center"
 								align="center"
