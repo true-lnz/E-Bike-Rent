@@ -66,10 +66,11 @@ func (s *RentService) CreateRent(c context.Context, req dto.CreateRentRequest, u
 		}
 		return 0
 	}(req.RentalDays)
-
+	now := time.Now()
 	newRent := models.Rent{
 		ExpireDate:     expDate,
 		UpdatedAt:      time.Now(),
+		StartDate:      &now,
 		UserID:         userID,
 		BicycleID:      req.BicycleID,
 		RentPrice:      totalRentPrice,
