@@ -82,6 +82,6 @@ func ImportAccessories(db *gorm.DB) error {
 		}
 	}
 
-	fmt.Println("Импорт велосипедов завершён.")
+	fmt.Println("Импорт аксессуаров завершён.")
 	return nil
 }
