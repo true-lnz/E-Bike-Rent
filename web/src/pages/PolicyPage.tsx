@@ -3,7 +3,7 @@ import { Container, Divider, List, ListItem, Text, Title } from '@mantine/core';
 export default function PolicyPage() {
 	return (
 		<Container size="lg" py="xl">
-			<Title order={1}>Политика конфиденциальности</Title>
+			<Title order={1} fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>Политика конфиденциальности</Title>
 
 			<Text c="dimmed" size="sm" pt="sm">
 				Индивидуальный предприниматель Габдрахманова Гузелия Шамилевна (ОГРНИП 325028000051170, ИНН 023403097917)
@@ -15,7 +15,7 @@ export default function PolicyPage() {
 			</Text>
 
 			<Divider my="md" />
-			<Title order={2}>1. Термины и определения</Title>
+			<Title order={2} fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>1. Термины и определения</Title>
 			<List spacing="xs" withPadding>
 				<ListItem>Персональные данные — любая информация, относящаяся к прямо или косвенно определённому Пользователю.</ListItem>
 				<ListItem>Обработка персональных данных — любое действие (операция) или совокупность действий, совершаемых с использованием средств автоматизации или без таковых.</ListItem>
@@ -32,7 +32,7 @@ export default function PolicyPage() {
 			</List>
 
 			<Divider my="md" />
-			<Title order={2}>2. Общие положения</Title>
+			<Title order={2} fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>2. Общие положения</Title>
 			<List spacing="xs" withPadding>
 				<ListItem>Оператор обеспечивает защиту прав и свобод человека и гражданина при обработке его персональных данных.</ListItem>
 				<ListItem>Настоящая Политика применяется ко всей информации, полученной через Сайт https://fulgaz.ru/.</ListItem>
@@ -45,7 +45,7 @@ export default function PolicyPage() {
 			</List>
 
 			<Divider my="md" />
-			<Title order={2}>3. Цели обработки персональных данных</Title>
+			<Title order={2} fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>3. Цели обработки персональных данных</Title>
 			<List spacing="xs" withPadding>
 				<ListItem>Оператор обрабатывает персональные данные строго для достижения конкретных, заранее определённых и законных целей.</ListItem>
 				<ListItem>Обработка осуществляется исключительно в объёме, необходимом для достижения целей.</ListItem>
@@ -63,7 +63,7 @@ export default function PolicyPage() {
 			</List>
 
 			<Divider my="md" />
-			<Title order={2}>4. Состав и категории обрабатываемых персональных данных</Title>
+			<Title order={2} fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>4. Состав и категории обрабатываемых персональных данных</Title>
 			<List spacing="xs" withPadding>
 				<ListItem>Данные, предоставляемые Пользователями: ФИО, паспортные данные, контактные данные, сведения о платёжных средствах, фотографии (при наличии).</ListItem>
 				<ListItem>Автоматически собираемые данные: IP-адрес, данные о местоположении, действия на Сайте, cookies, технические параметры устройств.</ListItem>
@@ -72,7 +72,7 @@ export default function PolicyPage() {
 			</List>
 
 			<Divider my="md" />
-			<Title order={2}>5. Права и обязанности сторон</Title>
+			<Title order={2} fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>5. Права и обязанности сторон</Title>
 			<Title mt="md" order={3}>Права и обязанности Оператора:</Title>
 			<List spacing="xs" withPadding>
 				<ListItem>Определять цели и способы обработки персональных данных.</ListItem>
@@ -92,7 +92,7 @@ export default function PolicyPage() {
 			</List>
 
 			<Divider my="md" />
-			<Title order={2}>6. Условия обработки персональных данных</Title>
+			<Title order={2} fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>6. Условия обработки персональных данных</Title>
 			<List spacing="xs" withPadding>
 				<ListItem>Обработка осуществляется с использованием как автоматизированных, так и неавтоматизированных средств.</ListItem>
 				<ListItem>Основанием для обработки являются законы РФ, согласия Пользователей, договорные обязательства.</ListItem>
