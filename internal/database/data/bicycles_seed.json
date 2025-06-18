@@ -15,9 +15,11 @@
     "wheel_type": "надувные",
     "drive": "задний",
     "brake_system": "гидравлический",
-    "day_price": 90000,
     "quantity": 10,
-    "image_url": "liming-v8-1.png"
+    "image_url": "liming-v8-1.png",
+    "one_week_price": 350000,
+    "two_week_price": 690000,
+    "month_price": 1300000
   },
   {
     "name": "Kolyan",
@@ -35,9 +37,11 @@
     "wheel_type": "надувные",
     "drive": "задний",
     "brake_system": "гидравлический",
-    "day_price": 75000,
     "quantity": 10,
-    "image_url": "kolyan-1.png"
+    "image_url": "kolyan-1.png",
+    "one_week_price": 350000,
+    "two_week_price": 690000,
+    "month_price": 1300000
   },
   {
     "name": "Kirin V3 Pro",
@@ -55,8 +59,10 @@
     "wheel_type": "надувные",
     "drive": "задний",
     "brake_system": "гидравлический",
-    "day_price": 85000,
     "quantity": 10,
-    "image_url": "kugoo-v3-max-1.png"
+    "image_url": "kugoo-v3-max-1.png",
+    "one_week_price": 370000,
+    "two_week_price": 720000,
+    "month_price": 1400000
   }
 ]
