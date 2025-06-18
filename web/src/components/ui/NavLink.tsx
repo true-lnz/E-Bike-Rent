@@ -31,6 +31,7 @@ export function NavLink({ to, children, active, exact = false, onClick }: NavLin
 			ref={ref}
 			component={Link}
 			to={to}
+			p={0}
 			fw={500}
 			onClick={handleClick} // Добавляем обработчик
 			style={{

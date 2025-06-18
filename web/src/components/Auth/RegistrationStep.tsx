@@ -6,26 +6,28 @@ import {
 	Container,
 	Group,
 	Input,
-	Loader,
+	LoadingOverlay,
 	Paper,
 	SimpleGrid,
 	Stack,
 	Text,
 	TextInput,
+	ThemeIcon,
 	Title
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { modals } from "@mantine/modals";
-import { IconAlertSquareRounded, IconSearch } from "@tabler/icons-react";
+import { IconAlertSquareRounded, IconBolt, IconSearch } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import 'dayjs/locale/ru';
 import { useEffect, useState } from "react";
+import { IMaskInput } from "react-imask";
 import { useAuth } from "../../hooks/useAuth";
 import { completeRegistration } from "../../services/authService";
 import { companyService } from "../../services/companyService";
 import type { Company } from "../../types/company";
-import CompanyCard from "../CompanyCard";
-import { PhoneInput } from "./PhoneInput";
+import { CityPicker } from "./CityPicker";
+import CompanyCard from "./CompanyCard";
 
 export default function RegistrationStep() {
 	const { email } = useAuth();
@@ -34,6 +36,7 @@ export default function RegistrationStep() {
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [patronymic, setPatronymic] = useState("");
+	const [city, setCity] = useState("");
 	const [phone, setPhone] = useState("");
 	const [birthday, setBirthday] = useState<Date | null>(null);
 	const [searchQuery, setSearchQuery] = useState("");
@@ -61,9 +64,10 @@ export default function RegistrationStep() {
 			firstName.trim() !== "" &&
 			lastName.trim() !== "" &&
 			phone.trim() !== "" &&
+			city.trim() !== "" &&
 			birthday !== null
 		);
-	}, [firstName, lastName, phone, birthday]);
+	}, [firstName, lastName, phone, city, birthday]);
 
 	const filteredCompanies = companies.filter((company) =>
 		company.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -112,7 +116,7 @@ export default function RegistrationStep() {
 	};
 
 	const handleSubmit = async () => {
-		if (!firstName || !lastName || !phone || !birthday) return;
+		if (!firstName || !lastName || !phone || !city || !birthday) return;
 
 		const modalId = modals.open({
 			title: 'Регистрация',
@@ -121,7 +125,11 @@ export default function RegistrationStep() {
 			radius: 'md',
 			children: (
 				<Center>
-					<Loader size="sm" />
+					<LoadingOverlay
+						visible
+						overlayProps={{ radius: 'sm', blur: 2 }}
+						loaderProps={{ color: 'blue.5', type: 'bars' }}
+					/>
 					<Text ml="md">Пожалуйста, подождите...</Text>
 				</Center>
 			),
@@ -135,17 +143,22 @@ export default function RegistrationStep() {
 				patronymic,
 				phone_number: phone,
 				birthday: dayjs(birthday).format("YYYY-MM-DD"),
+				city: city,
 				company_id: selectedId,
 			});
 
 			modals.updateModal({
 				modalId,
-				title: 'Регистрация успешна',
-				withCloseButton: true,
+				title: 'Регистрация завершена!',
 				radius: 'md',
 				children: (
-					<Stack gap="md">
-						<Text>Вы успешно зарегистрированы!</Text>
+					<Stack gap="md" justify="center">
+						<Group wrap="nowrap">
+							<ThemeIcon variant="light" color="green" size="80px" radius="50%">
+								<IconBolt style={{ width: '60%', height: '60%' }} />
+							</ThemeIcon>
+							<Text size="sm">Теперь вы можете арендовать любой электровелосипед в пару кликов</Text>
+						</Group>
 						<Button
 							onClick={() => {
 								modals.closeAll();
@@ -165,8 +178,13 @@ export default function RegistrationStep() {
 				withCloseButton: true,
 				radius: 'md',
 				children: (
-					<Stack gap="md">
-						<Text c="red">Произошла ошибка при регистрации. Попробуйте позже.</Text>
+					<Stack gap="md" justify="center">
+						<Group wrap="nowrap">
+							<ThemeIcon variant="light" color="red" size="80px" radius="50%">
+								<IconAlertSquareRounded style={{ width: '60%', height: '60%' }} />
+							</ThemeIcon>
+							<Text size="sm" c="red">Произошла ошибка при регистрации, или сайт сейчас не доступен. Попробуйте позже.</Text>
+						</Group>
 						<Button
 							color="red"
 							onClick={() => {
@@ -183,15 +201,13 @@ export default function RegistrationStep() {
 		}
 	};
 
-
-
 	return (
 		<Container size="lg" py="xl">
 			<Paper radius="xl" bg="white" p="xl">
 
 				{step === 1 ? (
 					<Stack gap="xl" bg="white">
-						<Title order={2}>Выберите компанию</Title>
+						<Title fz={{ base: "24px", sm: "26px" }}  >Выберите компанию</Title>
 						<Input
 							placeholder="Поиск компании..."
 							leftSection={<IconSearch size={20} />}
@@ -210,9 +226,13 @@ export default function RegistrationStep() {
 						/>
 
 						{loading ? (
-							<Loader />
+							<LoadingOverlay
+								visible
+								overlayProps={{ radius: 'sm', blur: 2 }}
+								loaderProps={{ color: 'blue.5', type: 'bars' }}
+							/>
 						) : (
-							<SimpleGrid cols={5} spacing="lg">
+							<SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 5 }} spacing="lg">
 								{filteredCompanies.map((company) => (
 									<CompanyCard
 										key={company.id}
@@ -230,9 +250,8 @@ export default function RegistrationStep() {
 									onClick={() => setSelectedId(null)}
 									style={{
 										cursor: "pointer",
+										aspectRatio: '1',
 										border: selectedId === null ? "1px solid #228be6" : undefined,
-										width: 200,
-										height: 200,
 										display: "flex",
 										flexDirection: "column",
 										alignItems: "center",
@@ -240,7 +259,7 @@ export default function RegistrationStep() {
 										textAlign: "center",
 									}}
 								>
-									<Title order={5}>Без компании</Title>
+									<Title fz={{ base: "sm", sm: "lg", lg: "sm" }}>Без компании</Title>
 									<Text size="xs" color="dimmed" mt="xs">
 										Частное лицо
 									</Text>
@@ -258,7 +277,7 @@ export default function RegistrationStep() {
 					</Stack>
 				) : (
 					<Stack gap="md">
-						<Title order={2}>Заполните данные</Title>
+						<Title fz={{ base: "24px", sm: "26px" }}>Заполните обязательные поля</Title>
 
 						<SimpleGrid
 							cols={{ base: 1, sm: 2, md: 3 }}
@@ -268,6 +287,7 @@ export default function RegistrationStep() {
 							<TextInput
 								radius="md"
 								label="Фамилия"
+								placeholder="Например, Иванов"
 								value={lastName}
 								required
 								onChange={(e) => setLastName(e.currentTarget.value)}
@@ -275,6 +295,7 @@ export default function RegistrationStep() {
 							<TextInput
 								radius="md"
 								label="Имя"
+								placeholder="Например, Владимир"
 								value={firstName}
 								required
 								onChange={(e) => setFirstName(e.currentTarget.value)}
@@ -282,33 +303,35 @@ export default function RegistrationStep() {
 							<TextInput
 								radius="md"
 								label="Отчество"
+								placeholder="(не обязательно)"
 								value={patronymic}
 								onChange={(e) => setPatronymic(e.currentTarget.value)}
 							/>
-						</SimpleGrid>
-
-
-						<SimpleGrid
-							cols={{ base: 1, sm: 2 }}
-							spacing={{ base: 'sm', sm: 'md' }}
-							verticalSpacing="md"
-						>
-							<TextInput
-								label="Телефон"
-								radius="md"
-								size="sm"
-								value={phone}
-								required
-								onChange={(e) => setPhone(e.currentTarget.value)}
-								component={PhoneInput}
-							/>
+							<Input.Wrapper label="Телефон" required>
+								<Input
+									size="sm"
+									radius="md"
+									value={phone}
+									required
+									placeholder="+7 (800) 123-45-67"
+									onChange={(e) => setPhone(e.currentTarget.value)}
+									component={IMaskInput}
+									mask="+7 (000) 000-00-00"
+								/>
+							</Input.Wrapper>
 							<DatePickerInput
 								locale="ru"
 								label="Дата рождения"
+								placeholder="Нажмите для выбора даты"
 								radius="md"
+								clearable
 								value={birthday}
 								required
 								onChange={handleBirthdayChange as (value: any) => void}
+							/>
+							<CityPicker
+								value={city}
+								onChange={(value) => setCity(value)}
 							/>
 						</SimpleGrid>
 

@@ -8,8 +8,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type MaintenanceService struct {
@@ -66,7 +67,9 @@ func (s *MaintenanceService) UpdateMaintenance(c context.Context, request *dto.U
 		return nil, fmt.Errorf("ошибка при получении записи: %w", err)
 	}
 
-	t, err := time.Parse("2006-01-02", request.FinishDate)
+	fmt.Print(request.FinishDate)
+
+	t, _ := time.Parse("2006-01-02", request.FinishDate)
 
 	lastStatus := existingMaintenance.Status
 
@@ -78,7 +81,7 @@ func (s *MaintenanceService) UpdateMaintenance(c context.Context, request *dto.U
 
 	if lastStatus != request.Status {
 		err = SendMaintenanceStatusUpdate(existingMaintenance.User.Email, existingMaintenance.BicycleName, request.Status, s.cfg)
-		if request.Status == "в работе" {
+		if request.Status == "ремонтируется" {
 			now := time.Now()
 			existingMaintenance.StartDate = time.Date(
 				now.Year(), now.Month(), now.Day(),

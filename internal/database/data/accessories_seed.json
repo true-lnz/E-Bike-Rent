@@ -3,12 +3,12 @@
     "name": "Перчатки",
     "image_url": "perchatki.png",
     "quantity": 10,
-    "price" : 300
+    "price" : 30000
   },
   {
     "name": "Замок",
     "image_url": "zamok.png",
     "quantity": 10,
-    "price" : 300
+    "price" : 30000
   }
 ]

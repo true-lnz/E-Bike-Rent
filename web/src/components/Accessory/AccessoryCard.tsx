@@ -4,7 +4,8 @@ import {
 	Center,
 	Image,
 	Stack,
-	Text
+	Text,
+	rem
 } from "@mantine/core";
 import { BASE_IMAGE_URL } from "../../constants.ts";
 import type { Accessory } from "../../types/accessory.ts";
@@ -21,15 +22,19 @@ export default function AccessoryCard({
 	return (
 		<Card
 			bg="white"
-			p="lg"
+			p="sm"
 			radius="xl"
+			withBorder
 			style={{
-				position: "relative",
+				aspectRatio: '1', // делает карточку квадратной
 				display: "flex",
 				flexDirection: "column",
+				justifyContent: "space-between",
+				width: "100%",
+				boxSizing: "border-box",
 			}}
 		>
-			<Stack gap="sm">
+			<Stack gap="xs" h="100%" justify="space-between">
 				{showQuantity && (
 					<Center>
 						<Badge
@@ -42,19 +47,21 @@ export default function AccessoryCard({
 					</Center>
 				)}
 
-				<Image
-					src={`${BASE_IMAGE_URL}${accessory.image_url}`}
-					alt={accessory.name}
-					h={120}
-					fit="contain"
-					style={{
-						filter: accessory.available_quantity === 0 ? "grayscale(80%)" : "none",
-						opacity: accessory.available_quantity === 0 ? 0.7 : 1
-					}}
-				/>
+				<Center h="100%">
+					<Image
+						src={`${BASE_IMAGE_URL}${accessory.image_url}`}
+						alt={accessory.name}
+						fit="contain"
+						style={{
+							maxHeight: rem(100),
+							filter: accessory.available_quantity === 0 ? "grayscale(80%)" : "none",
+							opacity: accessory.available_quantity === 0 ? 0.7 : 1
+						}}
+					/>
+				</Center>
 
 				<Center>
-					<Text fw={600} ta="center" lineClamp={2}>
+					<Text fw={600} ta="center" lineClamp={2} fz="sm">
 						{accessory.name}
 					</Text>
 				</Center>

@@ -1,4 +1,5 @@
 import {
+	ActionIcon,
 	Badge,
 	Box,
 	Button,
@@ -10,7 +11,9 @@ import {
 	Stack,
 	Text,
 	Title,
+	rem
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import {
 	IconAlertCircle,
@@ -21,7 +24,7 @@ import {
 	IconMail,
 	IconPhone,
 	IconPlus,
-	IconX,
+	IconX
 } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
@@ -75,50 +78,52 @@ export function RentalBikeCard({
 }: RentalBikeCardProps) {
 	const [accessoryModalOpen, setAccessoryModalOpen] = useState(false);
 	const [extendRentalModalOpen, setExtendRentalModalOpen] = useState(false);
-	const initialAccessoryIds = useMemo(() => accessories.map(acc => acc.id), [accessories]);
+	const initialAccessoryIds = useMemo(() => accessories.map((acc) => acc.id), [accessories]);
+	const isMobile = useMediaQuery("(max-width: 576px)");
 
 	const renderStatusSection = () => {
 		if (isPending) {
 			return (
-				<Button variant="outline" color="gray" radius="xl">
-					<Group gap="xs">
-						<IconClockHour3 size="20" />
+				<Button variant="outline" color="gray" radius="xl" fullWidth={isMobile}>
+					<Group gap="xs" wrap="nowrap">
+						<IconClockHour3 size={20} />
 						Ожидает подтверждения
 					</Group>
 				</Button>
 			);
 		}
-
 		if (isDeclined) {
 			return (
-				<Button variant="outline" color="red" radius="xl">
-					<Group gap="xs">
-						<IconX size="20" />
+				<Button variant="outline" color="red" radius="xl" fullWidth={isMobile}>
+					<Group gap="xs" wrap="nowrap">
+						<IconX size={20} />
 						Отказано
 					</Group>
 				</Button>
 			);
 		}
-
 		if (isActive) {
 			return (
-				<Button variant="filled" color="orange" radius="xl"
+				<Button
+					variant="filled"
+					color="orange"
+					radius="xl"
+					fullWidth={isMobile}
 					onClick={() => {
 						setExtendRentalModalOpen(true);
-						if (onExtend) onExtend();
+						onExtend?.();
 					}}
 				>
-					<Group gap="xs">
-						<IconClockPlus size="20" />
+					<Group gap="xs" wrap="nowrap">
+						<IconClockPlus size={20} />
 						Продлить аренду
 					</Group>
 				</Button>
 			);
 		}
-
 		return (
-			<Button variant="filled" color="blue" radius="xl">
-				<Group gap="xs">
+			<Button variant="filled" color="blue" radius="xl" fullWidth={isMobile}>
+				<Group gap="xs" wrap="nowrap">
 					<IconCheck size={20} />
 					Завершен
 				</Group>
@@ -127,53 +132,53 @@ export function RentalBikeCard({
 	};
 
 	return (
-		<Box style={{ borderRadius: "xl", overflow: "hidden" }}>
-			<Card
-				radius='xl'
-				p="lg"
-				withBorder
-				bg="white"
-			>
-				<Flex align="flex-start" gap="lg">
+		<Box style={{ borderRadius: rem(20), overflow: "hidden" }}>
+			<Card radius="xl" p="lg" withBorder bg="white" h={{ base: "100%", sm: 260 }}>
+				{isArchived && (
+					<Badge variant="light" color="gray" size="lg" radius="xl" hiddenFrom="sm" pos="absolute" style={{ right: 20 }}>
+						Архив
+					</Badge>
+				)}
+				<Flex
+					direction={{ base: "column", sm: "row" }}
+					align={{ base: "center", xs: "flex-start" }}
+					gap="lg"
+				>
 					<Image
 						src={BASE_IMAGE_URL + imageUrl}
 						alt={name}
-						w={220}
+						w={{ base: "100%", sm: 220 }}
 						h={220}
 						fit="contain"
 						radius="md"
 					/>
 
-					<Divider orientation="vertical" />
+					<Divider orientation="vertical" visibleFrom="sm" />
 
-					<Stack gap="xs" style={{ flex: 1 }}>
-						<Group justify="space-between" align="center">
-							<Group>
-								<Title order={2}>{name}</Title>
+					<Stack gap="xs" h="100%" w="100%">
+						<Group justify="space-between" align="flex-end" wrap="wrap">
+							<Flex gap="md" rowGap="2" align="flex-end" wrap="wrap">
+								<Title order={2} style={{ wordBreak: "break-word" }}>
+									{name}
+								</Title>
 								<Link to={`/bikes/${bikeId}`}>
-									<Badge
-										variant="light"
-										color="gray"
-										radius="xl"
-										size="lg"
-										style={{ cursor: "pointer" }}
-									>
+									<Badge variant="outline" color="gray" radius="xl" size="lg">
 										О модели
 									</Badge>
 								</Link>
-							</Group>
+							</Flex>
 							{isArchived && (
-								<Badge variant="light" color="gray" size="lg" radius="xl">
+								<Badge variant="light" color="gray" size="lg" radius="xl" visibleFrom="sm">
 									Архив
 								</Badge>
 							)}
 						</Group>
 
-						<Text size="md">
+						<Text size="md" style={{ wordBreak: "break-word" }}>
 							Начало аренды: с {rentStart}
 							<br />
 							Срок аренды: до {rentEnd}
-							{isActive && daysLeft !== undefined && <> (осталось {daysLeft} дн.)</>}
+							{isActive && daysLeft !== undefined && <> (осталось {daysLeft} дн.)</>}
 							<br />
 							Аксессуары:{" "}
 							{hasAccessories ? (
@@ -189,9 +194,13 @@ export function RentalBikeCard({
 										onClick={(e) => {
 											e.preventDefault();
 											setAccessoryModalOpen(true);
-											if (onAddAccessory) onAddAccessory();
+											onAddAccessory?.();
 										}}
-										style={{ cursor: "pointer", display: "inline" }}
+										style={{
+											cursor: "pointer",
+											display: "inline",
+											fontWeight: 500,
+										}}
 									>
 										(добавить)
 									</Text>
@@ -200,20 +209,24 @@ export function RentalBikeCard({
 						</Text>
 
 						{isActive && isExpired && (
-							<Text size="sm" c="orange" fw={500}>
-								<IconAlertCircle size={16} style={{ verticalAlign: "middle" }} />{" "}
+							<Text size="sm" c="orange" fw={500} style={{ marginTop: "auto" }}>
+								<IconAlertCircle
+									size={16}
+									style={{ verticalAlign: "middle", marginRight: 4 }}
+								/>
 								Заканчивается срок аренды!
 							</Text>
 						)}
 
-						<Group mt="sm">
+						<Group mt="auto" gap="xs" w="100%" wrap="nowrap">
 							<Button
 								radius="xl"
 								bg="gray.2"
 								c="black"
 								variant="light"
+								visibleFrom="sm"
 								onClick={() => {
-									if (onContact) onContact();
+									onContact?.();
 									modals.open({
 										title: (
 											<Title order={3} ta="center" fw={600}>
@@ -221,24 +234,24 @@ export function RentalBikeCard({
 											</Title>
 										),
 										centered: true,
-										radius: 'lg',
+										radius: "lg",
 										withCloseButton: true,
 										children: (
 											<Stack gap="xs">
 												<Group gap="xs">
 													<IconMail size={18} />
-													<Text size="sm">Почта: <b>fulgaz@gmail.com</b></Text>
-												</Group>
-												<Group gap="xs">
-													<IconHelp size={18} />
-													<Text size="sm">Тех. поддержка: <b>help-fulgaz@gmail.com</b></Text>
+													<Text size="sm" component="a" href="mailto:thebearonegey@gmail.com">Почта: <b>thebearonegey@gmail.com</b></Text>
 												</Group>
 												<Group gap="xs">
 													<IconPhone size={18} />
-													<Text size="sm">Телефон: <b>+7 (964) 951-28-10</b></Text>
+													<Text size="sm" component="a" href="tel:+79047382666">Тел.: <b>+7 (904) 738-26-66</b></Text>
+												</Group>
+												<Group gap="xs">
+													<IconHelp size={18} />
+													<Text size="sm" component="a" href="https://t.me/FulGaz_Ufa">Менеджер: <b>@FulGaz_ufa</b></Text>
 												</Group>
 												<Divider my="xs" />
-												<Button fullWidth variant="light" color="blue" component="a" href="tel:+79649512810" onClick={() => modals.closeAll()}>
+												<Button fullWidth variant="light" color="blue" component="a" href="tel:+79047382666" onClick={() => modals.closeAll()}>
 													Позвонить
 												</Button>
 											</Stack>
@@ -249,27 +262,63 @@ export function RentalBikeCard({
 								Связаться
 							</Button>
 							{renderStatusSection()}
+							<ActionIcon size="40" radius="xl" variant="light" color="gray" hiddenFrom="sm"
+								onClick={() => {
+									onContact?.();
+									modals.open({
+										title: (
+											<Title order={3} ta="center" fw={600}>
+												Связаться с «ФулГаз»
+											</Title>
+										),
+										centered: true,
+										radius: "lg",
+										withCloseButton: true,
+										children: (
+											<Stack gap="xs">
+												<Group gap="xs">
+													<IconMail size={18} />
+													<Text size="sm" component="a" href="mailto:thebearonegey@gmail.com">Почта: <b>thebearonegey@gmail.com</b></Text>
+												</Group>
+												<Group gap="xs">
+													<IconPhone size={18} />
+													<Text size="sm" component="a" href="tel:+79047382666">Тел.: <b>+7 (904) 738-26-66</b></Text>
+												</Group>
+												<Group gap="xs">
+													<IconHelp size={18} />
+													<Text size="sm" component="a" href="https://t.me/FulGaz_Ufa">Менеджер: <b>@FulGaz_ufa</b></Text>
+												</Group>
+												<Divider my="xs" />
+												<Button fullWidth variant="light" color="blue" component="a" href="tel:+79047382666" onClick={() => modals.closeAll()}>
+													Позвонить
+												</Button>
+											</Stack>
+										),
+									});
+								}}
+							>
+								<IconPhone size="18" />
+							</ActionIcon>
 						</Group>
 					</Stack>
 				</Flex>
 			</Card>
 
-			{/* Блок аксессуаров */}
 			{hasAccessories && (
 				<Box
 					bg="gray.1"
+					mt={{ base: "-45px", sm: "-32px" }}
 					style={{
-						marginTop: '-2rem',
-						padding: "3.5rem 1rem 1.5rem 1rem",
-						borderBottomLeftRadius: "2rem",
-						borderBottomRightRadius: "2rem",
+						padding: "3.5rem 1rem 1.35rem 1rem",
+						borderBottomLeftRadius: rem(32),
+						borderBottomRightRadius: rem(32),
 					}}
 				>
-					<Text ta="center" size="lg" mb="md" fw={500} c="black">
+					<Text ta="center" size="lg" mb="md" fw={500}>
 						Аксессуары
 					</Text>
 
-					<Group px="xl" gap="xl" wrap="wrap">
+					<Group px={{ base: "6", sm: "xl" }} gap={isMobile ? "sm" : "xl"} wrap="wrap">
 						{accessories.map((item) => (
 							<Stack
 								key={item.id}
@@ -278,8 +327,9 @@ export function RentalBikeCard({
 								p="xs"
 								style={{
 									backgroundColor: "white",
-									borderRadius: "16px",
+									borderRadius: rem(16),
 									width: 100,
+									wordBreak: "break-word",
 								}}
 							>
 								<Image
@@ -289,25 +339,23 @@ export function RentalBikeCard({
 									height={60}
 									fit="contain"
 								/>
-								<Text size="xs" ta="center" color="black">
+								<Text size="xs" ta="center">
 									{item.name}
 								</Text>
 							</Stack>
 						))}
-
-						{/* Добавить аксессуар */}
-						{isActive && (
+						{1 && (
 							<Stack
 								justify="center"
 								align="center"
 								p="xs"
 								onClick={() => {
 									setAccessoryModalOpen(true);
-									if (onAddAccessory) onAddAccessory();
+									onAddAccessory?.();
 								}}
 								style={{
 									backgroundColor: "white",
-									borderRadius: "16px",
+									borderRadius: rem(16),
 									width: 100,
 									height: 100,
 									cursor: "pointer",

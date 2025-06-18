@@ -5,7 +5,7 @@ import { Card, Center, Container, Group, Text } from "@mantine/core";
 export default function RentStats() {
 	return (
 		<Container size="lg" mt={100}>
-			<Card bg="gray.1" radius="xl" p="xl">
+			<Card bg="gray.1" radius="xl" py={50} px="xl">
 				<Group justify="space-around" align="flex-start">
 					{[
 						{ value: "300+", label: 'пользователей уже арендовали наши велосипеды' },
@@ -14,13 +14,14 @@ export default function RentStats() {
 					].map((stat, index) => (
 						<Center key={index} style={{ flexDirection: 'column' }}>
 							<Text
-								fz={80}
+								fz={{ base: "45px", xs: "60px", sm: "70px", md: "80px", xxl: "120px" }}
 								fw={700}
+								lh={1}
 								c="orange.5"
 							>
 								{stat.value}
 							</Text>
-							<Text size="lg" ta="center" w={300}>{stat.label}</Text>
+							<Text size="lg" ta="center" maw={300}>{stat.label}</Text>
 						</Center>
 					))}
 				</Group>

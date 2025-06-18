@@ -13,6 +13,7 @@ type User struct {
 	Role             string        `gorm:"default:'user'" json:"role"`
 	VerificationCode string        `json:"-"`
 	IsVerified       bool          `json:"is_verified"`
+	City             string        `json:"city"`
 	CompanyID        uint          `json:"company_id"`
 	Company          *Company      `gorm:"foreignKey:CompanyID" json:"company,omitempty"`
 	Maintenances     []Maintenance `gorm:"foreignKey:UserID" json:"maintenances,omitempty"`

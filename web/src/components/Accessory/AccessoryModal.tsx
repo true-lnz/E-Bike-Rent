@@ -119,7 +119,7 @@ export default function AccessoryModal({
 				radius="lg"
 				centered
 			>
-				<Stack gap="md">
+				<Stack gap="md" my="4">
 					<AccessorySelectCardList
 						selectedAccessories={selected}
 						lockedAccessories={initialAccessoryIds}

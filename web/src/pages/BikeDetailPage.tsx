@@ -1,9 +1,11 @@
 import {
+	AspectRatio,
 	Button,
 	Card,
 	Center,
 	Collapse,
 	Container,
+	Grid,
 	Group,
 	Image,
 	SegmentedControl,
@@ -14,7 +16,7 @@ import {
 	Title,
 	Tooltip
 } from "@mantine/core";
-import { modals } from '@mantine/modals';
+import { modals } from "@mantine/modals";
 import { IconArrowLeft, IconMoodSad } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -35,15 +37,12 @@ export function BikeDetailPage() {
 	const [rentalPeriod, setRentalPeriod] = useState<string>("7");
 	const [expanded, setExpanded] = useState(true);
 	const { user } = useAuth();
-
-	// Новый state для выбранных аксессуаров — массив ID аксессуаров
 	const [selectedAccessories, setSelectedAccessories] = useState<number[]>([]);
 
 	useEffect(() => {
 		if (!id) return;
 		setLoading(true);
 		setError(null);
-
 		getBikeById(Number(id))
 			.then((data) => setBike(data))
 			.catch(() => setError("Ошибка при загрузке данных байка"))
@@ -53,23 +52,23 @@ export function BikeDetailPage() {
 	const calculatePrice = () => {
 		if (!bike) return 0;
 		const days = Number(rentalPeriod);
-		return (bike.day_price) / 100 * days;
+		return (bike.day_price / 100) * days;
 	};
 
 	const handleOrderClick = () => {
 		if (!bike) return;
-
 		modals.openConfirmModal({
-			title: 'Подтвердите бронирование',
+			title: "Подтвердите бронирование",
 			centered: true,
 			radius: "lg",
 			children: (
 				<Text size="sm">
-					Вы уверены, что хотите арендовать <strong>{bike.name}</strong> на срок: {getRentalLabel(rentalPeriod)}?
+					Вы уверены, что хотите арендовать <strong>{bike.name}</strong> на срок:{" "}
+					{getRentalLabel(rentalPeriod)}?
 				</Text>
 			),
-			labels: { confirm: 'Подтвердить', cancel: 'Отмена' },
-			confirmProps: { color: 'orange.5', radius: "md" },
+			labels: { confirm: "Подтвердить", cancel: "Отмена" },
+			confirmProps: { color: "orange.5", radius: "md" },
 			onConfirm: async () => {
 				try {
 					await createRent({
@@ -79,7 +78,7 @@ export function BikeDetailPage() {
 					});
 
 					modals.open({
-						title: 'Заявка успешно отправлена',
+						title: "Заявка успешно отправлена",
 						centered: true,
 						radius: "lg",
 						children: (
@@ -92,7 +91,7 @@ export function BikeDetailPage() {
 									radius="md"
 									onClick={() => {
 										modals.closeAll();
-										navigator('/dashboard/my-rents');
+										navigator("/dashboard/my-rents");
 									}}
 								>
 									Перейти в личный кабинет
@@ -101,9 +100,9 @@ export function BikeDetailPage() {
 						),
 					});
 				} catch (error: any) {
-					document.getElementById('rentBtn')?.setAttribute('disabled', '');
+					document.getElementById("rentBtn")?.setAttribute("disabled", "");
 					modals.open({
-						title: 'Ошибка в запросе аренды',
+						title: "Ошибка в запросе аренды",
 						centered: true,
 						radius: "lg",
 						children: (
@@ -111,7 +110,7 @@ export function BikeDetailPage() {
 								К сожалению, не удалось выполнить бронирование. Пожалуйста, попробуйте позже.
 								{error.message && (
 									<Text tt="capitalize" size="sm" c="red" mt="sm">
-										{error.response.data.error}
+										{error.response?.data?.error}
 									</Text>
 								)}
 							</Text>
@@ -124,10 +123,14 @@ export function BikeDetailPage() {
 
 	const getRentalLabel = (period: string) => {
 		switch (period) {
-			case '30': return '1 месяц';
-			case '14': return '2 недели';
-			case '7': return '1 неделя';
-			default: return `${period} дней`;
+			case "30":
+				return "1 месяц";
+			case "14":
+				return "2 недели";
+			case "7":
+				return "1 неделя";
+			default:
+				return `${period} дней`;
 		}
 	};
 
@@ -135,7 +138,7 @@ export function BikeDetailPage() {
 		return (
 			<Container size="lg" py="xl">
 				<Skeleton height={40} width={300} mb="xl" />
-				<Group align="start" justify="space-between" gap="xl" wrap="nowrap">
+				<Group align="start" gap="xl" wrap="wrap">
 					<Card withBorder radius="xl" w={380} h={380}>
 						<Skeleton height={380} radius="md" />
 					</Card>
@@ -156,15 +159,7 @@ export function BikeDetailPage() {
 		);
 	}
 
-	if (error) {
-		return (
-			<Center style={{ height: "70vh" }}>
-				<Text color="red">{error}</Text>
-			</Center>
-		);
-	}
-
-	if (!bike) {
+	if (error || !bike) {
 		return (
 			<Center style={{ height: "70vh" }}>
 				<Stack align="center" gap="md">
@@ -204,76 +199,80 @@ export function BikeDetailPage() {
 
 	return (
 		<Container size="lg" py="xl">
-			<Title order={1} mb="xl">{bike.name}</Title>
-			<Group align="start" justify="space-between" gap="xl" wrap="nowrap">
-				<Card withBorder radius="xl">
-					<Center>
-						{!imageLoaded && <Skeleton height={380} width={380} radius="md" />}
-						<Image
-							src={BASE_IMAGE_URL + bike.image_url}
-							alt={bike.name}
-							w={450}
-							h={450}
-							fit="contain"
-							radius="md"
-							style={{ display: imageLoaded ? "block" : "none" }}
-							onLoad={() => setImageLoaded(true)}
-						/>
-					</Center>
-				</Card>
+			<Title order={1} mb="sm" fz={{base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px"}}>{bike.name}</Title>
 
-				<Stack style={{ flex: 1 }} justify="space-between">
-					<div>
-						<Text fw={500} mb="xs">Выберите период аренды:</Text>
+			<Grid gutter='xl'>
+				<Grid.Col span={{ base: 12, md: 6, lg: 5.5 }}>
+					{!imageLoaded && <Skeleton height={360} width={360} radius="md" />}
+					<AspectRatio ratio={1 / 1}>
+						<Card
+							withBorder
+							radius='xl'
+						>
+							<Image
+								src={BASE_IMAGE_URL + bike.image_url}
+								alt={bike.name}
+								w='100%'
+								h='100%'
+								fit="contain"
+								radius="md"
+								style={{ display: imageLoaded ? "block" : "none" }}
+								onLoad={() => setImageLoaded(true)}
+							/>
+						</Card>
+
+					</AspectRatio>
+				</Grid.Col>
+				<Grid.Col span={{ base: 12, md: 6, lg: 6.5 }}>
+					<Stack pos="relative">
+						<Text fw={500}>Выберите период аренды:</Text>
 						<SegmentedControl
 							value={rentalPeriod}
 							onChange={setRentalPeriod}
 							color="black"
 							size="md"
-							w={350}
+							w={{ base: '100%', sm: '80%', lg: '60%' }}
+							radius="md"
+							mb="sm"
 							data={[
 								{ label: "7 дней", value: "7" },
 								{ label: "14 дней", value: "14" },
 								{ label: "1 месяц", value: "30" },
 							]}
-							radius="md"
-							mb="sm"
 						/>
 
-						<Text fz={32} fw={700} mt="xl" mb="sm">
-							{calculatePrice().toLocaleString()} ₽ / {rentalPeriod === "30" ? "месяц" : (rentalPeriod === "14" ? "2 недели" : "неделя")}
+						<Text fz={28} fw={700} mt="md">
+							{calculatePrice().toLocaleString()} ₽ / {getRentalLabel(rentalPeriod)}
 						</Text>
+
 						<Tooltip
 							label={
 								user === null
-									? "Необходимо авторизоваться для аренды"  // Приоритет №1
+									? "Необходимо авторизоваться для аренды"
 									: bike.available_quantity === 0
-										? "Данный велосипед сейчас недоступен для аренды"  // Приоритет №2
-										: ""  // Пустая строка (но disabled не даст показать Tooltip)
+										? "Данный велосипед сейчас недоступен для аренды"
+										: ""
 							}
-							disabled={user !== null && bike.available_quantity > 0}  // Скрываем подсказку, если всё ок
+							disabled={user !== null && bike.available_quantity > 0}
 							withArrow
 						>
 							<div>
-								{/* Оборачиваем кнопку в div, чтобы tooltip работал корректно с disabled кнопкой */}
 								<Button
 									id="rentBtn"
 									color="orange.5"
 									radius="xl"
 									size="lg"
-									w={225}
+									w={{ base: '100%', sm: '50%', lg: '45%' }}
 									onClick={handleOrderClick}
-									mb="sm"
-									disabled={bike.available_quantity === 0 || !user || !user?.is_verified} // кнопка disabled если нет в наличии
+									disabled={bike.available_quantity === 0 || !user || !user?.is_verified}
 								>
 									Оставить заявку
 								</Button>
 							</div>
 						</Tooltip>
 
-						<Stack my="xl">
-							<Text fw={600}>Выберите акксессуары к заказу</Text>
-							{/* Передаём выбранные аксессуары и функцию для обновления в дочерний компонент */}
+						<Stack mt="xl">
+							<Text fw={600}>Выберите аксессуары к заказу</Text>
 							<AccessorySelectCardList
 								selectedAccessories={selectedAccessories}
 								onChangeSelected={setSelectedAccessories}
@@ -285,27 +284,30 @@ export function BikeDetailPage() {
 							fw={500}
 							onClick={() => setExpanded((v) => !v)}
 							style={{ cursor: "pointer" }}
-							mb="xs"
-							mt="md"
+							mt="lg"
 						>
 							{expanded ? "Скрыть характеристики" : "Все характеристики"}
 						</Text>
 
 						<Collapse in={expanded}>
-							<Table withRowBorders>
+							<Table striped withRowBorders horizontalSpacing="md" verticalSpacing="xs">
 								<Table.Tbody>
 									{rows.map((row) => (
 										<Table.Tr key={row.label}>
-											<Table.Td><Text c="dimmed">{row.label}</Text></Table.Td>
-											<Table.Td><Text fw={500}>{row.value}</Text></Table.Td>
+											<Table.Td w="40%">
+												<Text size="sm" c="dimmed" style={{ whiteSpace: "nowrap" }}>{row.label}</Text>
+											</Table.Td>
+											<Table.Td>
+												<Text size="sm" fw={500} style={{ wordBreak: "break-word" }}>{row.value}</Text>
+											</Table.Td>
 										</Table.Tr>
 									))}
 								</Table.Tbody>
 							</Table>
 						</Collapse>
-					</div>
-				</Stack>
-			</Group>
+					</Stack>
+				</Grid.Col>
+			</Grid>
 		</Container>
 	);
 }

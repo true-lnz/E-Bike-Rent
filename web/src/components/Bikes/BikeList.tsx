@@ -1,4 +1,5 @@
 import {
+	Box,
 	Card,
 	Center,
 	Container,
@@ -38,7 +39,12 @@ export default function BikeListPage({
 			.finally(() => setLoading(false));
 	}, []);
 
-	if (loading) return <LoadingOverlay visible={true} zIndex={101} />;
+	if (loading) return
+	<LoadingOverlay
+		visible
+		overlayProps={{ radius: 'sm', blur: 2 }}
+		loaderProps={{ color: 'blue.5', type: 'bars' }}
+	/>;
 
 	const visibleBikes = onlyAvailable
 		? bikes.filter((bike) => bike.available_quantity > 0)
@@ -49,18 +55,31 @@ export default function BikeListPage({
 	return (
 		<Container id="bikes" size="lg" py="xl">
 			{onlyAvailable ? (
-				<Title order={1} size={45} mb="xl">
-					Доступно к аренде
-				</Title>
+				<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>Доступно к аренде</Title>
 			) : (
-				<Stack mb="xl">
-					<Title order={1} size={45} lh={0.5}>
-						Выбери свою идеальную модель
-					</Title>
-					<Title order={1} size={45} c="orange.5">
-						электровелосипеда
-					</Title>
-				</Stack>
+				<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>
+					Выбери свою идеальную модель
+					<Box
+						px={8}
+						mt="xs"
+						w="max-content"
+						bg="orange.0"
+						style={{
+							borderRadius: 14,
+							border: "3px solid var(--mantine-color-orange-5)"
+						}}>
+						<Title
+							fz="inherit"
+							c="orange.5"
+							lh={1.1}
+							style={{
+								transform: "translateY(-4px)",
+							}}
+						>
+							электровелосипеда
+						</Title>
+					</Box>
+				</Title>
 			)}
 
 			{noVisibleBikes ? (
@@ -77,7 +96,10 @@ export default function BikeListPage({
 					</Center>
 				</Card>
 			) : (
-				<SimpleGrid cols={3} spacing="lg">
+				<SimpleGrid
+					cols={{ base: 1, sm: 2, md: 3 }}
+					spacing="lg"
+				>
 					{visibleBikes.map((bike) => (
 						<BikeCard key={bike.id} bike={bike} />
 					))}

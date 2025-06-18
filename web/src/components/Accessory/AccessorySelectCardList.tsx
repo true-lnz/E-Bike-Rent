@@ -1,11 +1,10 @@
 import {
 	Card,
-	Center,
 	Image,
 	LoadingOverlay,
 	SimpleGrid,
 	Stack,
-	Text
+	Text,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { BASE_IMAGE_URL } from "../../constants.ts";
@@ -35,7 +34,12 @@ export default function AccessorySelectCardList({
 			.finally(() => setLoading(false));
 	}, []);
 
-	if (loading) return <LoadingOverlay visible={true} zIndex={101} />;
+	if (loading) return
+	<LoadingOverlay
+		visible
+		overlayProps={{ radius: 'sm', blur: 2 }}
+		loaderProps={{ color: 'blue.5', type: 'bars' }}
+	/>;
 
 	function toggleAccessory(id: number) {
 		if (lockedAccessories.includes(id)) return;
@@ -48,58 +52,68 @@ export default function AccessorySelectCardList({
 	}
 
 	return (
-		<SimpleGrid cols={4} spacing="sm">
+		<SimpleGrid
+			cols={{ base: 2, xs: 3, sm: 4, lg: 3 }}
+			spacing="md"
+			verticalSpacing="md"
+		>
 			{accessories_list.map((accessory) => {
 				const isSelected = selectedAccessories.includes(accessory.id);
 				const isLocked = lockedAccessories.includes(accessory.id);
 
 				return (
-					<Stack gap='xs'>
-					<Card
-						key={accessory.id}
-						bg="white"
-						p="lg"
-						m={3}
-						radius="lg"
-						style={{
-							position: "relative",
-							display: "flex",
-							flexDirection: "column",
-							border: "1px solid #eee",
-							outline: isSelected ? "3px solid #228be6" : "1px solid #eee",
-							cursor: accessory.available_quantity > 0 && !isLocked ? "pointer" : "default",
-							userSelect: "none",
-							opacity: accessory.available_quantity === 0 ? 0.7 : 1,
-							filter: accessory.available_quantity === 0 ? "grayscale(80%)" : "none",
-						}}
-						onClick={() => {
-							if (accessory.available_quantity > 0) {
-								toggleAccessory(accessory.id);
-							}
-						}}
-					>
-						<Stack gap="sm">
-							<Image
-								src={`${BASE_IMAGE_URL}${accessory.image_url}`}
-								alt={accessory.name}
-								h={60}
-								fit="contain"
-							/>
-							<Center>
-								<Text fw={600} ta="center" lineClamp={2}>
+					<Stack key={accessory.id} gap={4} style={{ position: "relative" }}>
+						<Card
+							p="md"
+							radius="lg"
+							withBorder
+							bg="white"
+							onClick={() => {
+								if (accessory.available_quantity > 0 && !isLocked) {
+									toggleAccessory(accessory.id);
+								}
+							}}
+							style={{
+								aspectRatio: "1",
+								cursor:
+									accessory.available_quantity > 0 && !isLocked
+										? "pointer"
+										: "default",
+								outline: isSelected
+									? "2px solid var(--mantine-color-blue-6)"
+									: "1px solid #eee",
+								opacity: accessory.available_quantity === 0 ? 0.6 : 1,
+								filter:
+									accessory.available_quantity === 0 ? "grayscale(80%)" : "none",
+								display: "flex",
+								flexDirection: "column",
+								justifyContent: "center",
+							}}
+						>
+							<Stack align="center" gap="4">
+								<Image
+									src={`${BASE_IMAGE_URL}${accessory.image_url}`}
+									alt={accessory.name}
+									h="80%"
+									fit="contain"
+								/>
+								<Text
+									fw={600}
+									ta="center"
+									fz={{ base: "14px", sm: "16px", lg: "18px", xxl: "32px" }}
+									lineClamp={2}
+								>
 									{accessory.name}
 								</Text>
-							</Center>
-						</Stack>
-					</Card>
-											{
-					isLocked && (
-						<Text ta="center" size="xs" c="dimmed">
-							Уже добавлен
-						</Text>
-					)
-				}
-				</Stack>
+							</Stack>
+						</Card>
+
+						{isLocked && (
+							<Text ta="center" size="xs" c="dimmed">
+								Уже добавлен
+							</Text>
+						)}
+					</Stack>
 				);
 			})}
 		</SimpleGrid>

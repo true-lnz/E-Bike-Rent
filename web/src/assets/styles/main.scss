@@ -14,3 +14,10 @@ body {
 main {
 	min-height: 72vh;
 }
+
+/* Глобально */
+.nobr {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: keep-all;
+}

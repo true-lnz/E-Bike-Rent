@@ -17,6 +17,7 @@ import {
 } from '@mantine/core';
 import {
 	IconBolt,
+	IconBrandTelegram,
 	IconCheck,
 	IconDeviceDesktopCog,
 	IconMail,
@@ -28,10 +29,10 @@ import {
 } from '@tabler/icons-react';
 import { useState } from 'react';
 import { IMaskInput } from 'react-imask';
-import logo from '../assets/images/Logo512x512.png';
-import { sendFeedback } from '../services/feedbackService';
+import { sendFeedback } from '../../services/feedbackService';
+import logo from '../../assets/images/Logo512x512.png';
 
-export default function ContactPage() {
+export default function Contacts() {
 	const [formData, setFormData] = useState({
 		phone: '',
 		message: '',
@@ -83,8 +84,8 @@ export default function ContactPage() {
 		}
 	};
 
-	const handlePhoneChange = (value: string) => {
-		setFormData((prev) => ({ ...prev, phone: value }));
+	const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setFormData((prev) => ({ ...prev, phone: e.target.value }));
 	};
 
 	const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -116,7 +117,7 @@ export default function ContactPage() {
 				{/* Левая колонка */}
 				<Grid.Col span={{ base: 12, md: 5 }}>
 					{/* Информация о компании */}
-					<Card shadow="sm" radius="xl" p="xl" mb="md" withBorder bg="orange.5" c="white">
+					<Card shadow="sm" radius="xl" p={{ base: "lg", sm: "xl" }} mb="md" withBorder bg="orange.5" c="white">
 						<Stack gap="sm">
 							<Group align="center">
 								<Box
@@ -135,22 +136,22 @@ export default function ContactPage() {
 							</Group>
 
 							<Stack gap={4} mt="xs">
-								<Group gap="xs">
+								<Group gap="xs" wrap='nowrap'>
 									<IconMail size={18} />
-									<Anchor href="mailto:fulgaz@gmail.com" underline="never" c="white">
-										<Text size="md"><b>Почта:</b> fulgaz@gmail.com</Text>
-									</Anchor>
-								</Group>
-								<Group gap="xs">
-									<IconMail size={18} />
-									<Anchor href="mailto:help-fulgaz@gmail.com" underline="never" c="white">
-										<Text size="md"><b>Тех. поддержка:</b> help-fulgaz@gmail.com</Text>
+									<Anchor href="mailto:thebearonegey@gmail.com" underline="never" c="white">
+										<Text size="md"><b>Почта:</b> thebearonegey@gmail.com</Text>
 									</Anchor>
 								</Group>
 								<Group gap="xs">
 									<IconPhone size={18} />
-									<Anchor href="tel:+79649512810" underline="never" c="white">
-										<Text size="md"><b>Телефон:</b> +7 (964) 951-28-10</Text>
+									<Anchor href="tel:+79047382666" underline="never" c="white">
+										<Text size="md"><b>Телефон:</b> +7 (904) 738-26-66</Text>
+									</Anchor>
+								</Group>
+								<Group gap="xs" wrap='nowrap'>
+									<IconBrandTelegram size={18} />
+									<Anchor href="https://t.me/FulGaz_Ufa" underline="never" c="white">
+										<Text size="md"><b>Менеджер:</b> @FulGaz_Ufa</Text>
 									</Anchor>
 								</Group>
 							</Stack>
@@ -158,7 +159,7 @@ export default function ContactPage() {
 					</Card>
 
 					{/* Адрес */}
-					<Card shadow="sm" radius="xl" p="xl" mb="md" withBorder>
+					<Card shadow="sm" radius="xl" p={{ base: "lg", sm: "xl" }} mb="md" withBorder>
 						<Group gap="xs" mb="xs">
 							<IconMapPin size={20} />
 							<Text fw={600} fz="lg">
@@ -172,24 +173,24 @@ export default function ContactPage() {
 					</Card>
 
 					{/* Услуги */}
-					<Card shadow="sm" radius="xl" p="xl" withBorder>
+					<Card shadow="sm" radius="xl" p={{ base: "lg", sm: "xl" }} withBorder>
 						<Text fw={600} fz="lg" mb="sm">
 							Услуги
 						</Text>
 						<Stack gap="xs">
-							<Group gap="xs">
+							<Group gap="xs" wrap='nowrap'>
 								<IconBolt size={18} />
 								<Text size="sm">Сдача в аренду электровелосипедов</Text>
 							</Group>
-							<Group gap="xs">
+							<Group gap="xs" wrap='nowrap'>
 								<IconTool size={18} />
 								<Text size="sm">Ремонт и обслуживание велосипедов</Text>
 							</Group>
-							<Group gap="xs">
+							<Group gap="xs" wrap='nowrap'>
 								<IconDeviceDesktopCog size={18} />
 								<Text size="sm">Прошивка ПО электровелосипедов</Text>
 							</Group>
-							<Group gap="xs">
+							<Group gap="xs" wrap='nowrap'>
 								<IconSettings size={18} />
 								<Text size="sm">Диагностика электросистем велосипедов</Text>
 							</Group>
@@ -212,7 +213,7 @@ export default function ContactPage() {
 					</Card>
 
 					{/* Обратная связь */}
-					<Card shadow="sm" radius="xl" p="xl" withBorder>
+					<Card shadow="sm" radius="xl" p={{ base: "lg", sm: "xl" }} withBorder>
 						<Text fw={600} fz="lg" mb="sm">
 							Форма обратной связи
 						</Text>
@@ -233,7 +234,7 @@ export default function ContactPage() {
 									name="phone"
 									value={formData.phone}
 									radius="md"
-									onChange={(event) => handlePhoneChange(event.currentTarget.value)}
+									onChange={handlePhoneChange}
 									component={IMaskInput}
 									mask="+7 (000) 000-00-00"
 									placeholder="Ваш телефон"

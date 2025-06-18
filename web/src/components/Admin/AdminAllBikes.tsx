@@ -9,7 +9,11 @@ import {
 	LoadingOverlay,
 	Modal,
 	NumberInput,
+	rem,
+	ScrollArea,
+	SimpleGrid,
 	Stack,
+	Switch,
 	Text,
 	TextInput,
 	Title
@@ -24,12 +28,18 @@ import { AdminBikeCard } from "./AdminBikeCard";
 export default function AdminAllBikes() {
 	const [bikes, setBikes] = useState<Bike[]>([]);
 	const [loading, setLoading] = useState(true);
+
 	const [selectedBike, setSelectedBike] = useState<Bike | null>(null);
 	const [newBike, setNewBike] = useState<Partial<Bike> | null>(null);
+
 	const [editModalOpened, setEditModalOpened] = useState(false);
 	const [addModalOpened, setAddModalOpened] = useState(false);
 	const [deleteModalOpened, setDeleteModalOpened] = useState(false);
+
 	const [newImage, setNewImage] = useState<File | null>(null);
+	const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+	const [saving, setSaving] = useState(false); // для блокировки кнопок сохранения/создания
 
 	useEffect(() => {
 		loadBikes();
@@ -38,16 +48,15 @@ export default function AdminAllBikes() {
 	const loadBikes = () => {
 		setLoading(true);
 		getAllBikes()
-			.then(([fetchedBikes]) => {
-				setBikes(fetchedBikes);
-			})
+			.then(([fetchedBikes]) => setBikes(fetchedBikes))
 			.catch((error) => console.error("Ошибка загрузки:", error))
 			.finally(() => setLoading(false));
 	};
 
 	const handleEditClick = (bike: Bike) => {
-		setSelectedBike(bike);
+		setSelectedBike({ ...bike });
 		setNewImage(null);
+		setImagePreview(bike.image_url || null);
 		setEditModalOpened(true);
 	};
 
@@ -59,7 +68,7 @@ export default function AdminAllBikes() {
 			max_range: 0,
 			max_load: 0,
 			power: 0,
-			charge_time_hours: 0,
+			charge_time_hours: '',
 			battery: '',
 			suspension: false,
 			brakes: '',
@@ -70,9 +79,9 @@ export default function AdminAllBikes() {
 			brake_system: '',
 			day_price: 0,
 			quantity: 1,
-			available_quantity: 1
 		});
 		setNewImage(null);
+		setImagePreview(null);
 		setAddModalOpened(true);
 	};
 
@@ -81,57 +90,209 @@ export default function AdminAllBikes() {
 		setDeleteModalOpened(true);
 	};
 
-	const handleSave = async () => {
-		try {
-			if (selectedBike) {
-				console.log("Обновление велосипеда:", selectedBike);
-				await updateBike(selectedBike.id, selectedBike);
-			}
-			setEditModalOpened(false);
-			loadBikes();
-		} catch (error) {
-			console.error("Ошибка сохранения:", error);
-		}
-	};
-
-	const handleCreate = async () => {
-		if (!newBike?.name) return;
-
-		try {
-			const bikeData = new Bike();
-			bikeData.append('name', newBike.name);
-			bikeData.append('weight', String(newBike.weight || 0));
-			// Добавьте остальные поля аналогично
-
-			if (newImage) {
-				bikeData.append('image', newImage);
-			}
-
-			await createBike(formData);
-			setAddModalOpened(false);
-			loadBikes();
-		} catch (error) {
-			console.error("Ошибка создания:", error);
-		}
-	};
-
 	const handleDelete = async () => {
+		if (!selectedBike?.id) return;
+		setSaving(true);
 		try {
-			console.log("Удаление велосипеда:", selectedBike?.id);
 			await deleteBike(selectedBike.id);
 			setDeleteModalOpened(false);
+			setSelectedBike(null);
 			loadBikes();
 		} catch (error) {
 			console.error("Ошибка удаления:", error);
+		} finally {
+			setSaving(false);
 		}
 	};
 
-	if (loading) return <LoadingOverlay visible={true} zIndex={101} />;
+	const updateBikeField = <K extends keyof Bike>(
+		bike: Partial<Bike>,
+		key: K,
+		value: string | number | boolean | undefined
+	): Partial<Bike> => {
+		const numericKeys: (keyof Bike)[] = [
+			"weight",
+			"max_speed",
+			"max_range",
+			"max_load",
+			"power",
+			"wheel_size",
+			"day_price",
+			"quantity",
+		];
+
+		// charge_time_hours - строка, оставляем как есть
+
+		if (numericKeys.includes(key)) {
+			if (value === "" || value === undefined || value === null) {
+				return { ...bike, [key]: 0 };
+			}
+			if (typeof value === "string") {
+				const n = Number(value);
+				return { ...bike, [key]: isNaN(n) ? 0 : n };
+			}
+			if (typeof value === "number") {
+				return { ...bike, [key]: value };
+			}
+			return { ...bike, [key]: 0 };
+		}
+
+		if (typeof value === "boolean") {
+			return { ...bike, [key]: value };
+		}
+
+		return { ...bike, [key]: value };
+	};
+
+	const handleImageChange = (file: File | null) => {
+		setNewImage(file);
+		if (file) {
+			const reader = new FileReader();
+			reader.onload = (e) => {
+				setImagePreview(e.target?.result as string);
+			};
+			reader.readAsDataURL(file);
+		} else {
+			setImagePreview(null);
+		}
+	};
+
+	const renderBikeFields = (
+		bike: Partial<Bike>,
+		setBike: (bike: Partial<Bike>) => void
+	) => (
+		<ScrollArea h={600} type="auto">
+			<Stack gap="sm" p="sm">
+				<TextInput
+					label="Название"
+					placeholder="Например, Kirin V3 Pro"
+					value={bike.name ?? ""}
+					onChange={(e) => setBike(updateBikeField(bike, "name", e.target.value))}
+					radius="md"
+					required
+				/>
+				<NumberInput
+					label="Вес (кг)"
+					value={bike.weight ?? 0}
+					onChange={(v) => setBike(updateBikeField(bike, "weight", v))}
+					radius="md"
+					min={0}
+				/>
+				<NumberInput
+					label="Макс. скорость (км/ч)"
+					value={bike.max_speed ?? 0}
+					onChange={(v) => setBike(updateBikeField(bike, "max_speed", v))}
+					radius="md"
+					min={0}
+				/>
+				<NumberInput
+					label="Макс. пробег (км)"
+					value={bike.max_range ?? 0}
+					onChange={(v) => setBike(updateBikeField(bike, "max_range", v))}
+					radius="md"
+					min={0}
+				/>
+				<NumberInput
+					label="Макс. нагрузка (кг)"
+					value={bike.max_load ?? 0}
+					onChange={(v) => setBike(updateBikeField(bike, "max_load", v))}
+					radius="md"
+					min={0}
+				/>
+				<NumberInput
+					label="Мощность (Вт)"
+					value={bike.power ?? 0}
+					onChange={(v) => setBike(updateBikeField(bike, "power", v))}
+					radius="md"
+					min={0}
+				/>
+				<TextInput
+					label="Время зарядки (ч)"
+					placeholder="Например, 7-8"
+					value={bike.charge_time_hours ?? ""}
+					onChange={(e) => setBike(updateBikeField(bike, "charge_time_hours", e.target.value))}
+					radius="md"
+				/>
+				<TextInput
+					label="Батарея"
+					placeholder="Например, съемная, литиевая, 21Ah"
+					value={bike.battery ?? ""}
+					onChange={(e) => setBike(updateBikeField(bike, "battery", e.target.value))}
+					radius="md"
+				/>
+
+				<Text fw={500} size="sm">Наличие амортизации</Text>
+				<Switch
+					label="Подвеска"
+					checked={bike.suspension ?? false}
+					onChange={(e) => setBike(updateBikeField(bike, "suspension", e.currentTarget.checked))}
+				/>
+				<TextInput
+					label="Тормоза"
+					placeholder="Например, задний гидравлический тормоз"
+					value={bike.brakes ?? ""}
+					onChange={(e) => setBike(updateBikeField(bike, "brakes",
+						e.target.value))}
+					radius="md"
+				/>
+				<TextInput
+					label="Рама"
+					placeholder="Например, алюминий"
+					value={bike.frame ?? ""}
+					onChange={(e) => setBike(updateBikeField(bike, "frame", e.target.value))}
+					radius="md"
+				/>
+				<NumberInput
+					label="Размер колеса (дюймы)"
+					value={bike.wheel_size ?? 0}
+					onChange={(v) => setBike(updateBikeField(bike, "wheel_size", v))}
+					radius="md"
+					min={0}
+				/>
+				<TextInput
+					label="Тип колеса"
+					placeholder="Например, надувные"
+					value={bike.wheel_type ?? ""}
+					onChange={(e) => setBike(updateBikeField(bike, "wheel_type", e.target.value))}
+					radius="md"
+				/>
+				<TextInput
+					label="Привод"
+					placeholder="Например, задний"
+					value={bike.drive ?? ""}
+					onChange={(e) => setBike(updateBikeField(bike, "drive", e.target.value))}
+					radius="md"
+				/>
+				<TextInput
+					label="Тормозная система"
+					placeholder="Например, гидравлический"
+					value={bike.brake_system ?? ""}
+					onChange={(e) => setBike(updateBikeField(bike, "brake_system", e.target.value))}
+					radius="md"
+				/>
+				<NumberInput
+					label="Цена за день (в копейках, ₽)"
+					value={bike.day_price ?? 0}
+					onChange={(v) => setBike(updateBikeField(bike, "day_price", v))}
+					radius="md"
+					min={0}
+				/>
+				<NumberInput
+					label="Количество"
+					value={bike.quantity ?? 1}
+					onChange={(v) => setBike(updateBikeField(bike, "quantity", v))}
+					radius="md"
+					min={1}
+				/>
+			</Stack>
+		</ScrollArea>
+	);
+
 
 	return (
-		<Container py="xl" size="lg">
+		<Container size="lg" py="md">
 			<Group justify="space-between" mb="xl">
-				<Title fz={45}>Управление велосипедами</Title>
+				<Title fz={45} mb="md">Управление велосипедами</Title>
 				<Button
 					variant="outline"
 					radius="xl"
@@ -141,8 +302,12 @@ export default function AdminAllBikes() {
 					Добавить велосипед
 				</Button>
 			</Group>
-
-			<Stack gap="md">
+			<LoadingOverlay
+				visible={loading}
+				overlayProps={{ radius: 'sm', blur: 2 }}
+				loaderProps={{ color: 'blue.5', type: 'bars' }}
+			/>
+			<SimpleGrid cols={{ base: 1, sm: 1, md: 1 }} spacing="lg">
 				{bikes.map((bike) => (
 					<AdminBikeCard
 						key={bike.id}
@@ -151,246 +316,187 @@ export default function AdminAllBikes() {
 						onDelete={() => handleDeleteClick(bike)}
 					/>
 				))}
-			</Stack>
+			</SimpleGrid>
 
-			{/* Модальное окно редактирования */}
-			<Modal
-				opened={editModalOpened}
-				onClose={() => setEditModalOpened(false)}
-				title={`Редактирование: ${selectedBike?.name || ''}`}
-				size="xl"
-				radius="xl"
-				centered
-			>
-				{selectedBike && (
-					<Stack gap="md">
-						<Group align="flex-start" grow>
-							<Box>
-								<Text size="sm" fw={500} mb="3">Превью изображение:</Text>
-								<Image
-									src={newImage ? URL.createObjectURL(newImage) : `${BASE_IMAGE_URL}${selectedBike.image_url}`}
-									alt={selectedBike.name}
-									height={300}
-									fit="contain"
-									style={{ border: '1px solid #dee2e6', borderRadius: 'var(--mantine-radius-lg)' }}
-								/>
-								<Text size="xs" c="dimmed" mt="xs">Рекомендуемый размер: 1000x800</Text>
-
-								<FileInput
-									label="Заменить изображение"
-									placeholder={selectedBike.image_url ? `${BASE_IMAGE_URL}${selectedBike.image_url}` : "Выберите файл"}
-									accept="image/*"
-									radius="md"
-									mt="xs"
-									rightSection={<IconPhoto size={20} />}
-									onChange={setNewImage}
-								/>
-							</Box>
-
-							<Stack gap="sm">
-								<TextInput
-									label="Название"
-									value={selectedBike.name}
-									radius="md"
-									onChange={(e) => setSelectedBike({
-										...selectedBike,
-										name: e.target.value
-									})}
-								/>
-
-								<Group grow>
-									<NumberInput
-										label="Макс. скорость (км/ч)"
-										value={selectedBike.max_speed}
-										radius="md"
-										min={0}
-										onChange={(value) => setSelectedBike({
-											...selectedBike,
-											max_speed: Number(value)
-										})}
-									/>
-									<NumberInput
-										label="Макс. пробег (км)"
-										value={selectedBike.max_range}
-										radius="md"
-										min={0}
-										onChange={(value) => setSelectedBike({
-											...selectedBike,
-											max_range: Number(value)
-										})}
-									/>
-								</Group>
-
-								{/* Добавьте остальные поля аналогично */}
-
-							</Stack>
-						</Group>
-
-						<Flex justify="space-between" mt="md">
-							<Button
-								color="red"
-								variant="outline"
-								radius="md"
-								leftSection={<IconTrash size={16} />}
-								onClick={() => {
-									setEditModalOpened(false);
-									setDeleteModalOpened(true);
-								}}
-							>
-								Удалить велосипед
-							</Button>
-							<Group>
-								<Button variant="outline" radius="md" onClick={() => setEditModalOpened(false)}>
-									Отмена
-								</Button>
-								<Button radius="md" onClick={handleSave}>
-									Сохранить изменения
-								</Button>
-							</Group>
-						</Flex>
-					</Stack>
-				)}
-			</Modal>
-
-			{/* Модальное окно подтверждения удаления */}
-			<Modal
-				opened={deleteModalOpened}
-				onClose={() => setDeleteModalOpened(false)}
-				title="Подтверждение удаления"
-				size="md"
-				radius="xl"
-				centered
-			>
-				<Stack>
-					<Text>Вы уверены, что хотите удалить "{selectedBike?.name}"?</Text>
-					<Text size="sm" c="dimmed">Это действие нельзя отменить.</Text>
-
-					<Group justify="flex-end" mt="md">
-						<Button
-							variant="outline"
-							radius="md"
-							onClick={() => setDeleteModalOpened(false)}
-						>
-							Отмена
-						</Button>
-						<Button
-							color="red"
-							radius="md"
-							leftSection={<IconTrash size={16} />}
-							onClick={handleDelete}
-						>
-							Удалить
-						</Button>
-					</Group>
-				</Stack>
-			</Modal>
-
-			{/* Модальное окно добавления */}
 			<Modal
 				opened={addModalOpened}
-				onClose={() => setAddModalOpened(false)}
-				title="Добавление нового велосипеда"
+				onClose={() => {
+					setAddModalOpened(false);
+					setNewBike(null);
+					setNewImage(null);
+					setImagePreview(null);
+				}}
+				title="Добавить велосипед"
 				size="xl"
-				radius="xl"
 				centered
 			>
-				<Stack gap="md">
-					<Group align="flex-start" grow>
-						<Box>
-							<Text size="sm" fw={500} mb="3">Превью изображения:</Text>
-							{newImage ? (
-								<Image
-									src={URL.createObjectURL(newImage)}
-									height={300}
-									fit="contain"
-									style={{ border: '1px solid #dee2e6', borderRadius: 'var(--mantine-radius-lg)' }}
-								/>
-							) : (
-								<Box h={300} bg="gray.1" style={{
-									display: 'flex',
-									alignItems: 'center',
-									justifyContent: 'center',
-									border: '1px dashed #dee2e6',
-									borderRadius: 'var(--mantine-radius-lg)'
-								}}>
-									<Text c="dimmed">Изображение не выбрано</Text>
-								</Box>
-							)}
-
-							<Text size="xs" c="dimmed" mt="xs">Рекомендуемый размер: 1000x800</Text>
-
-							<FileInput
-								label="Изображение"
-								radius="md"
-								placeholder={newImage ? "Выбрано изображение" : "Выберите файл"}
-								accept="image/*"
-								mt="xs"
-								rightSection={<IconPhoto size={20} />}
-								onChange={setNewImage}
+				<Flex gap="lg" align="start">
+					<Stack w={240} align="center" gap="sm">
+						{imagePreview ? (
+							<Image
+								src={imagePreview.startsWith('data:') || imagePreview.startsWith('http')
+									? imagePreview
+									: `${BASE_IMAGE_URL}/${imagePreview}`}
+								h={160}
+								fit="contain"
 							/>
-						</Box>
-
-						<Stack gap="sm">
-							<TextInput
-								radius="md"
-								label="Название"
-								placeholder="Введите название"
-								value={newBike?.name || ''}
-								onChange={(e) => setNewBike({
-									...newBike,
-									name: e.target.value
-								})}
-							/>
-
-							<Group grow>
-								<NumberInput
-									label="Макс. скорость (км/ч)"
-									radius="md"
-									min={0}
-									value={newBike?.max_speed || 0}
-									onChange={(value) => setNewBike({
-										...newBike,
-										max_speed: Number(value)
-									})}
-								/>
-								<NumberInput
-									label="Макс. пробег (км)"
-									radius="md"
-									min={0}
-									value={newBike?.max_range || 0}
-									onChange={(value) => setNewBike({
-										...newBike,
-										max_range: Number(value)
-									})}
-								/>
+						) : (
+							<Group h={200} w={200} bg="gray.1" justify="center" align="center" style={{ borderRadius: 8 }}>
+								<IconPhoto size={48} color="gray" />
 							</Group>
+						)}
+						<FileInput
+							placeholder={newImage?.name || "Выберите изображение"}
+							rightSection={<IconPhoto size={rem(14)} />}
+							value={newImage}
+							onChange={(file) => {
+								handleImageChange(file);
+								setNewImage(file);
+								if (file) setImagePreview(URL.createObjectURL(file));
+								else setImagePreview(null);
+							}}
+							w="100%"
+						/>
+					</Stack>
 
-							{/* Добавьте остальные поля аналогично */}
+					<Box style={{ flex: 1 }}>
+						{newBike && renderBikeFields(newBike, setNewBike)}
+						<Group justify="flex-end" mt="md">
+							<Button
+								onClick={async () => {
+									if (!newBike) return;
+									setSaving(true);
+									try {
+										await createBike({ ...newBike, image: newImage || undefined });
+										setAddModalOpened(false);
+										setNewBike(null);
+										setNewImage(null);
+										setImagePreview(null);
+										loadBikes();
+									} catch (e) {
+										console.error("Ошибка при создании:", e);
+									} finally {
+										setSaving(false);
+									}
+								}}
+								loading={saving}
+							>
+								Создать
+							</Button>
+						</Group>
+					</Box>
+				</Flex>
+			</Modal>
 
-							<FileInput
-								label="Изображение"
-								radius="md"
-								placeholder="Выберите файл"
-								accept="image/*"
-								onChange={setNewImage}
+
+			<Modal
+				opened={editModalOpened}
+				onClose={() => {
+					setEditModalOpened(false);
+					setSelectedBike(null);
+					setNewImage(null);
+					setImagePreview(null);
+				}}
+				title="Редактировать велосипед"
+				size="xl"
+				centered
+			>
+				<Flex gap="lg" align="start">
+					<Stack w={240} align="center" gap="sm">
+						{imagePreview ? (
+							<Image
+								src={imagePreview.startsWith('data:')
+									? imagePreview
+									: `${BASE_IMAGE_URL}/${imagePreview}`}
+								h={160}
+								fit="contain"
 							/>
-						</Stack>
-					</Group>
+						) : (
+							<Group h={200} w={200} bg="gray.1" justify="center" align="center" style={{ borderRadius: 8 }}>
+								<IconPhoto size={48} color="gray" />
+							</Group>
+						)}
+						<FileInput
+							placeholder={newImage?.name || selectedBike?.image_url || "Выберите изображение"}
+							rightSection={<IconPhoto size={rem(14)} />}
+							value={newImage}
+							onChange={(file) => {
+								handleImageChange(file);
+								setNewImage(file);
+								if (file) setImagePreview(URL.createObjectURL(file));
+								else setImagePreview(null);
+							}}
+							w="100%"
+						/>
+					</Stack>
 
-					<Group justify="flex-end" mt="md">
-						<Button radius="md" variant="outline" onClick={() => setAddModalOpened(false)}>
-							Отмена
-						</Button>
-						<Button
-							radius="md"
-							onClick={handleCreate}
-							disabled={!newBike?.name}
-							leftSection={<IconPlus size={16} />}
-						>
-							Создать велосипед
-						</Button>
-					</Group>
-				</Stack>
+					<Box style={{ flex: 1 }}>
+						{selectedBike && renderBikeFields(selectedBike, (b) => setSelectedBike(b as Bike))}
+						<Group justify="space-between" mt="md">
+							<Button
+								variant="outline"
+								color="red"
+								leftSection={<IconTrash size={16} />}
+								onClick={async () => {
+									if (!selectedBike?.id) return;
+									setSaving(true);
+									try {
+										await deleteBike(selectedBike.id);
+										setEditModalOpened(false);
+										setSelectedBike(null);
+										setNewImage(null);
+										setImagePreview(null);
+										loadBikes();
+									} catch (error) {
+										console.error("Ошибка при удалении:", error);
+									} finally {
+										setSaving(false);
+									}
+								}}
+								disabled={saving}
+							>
+								Удалить
+							</Button>
+
+							<Button
+								onClick={async () => {
+									if (!selectedBike?.id) return;
+									setSaving(true);
+									try {
+										await updateBike(selectedBike.id, {
+											...selectedBike,
+											image: newImage || undefined,
+										});
+										setEditModalOpened(false);
+										setSelectedBike(null);
+										setNewImage(null);
+										setImagePreview(null);
+										loadBikes();
+									} catch (error) {
+										console.error("Ошибка при сохранении:", error);
+									} finally {
+										setSaving(false);
+									}
+								}}
+								loading={saving}
+							>
+								Сохранить
+							</Button>
+						</Group>
+					</Box>
+				</Flex>
+			</Modal>
+
+
+
+			<Modal opened={deleteModalOpened} onClose={() => setDeleteModalOpened(false)} title="Удалить велосипед?" centered>
+				<Text>Вы уверены, что хотите удалить {selectedBike?.name}?</Text>
+				<Flex justify="flex-end" gap="md" mt="md">
+					<Button variant="default" onClick={() => setDeleteModalOpened(false)}>Отмена</Button>
+					<Button color="red" leftSection={<IconTrash />} loading={saving} onClick={handleDelete}>
+						Удалить
+					</Button>
+				</Flex>
 			</Modal>
 		</Container>
 	);

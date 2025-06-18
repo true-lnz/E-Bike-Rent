@@ -27,11 +27,11 @@ func SendVerificationCode(us *services.UserService, cfg *config.Config) fiber.Ha
 		code := utils.GenerateCode()
 
 		if err = services.SendVerificationCode(req.Email, code, cfg); err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Не удалось отправить код" + err.Error()})
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Не удалось отправить код: " + err.Error()})
 		}
 
 		if err = us.SetVerificationCode(c.Context(), req.Email, code); err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Не удалось сохранить код" + err.Error()})
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Не удалось сохранить код: " + err.Error()})
 		}
 
 		return c.SendStatus(fiber.StatusOK)

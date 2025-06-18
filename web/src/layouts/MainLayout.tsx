@@ -1,6 +1,6 @@
 import { Outlet, ScrollRestoration } from "react-router-dom";
-import Footer from "../components/Footer";
-import Header from "../components/Headers/MainHeader";
+import Footer from "../components/ui/Footer";
+import Header from "../components/ui/MainHeader";
 
 export default function MainLayout() {
 	return (

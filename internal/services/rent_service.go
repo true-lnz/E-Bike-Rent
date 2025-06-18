@@ -103,7 +103,9 @@ func (s *RentService) UpdateRent(c context.Context, req dto.UpdateRentRequest, r
 			start := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
 			existingRent.StartDate = &start
 		} else {
-			existingRent.StartDate = req.StartDate
+			if req.StartDate != nil {
+				existingRent.StartDate = req.StartDate
+			}
 		}
 		existingRent.Status = *req.Status
 	}
@@ -121,7 +123,7 @@ func (s *RentService) UpdateRent(c context.Context, req dto.UpdateRentRequest, r
 	}
 	if req.RentPrice != nil {
 		existingRent.RentPrice = *req.RentPrice
-	} else {
+	} else if *req.Status != "отказано" {
 		start := existingRent.StartDate
 		end := existingRent.ExpireDate
 		days := int(end.Sub(*start).Hours() / 24)

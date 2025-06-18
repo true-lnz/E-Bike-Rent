@@ -3,7 +3,7 @@ import { useState } from "react";
 import CodeStep from "../../components/Auth/CodeStep";
 import EmailStep from "../../components/Auth/EmailStep";
 import RegistrationStep from "../../components/Auth/RegistrationStep";
-import { AuthProvider } from "../../contexts/AuthContext";
+import { AuthProvider } from "../../providers/AuthProvider";
 
 export default function AuthPage() {
   const [step, setStep] = useState(0);

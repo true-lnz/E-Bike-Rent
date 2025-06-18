@@ -1,11 +1,12 @@
-import { ActionIcon, Badge, Button, Center, Container, Group, Paper, ScrollArea, Table, Text, Title, Tooltip } from "@mantine/core";
-import { IconPhone } from "@tabler/icons-react";
+import { ActionIcon, Badge, Button, Center, Container, Divider, Group, LoadingOverlay, Paper, ScrollArea, Stack, Table, Text, Title, Tooltip } from "@mantine/core";
+import { IconHelp, IconMail, IconPhone } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useState } from "react";
 import { maintenanceService } from "../../services/maintenanceService";
 import type { Maintenance } from "../../types/maintenance";
 import { MaintenanceDetailModal } from "./MaintenanceDetailModal"; // импорт
+import { modals } from "@mantine/modals";
 
 type MaintenanceHistoryProps = {
 	data: Maintenance[];
@@ -42,21 +43,18 @@ const getTextColor = (status: string): string => {
 export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 	if (loading) {
 		return (
-			<Container size="lg" py="xl">
-				<Title order={1} mb="md">Заявки на обслуживание</Title>
-				<Paper radius="lg" withBorder>
-					<Center style={{ minHeight: 100 }}>
-						<Text color="dimmed" size="lg">Загрузка...</Text>
-					</Center>
-				</Paper>
-			</Container>
+			<LoadingOverlay
+				visible
+				overlayProps={{ radius: 'sm', blur: 2 }}
+				loaderProps={{ color: 'blue.5', type: 'bars' }}
+			/>
 		);
 	}
 
 	if (!data || data.length === 0) {
 		return (
 			<Container size="lg" py="xl">
-				<Title order={1} mb="md">Заявки на обслуживание</Title>
+				<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>Заявки на обслуживание</Title>
 				<Paper radius="lg" withBorder>
 					<Center style={{ minHeight: 100 }}>
 						<Text color="dimmed" size="lg">Нет заявок на обслуживание</Text>
@@ -81,13 +79,10 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 
 	return (
 		<Container size="lg" py="xl">
-			<Title order={1} mb="md">
-				Заявки на обслуживание
-			</Title>
-
-			<ScrollArea>
-				<Paper radius="lg" withBorder>
-					<Table striped highlightOnHover withColumnBorders>
+			<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>Заявки на обслуживание</Title>
+			<Paper radius="lg" withBorder>
+				<ScrollArea type="scroll" offsetScrollbars>
+					<Table striped highlightOnHover withColumnBorders miw={900}>
 						<Table.Thead>
 							<Table.Tr>
 								<Table.Th>ID</Table.Th>
@@ -151,7 +146,7 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 										</Table.Td>
 										<Table.Td>{startDate}</Table.Td>
 										<Table.Td>{repairDuration}</Table.Td>
-										<Table.Td>{item.price ? `${item.price} ₽` : "—"}</Table.Td>
+										<Table.Td>{item.price ? `${(item.price / 100).toLocaleString()} ₽` : "—"}</Table.Td>
 										<Table.Td>
 											<Badge
 												size="lg"
@@ -162,7 +157,7 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 											</Badge>
 										</Table.Td>
 										<Table.Td>
-											<Group gap="xs">
+											<Group gap="xs" wrap="nowrap">
 												<Button
 													variant="outline"
 													radius="md"
@@ -172,8 +167,40 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 												>
 													Детализация
 												</Button>
-												<ActionIcon size="lg" radius="md" color="blue.7" component="a"
-													href="tel:+79649512810">
+												<ActionIcon size="lg" radius="md" color="blue.7"
+													onClick={() => {
+														modals.open({
+															title: (
+																<Title order={3} ta="center" fw={600}>
+																	Связаться с «ФулГаз»
+																</Title>
+															),
+															centered: true,
+															radius: "lg",
+															withCloseButton: true,
+															children: (
+																<Stack gap="xs">
+																	<Group gap="xs">
+																		<IconMail size={18} />
+																		<Text size="sm" component="a" href="mailto:thebearonegey@gmail.com">Почта: <b>thebearonegey@gmail.com</b></Text>
+																	</Group>
+																	<Group gap="xs">
+																		<IconPhone size={18} />
+																		<Text size="sm" component="a" href="tel:+79047382666">Тел.: <b>+7 (904) 738-26-66</b></Text>
+																	</Group>
+																	<Group gap="xs">
+																		<IconHelp size={18} />
+																		<Text size="sm" component="a" href="https://t.me/FulGaz_Ufa">Менеджер: <b>@FulGaz_ufa</b></Text>
+																	</Group>
+																	<Divider my="xs" />
+																	<Button fullWidth variant="light" color="blue" component="a" href="tel:+79047382666" onClick={() => modals.closeAll()}>
+																		Позвонить
+																	</Button>
+																</Stack>
+															),
+														});
+													}}
+												>
 													<IconPhone size={20} />
 												</ActionIcon>
 											</Group>
@@ -182,10 +209,9 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 								);
 							})}
 						</Table.Tbody>
-
 					</Table>
-				</Paper>
-			</ScrollArea>
+				</ScrollArea>
+			</Paper>
 
 			{/* Модальное окно детализации */}
 			<MaintenanceDetailModal

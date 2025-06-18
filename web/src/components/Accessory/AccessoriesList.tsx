@@ -1,4 +1,5 @@
 import {
+	Box,
 	Card,
 	Center,
 	Container,
@@ -20,7 +21,7 @@ interface AccessoriesListPageProps {
 
 export default function AccessoriesList({
 	onlyAvailableByDefault = false,
-	showQuantityByDefault= false,
+	showQuantityByDefault = false,
 }: AccessoriesListPageProps) {
 	const [accessories, setAccessories] = useState<Accessory[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -35,7 +36,12 @@ export default function AccessoriesList({
 			.finally(() => setLoading(false));
 	}, []);
 
-	if (loading) return <LoadingOverlay visible={true} zIndex={101} />;
+	if (loading) return
+	<LoadingOverlay
+		visible
+		overlayProps={{ radius: 'sm', blur: 2 }}
+		loaderProps={{ color: 'blue.5', type: 'bars' }}
+	/>;
 
 	const visibleAccessories = onlyAvailable
 		? accessories.filter((accessories) => accessories.available_quantity > 0)
@@ -50,14 +56,29 @@ export default function AccessoriesList({
 					Доступно акссесуары
 				</Title>
 			) : (
-				<Stack mb="xl">
-					<Title order={1} size={45} lh={0.5}>
-						Добавь в свою подписку
-					</Title>
-					<Title order={1} size={45} c="orange.5">
-						акссесуары
-					</Title>
-				</Stack>
+				<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>
+					Добавь в свою подписку
+					<Box
+						px={8}
+						mt="xs"
+						w="max-content"
+						bg="orange.0"
+						style={{
+							borderRadius: 14,
+							border: "3px solid var(--mantine-color-orange-5)"
+						}}>
+						<Title
+							fz="inherit"
+							c="orange.5"
+							lh={1.1}
+							style={{
+								transform: "translateY(-4px)",
+							}}
+						>
+							акссесуары
+						</Title>
+					</Box>
+				</Title>
 			)}
 
 			{noVisibleAccessories ? (
@@ -72,11 +93,19 @@ export default function AccessoriesList({
 					</Center>
 				</Card>
 			) : (
-				<SimpleGrid cols={5} spacing="sm">
+				<SimpleGrid
+					cols={{ base: 2, xs: 3, sm: 5, md: 6, lg: 5 }}
+					spacing="md"
+				>
 					{visibleAccessories.map((accessories) => (
-						<AccessoryCard key={accessories.id} accessory={accessories} showQuantity={showQuantityByDefault} />
+						<AccessoryCard
+							key={accessories.id}
+							accessory={accessories}
+							showQuantity={showQuantityByDefault}
+						/>
 					))}
 				</SimpleGrid>
+
 			)}
 		</Container>
 	);

@@ -6,9 +6,12 @@ import {
 	Group,
 	Image,
 	Modal,
+	ScrollArea,
+	Spoiler,
 	Stack,
 	Text,
 } from "@mantine/core";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { BASE_IMAGE_URL } from "../../constants";
 import type { Bike } from "../../types/bike";
@@ -19,11 +22,14 @@ interface BikeDetailsModalProps {
 	onClose: () => void;
 }
 
+
 export default function BikeDetailsModal({
 	bike,
 	opened,
 	onClose,
 }: BikeDetailsModalProps) {
+	const [expanded, setExpanded] = useState(false);
+
 	return (
 		<Modal
 			opened={opened}
@@ -32,6 +38,7 @@ export default function BikeDetailsModal({
 			centered
 			radius="lg"
 			size="md"
+			scrollAreaComponent={ScrollArea.Autosize}
 		>
 			<Stack>
 				<Image
@@ -105,7 +112,7 @@ export default function BikeDetailsModal({
 
 				<Group>
 					<Text size="md" fw={600}>
-						Цена за день: {(bike.day_price/100).toLocaleString()} ₽
+						Цена за день: {(bike.day_price / 100).toLocaleString()} ₽
 					</Text>
 					<Button
 						radius="xl"
@@ -115,14 +122,22 @@ export default function BikeDetailsModal({
 						to={`/bikes/${bike.id}`}
 						style={{ flex: 1 }}
 					>
-						Забронировать
+						Далее
 					</Button>
 				</Group>
 
+				<Spoiler
+					showLabel="Раскрыть"
+					hideLabel="Скрыть"
+					maxHeight={50}
+					expanded={expanded}
+					onExpandedChange={setExpanded}
+				>
+					<Text size="sm" c="dimmed" mt="xs">
+						💬 Есть возможность аренды на тестовый период, а также полноценная покупка устройства. Для более подробной информации необходимо обратиться к <Link target="_blank" to={"https://t.me/FulGaz_Ufa"}>менеджеру</Link>
+					</Text>
+				</Spoiler>
 
-				<Text size="sm" c="dimmed" mt="xs">
-					💬 Можно договориться с оператором об аренде на 1 или 3 дня, а также на срок больше месяца.
-				</Text>
 			</Stack>
 		</Modal>
 	);
