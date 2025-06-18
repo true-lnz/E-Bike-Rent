@@ -80,11 +80,6 @@ func ParseUint(v string) uint {
 	return uint(i)
 }
 
-func ParseFloat(v string) float64 {
-	f, _ := strconv.ParseFloat(v, 64)
-	return f
-}
-
 func ParseByte(s string) byte {
 	i, _ := strconv.Atoi(s)
 	return byte(i)
@@ -134,8 +129,8 @@ func ToBytePtr(s string) *byte {
 }
 
 func GenerateCode() string {
-	rand.Seed(time.Now().UnixNano())
-	code := fmt.Sprintf("%04d", rand.Intn(10000))
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	code := fmt.Sprintf("%04d", r.Intn(10000))
 	fmt.Printf(code)
 	return code
 }

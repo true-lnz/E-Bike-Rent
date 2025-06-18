@@ -94,48 +94,6 @@ func CompleteRegistration(us *services.UserService, cfg *config.Config) fiber.Ha
 	}
 }
 
-func DeleteAccount(userService *services.UserService) fiber.Handler {
-	return func(c *fiber.Ctx) error {
-		userID := c.Locals("userId").(uint)
-
-		if err := userService.DeleteUser(c.Context(), userID); err != nil {
-			return fiber.NewError(fiber.StatusInternalServerError, "Внутренняя ошибка сервера")
-		}
-
-		c.Cookie(&fiber.Cookie{
-			Name:     "token",
-			Value:    "",
-			Expires:  time.Now().Add(-time.Hour),
-			HTTPOnly: true,
-			Secure:   true,
-			SameSite: "Strict",
-		})
-		return c.JSON(fiber.Map{"message": "Аккаунт успешно удален"})
-	}
-}
-
-func ChangeCredentials(userService *services.UserService) fiber.Handler {
-	return func(c *fiber.Ctx) error {
-
-		var body dto.ChangeCredentialsRequest
-		if err := c.BodyParser(&body); err != nil {
-			return fiber.NewError(fiber.StatusBadRequest, "Некорректный формат запроса")
-		}
-
-		if body.NewPhoneNumber == "" || body.NewLastName == "" || body.NewEmail == "" || body.NewFirstName == "" {
-			return fiber.NewError(fiber.StatusBadRequest, "Обязательное поле пустое")
-		}
-
-		userID := c.Locals("userId").(uint)
-
-		if err := userService.ChangeCredentials(c.Context(), userID, &body); err != nil {
-			return fiber.NewError(fiber.StatusInternalServerError, "Не удалось обновить данные")
-		}
-
-		return c.JSON(fiber.Map{"message": "номер телефона успешно изменен"})
-	}
-}
-
 func GetUser() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"user": c.Locals("user").(*models.User)})

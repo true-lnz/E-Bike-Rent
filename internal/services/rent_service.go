@@ -66,10 +66,11 @@ func (s *RentService) CreateRent(c context.Context, req dto.CreateRentRequest, u
 		}
 		return 0
 	}(req.RentalDays)
-
+	now := time.Now()
 	newRent := models.Rent{
 		ExpireDate:     expDate,
 		UpdatedAt:      time.Now(),
+		StartDate:      &now,
 		UserID:         userID,
 		BicycleID:      req.BicycleID,
 		RentPrice:      totalRentPrice,
@@ -110,14 +111,6 @@ func (s *RentService) UpdateRent(c context.Context, req dto.UpdateRentRequest, r
 		existingRent.Status = *req.Status
 	}
 
-	//if existingRent.Status == "в обработке" && *req.Status == "арендован" {
-	//	now := time.Now()
-	//	start := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
-	//	existingRent.StartDate = &start
-	//} else {
-	//	existingRent.StartDate = req.StartDate
-	//}
-
 	if req.ExpireDate != nil {
 		existingRent.ExpireDate = *req.ExpireDate
 	}
@@ -141,19 +134,7 @@ func (s *RentService) UpdateRent(c context.Context, req dto.UpdateRentRequest, r
 		existingRent.RentPrice = totalRentPrice
 	}
 
-	//existingRent.ExpireDate = req.ExpireDate
-	//if existingRent.RentPrice != req.RentPrice {
-	//	existingRent.RentPrice = req.RentPrice
-	//} else {
-	//	start := existingRent.StartDate
-	//	end := existingRent.ExpireDate
-	//	days := int(end.Sub(*start).Hours() / 24)
-	//	fmt.Println("Количество дней:", days)
-	//	totalRentPrice := existingRent.Bicycle.DayPrice * days
-	//	existingRent.RentPrice = totalRentPrice
-	//}
-
-	tx := s.repo.BeginTx(c) // начинаем транзакцию
+	tx := s.repo.BeginTx(c)
 
 	defer func() {
 		if r := recover(); r != nil {
