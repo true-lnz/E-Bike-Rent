@@ -14,8 +14,8 @@ import {
 } from '@mantine/core';
 import { IconBrandTelegram, IconPlus, IconUser } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
-import RentStats from './RentStats';
 import heroImg from "../../assets/images/kugoo-v3-max-1.png";
+import RentStats from './RentStats';
 
 export default function HeroWithStats() {
 	return (
@@ -67,6 +67,7 @@ export default function HeroWithStats() {
 									w="60"
 									h="60"
 									bg="orange.5"
+									target='_blank'
 									component={Link}
 									to={"https://t.me/fulgaz_ebike_rent"}
 									style={{ borderRadius: '50%' }}
@@ -79,6 +80,7 @@ export default function HeroWithStats() {
 									w="60"
 									h="60"
 									bg="orange.5"
+									target='_blank'
 									component={Link}
 									to={"https://t.me/FulGaz_Ufa"}
 									style={{ borderRadius: '50%' }}

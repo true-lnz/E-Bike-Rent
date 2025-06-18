@@ -1,5 +1,6 @@
 // components/Maintenance/MaintenanceList.tsx
 import { Button, Container, Grid, Group, Modal, Text, Title } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import battery from "../../assets/icons/battery.png";
@@ -69,6 +70,7 @@ export function MaintenanceList({ onCreated }: MaintenanceListProps) {
 	const [authModalOpened, setAuthModalOpened] = useState(false);
 	const [selectedTitle, setSelectedTitle] = useState("");
 	const [selectedType, setSelectedType] = useState(0);
+  const isMobile = useMediaQuery("(max-width: 576px)");
 
 	const handleApply = (type: number, title: string) => {
 		if (!user) {
@@ -131,12 +133,13 @@ export function MaintenanceList({ onCreated }: MaintenanceListProps) {
 				radius="lg"
 				centered
 			>
-				<Text mb="md">
+				<Text mb="md" fz={{base: "sm", sm: "md"}}>
 					Для оформления заявки на обслуживание необходимо войти в систему или зарегистрироваться.
 				</Text>
-				<Group justify="center">
+				<Group justify="flex-end">
 					<Button
 						variant="outline"
+						visibleFrom="sm"
 						radius="md"
 						onClick={() => setAuthModalOpened(false)}
 					>
@@ -145,6 +148,7 @@ export function MaintenanceList({ onCreated }: MaintenanceListProps) {
 					<Button
 						color="orange.5"
 						radius="md"
+						fullWidth={isMobile}
 						onClick={handleAuthRedirect}
 					>
 						Войти / Зарегистрироваться

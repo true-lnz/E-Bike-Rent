@@ -117,6 +117,7 @@ export default function BikeDetailsModal({
 						radius="xl"
 						color="blue.7"
 						size="sm"
+						fz={{ base: "sm", sm: "md" }}
 						component={Link}
 						to={`/bikes/${bike.id}`}
 						style={{ flex: 1 }}

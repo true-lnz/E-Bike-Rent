@@ -113,6 +113,7 @@ export default function BikeCard({ bike }: BikeCardProps) {
 							radius="xl"
 							color="orange.5"
 							size="md"
+							fz={{base: "sm", sm: "md"}}
 							component={Link}
 							to={`/bikes/${bike.id}`}
 							style={{ flex: 1, whiteSpace: 'nowrap' }}
