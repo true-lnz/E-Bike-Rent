@@ -222,7 +222,7 @@ export default function AdminRentRequests() {
 	const handleEditRent = (rent: Rent) => {
 		setEditingRent(rent);
 		setUpdateData({
-			startDate: rent.start_date,
+			start_date: rent.start_date,
 			status: rent.status,
 			accessories: rent.accessories.map(a => a.id),
 		});
@@ -814,19 +814,23 @@ export default function AdminRentRequests() {
 							radius="md"
 							placeholder="Выберите дату"
 							valueFormat="YYYY-MM-DD"
-							value={
-								updateData.startDate?.startsWith('0001-01-01')
-									? new Date()
-									: dayjs(updateData.startDate).toDate()
-							}
-							onChange={(date) => {
+							/* 							value={
+															updateData.startDate?.startsWith('0001-01-01')
+																? new Date()
+																: dayjs(updateData.startDate).toDate()
+														} */
+							value={updateData.start_date}
+		/* 					onChange={(date) => {
 								if (date) {
 									setUpdateData((prev) => ({
 										...prev!,
 										startDate: dayjs(date).format('YYYY-MM-DD'),
 									}));
 								}
-							}}
+							}} */
+							onChange={(value) =>
+								setUpdateData((prev) => ({ ...prev!, start_date: dayjs(value).toDate().toISOString() || prev!.start_date }))
+							}
 						/>
 
 						<Select

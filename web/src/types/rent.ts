@@ -25,7 +25,7 @@ export interface CreateRentRequest {
 }
 
 export interface UpdateRentRequest {
-  startDate?: string;
+  start_date?: string;
   status?: string;
   accessories?: number[];
 }
