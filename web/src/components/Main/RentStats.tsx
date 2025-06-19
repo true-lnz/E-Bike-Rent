@@ -17,11 +17,11 @@ export default function RentStats() {
 								fz={{ base: "45px", xs: "60px", sm: "70px", md: "80px", xxl: "120px" }}
 								fw={700}
 								lh={1}
-								c="orange.5"
+								c="gray.5"
 							>
 								{stat.value}
 							</Text>
-							<Text fz={{base: "sm",sm: "lg"}} ta="center" maw={300}>{stat.label}</Text>
+							<Text fz={{ base: "sm", sm: "lg" }} ta="center" maw={300}>{stat.label}</Text>
 						</Center>
 					))}
 				</Group>

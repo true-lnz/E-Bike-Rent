@@ -1,6 +1,7 @@
 'use client';
 
 import {
+	ActionIcon,
 	Box,
 	Button,
 	Center,
@@ -21,9 +22,9 @@ export default function HeroWithStats() {
 	return (
 		<>
 			{/* HERO СЕКЦИЯ */}
-			<Box pos="relative" pt="xl" style={{ overflow: 'hidden' }} >
+			<Box pos="relative" pt="xl" style={{ overflow: 'hidden' }}>
 				{/* Фоновая геометрия — наклонный прямоугольник с закруглением */}
-				<Container size="lg" pos="relative" py={{ base: "0", md: "xl" }}>
+				<Container size="lg" pos="relative" py={{ base: "0", md: "xl" }} >
 					<Stack gap="0" w={{ base: "100%", sm: "55%", md: "55%" }}>
 						<Title
 							order={1}
@@ -38,7 +39,6 @@ export default function HeroWithStats() {
 							<Box
 								w="350"
 								h="350"
-								bg="blue.7"
 								style={{
 									borderRadius: rem(100),
 									transform: 'rotate(-12deg)',
@@ -63,34 +63,29 @@ export default function HeroWithStats() {
 							</Button>
 
 							<Group gap="md">
-								<Box
-									w="60"
-									h="60"
-									bg="orange.5"
+								<ActionIcon
+									radius="xl"
+									size="62"
+									variant='light'
+									color='gray'
 									target='_blank'
 									component={Link}
 									to={"https://t.me/fulgaz_ebike_rent"}
-									style={{ borderRadius: '50%' }}
 								>
-									<Center h={60}>
-										<IconBrandTelegram color="white" size={32} />
-									</Center>
-								</Box>
-								<Box
-									w="60"
-									h="60"
-									bg="orange.5"
+									<IconBrandTelegram size={32} />
+								</ActionIcon>
+								<ActionIcon
+									radius="xl"
+									size="62"
+									variant='light'
+									color='gray'
 									target='_blank'
 									component={Link}
 									to={"https://t.me/FulGaz_Ufa"}
-									style={{ borderRadius: '50%' }}
 								>
-									<Center h={60}>
-										<IconUser color="white" size={32} />
-									</Center>
-								</Box>
+									<IconUser size={32} />
+								</ActionIcon>
 							</Group>
-
 						</Group>
 					</Stack>
 				</Container>
@@ -101,12 +96,13 @@ export default function HeroWithStats() {
 					right={0}
 					w={{ base: "400", xs: "350", sm: "400", md: "500", lg: "620", xl: "680" }}
 					h={{ base: "400", xs: "350", sm: "400", md: "500", lg: "620", xl: "680" }}
-					bg="blue.7"
 					visibleFrom='sm'
 					style={{
 						borderRadius: rem(100),
 						transform: 'rotate(-12deg)',
 						transformOrigin: 'top right',
+						background: 'linear-gradient(90deg, var(--mantine-color-blue-7), var(--mantine-color-blue-5))',
+
 						zIndex: 0,
 					}}
 				>

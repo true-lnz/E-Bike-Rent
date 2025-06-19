@@ -13,12 +13,13 @@ export default function RentalAdvertise() {
 					{/* Right angled background */}
 					<Box
 						pos="absolute"
-						bottom={-310}
+						bottom={-320}
 						right={-100}
 						w={650}
 						h={650}
 						style={{
 							backgroundColor: '#FFA336',
+							background: 'linear-gradient(-90deg, var(--mantine-color-yellow-7), var(--mantine-color-orange-5))',
 							borderRadius: '120px',
 							transform: 'rotate(45deg)',
 							zIndex: 0,
@@ -40,14 +41,13 @@ export default function RentalAdvertise() {
 								bg="blue.0"
 								style={{
 									borderRadius: "14px",
-									border: "3px solid var(--mantine-color-blue-7)"
 								}}>
 								<Title
 									fz={45}
-									c="blue.7"
 									lh={1.1}
+									c="blue.7"
 									style={{
-										transform: "translateY(-4px)",
+										transform: "translateY(-3px)",
 									}}
 								>
 									от 3 месяцев
@@ -77,10 +77,10 @@ export default function RentalAdvertise() {
 						left={-910}
 						w={1050}
 						h={1050}
-						bg="blue.7"
 						style={{
 							borderRadius: '200px',
 							transform: 'rotate(-45deg)',
+							background: 'linear-gradient(45deg, var(--mantine-color-blue-7), var(--mantine-color-blue-5))',
 							zIndex: 0,
 						}}
 					>
@@ -99,14 +99,14 @@ export default function RentalAdvertise() {
 							bg="orange.0"
 							style={{
 								borderRadius: "14px",
-								border: "3px solid var(--mantine-color-orange-5)"
 							}}>
 							<Title
 								fz={45}
-								c="orange.5"
+								fw={700}
 								lh={1.1}
+								c="orange.5"
 								style={{
-									transform: "translateY(-4px)",
+									transform: "translateY(-3px)",
 								}}
 							>
 								электробайка

@@ -90,7 +90,7 @@ export default function ContactCard() {
 								fz={isMobile ? 28 : isTablet ? 36 : 45}
 								lh={1.2}
 								fw={700}
-								c="blue.7"
+								variant="gradient"
 								mb={{ base: "sm", md: "xl" }}
 							>
 								оптимальное <br />

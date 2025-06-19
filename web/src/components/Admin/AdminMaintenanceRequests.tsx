@@ -117,7 +117,7 @@ export default function AdminMaintenanceRequests() {
 			if (!m.user.city.toLowerCase().includes(cityFilter.toLowerCase())) return false;
 		}
 
-		return m.status === statusFilter;;
+		return m.status === statusFilter;
 	});
 
 	const clearAllFilters = () => {

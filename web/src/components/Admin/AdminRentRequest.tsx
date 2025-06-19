@@ -140,7 +140,8 @@ export default function AdminRentRequests() {
 			if (!r.user.city.toLowerCase().includes(cityFilter.toLowerCase())) return false;
 		}
 
-		return true;
+		return r.status === statusFilter;
+;
 	});
 
 	const clearAllFilters = () => {

@@ -66,14 +66,13 @@ export default function BikeListPage({
 						bg="orange.0"
 						style={{
 							borderRadius: 14,
-							border: "3px solid var(--mantine-color-orange-5)"
 						}}>
 						<Title
 							fz="inherit"
 							c="orange.5"
 							lh={1.1}
 							style={{
-								transform: "translateY(-4px)",
+								transform: "translateY(-3px)",
 							}}
 						>
 							электровелосипеда
