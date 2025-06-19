@@ -13,7 +13,7 @@ import {
 	Title,
 	rem
 } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import {
 	IconAlertCircle,
@@ -27,16 +27,15 @@ import {
 	IconX
 } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 import { BASE_IMAGE_URL } from "../../constants";
+import type { Bike } from "../../types/bike";
 import AccessoryModal from "../Accessory/AccessoryModal";
+import BikeDetailsModal from "../Bikes/BikeDetailsModal";
 import ExtendRentalModal from "./ExtendRentalModal";
 
 interface RentalBikeCardProps {
-	bikeId: number;
+	bike: Bike;
 	rentId?: number;
-	name: string;
-	imageUrl: string;
 	rentStart: string;
 	rentEnd: string;
 	daysLeft?: number;
@@ -58,10 +57,8 @@ interface RentalBikeCardProps {
 }
 
 export function RentalBikeCard({
-	bikeId,
+	bike,
 	rentId,
-	name,
-	imageUrl,
 	rentStart,
 	rentEnd,
 	daysLeft,
@@ -80,6 +77,7 @@ export function RentalBikeCard({
 	const [extendRentalModalOpen, setExtendRentalModalOpen] = useState(false);
 	const initialAccessoryIds = useMemo(() => accessories.map((acc) => acc.id), [accessories]);
 	const isMobile = useMediaQuery("(max-width: 576px)");
+	const [openedBikeDetail, { open, close }] = useDisclosure(false);
 
 	const renderStatusSection = () => {
 		if (isPending) {
@@ -145,8 +143,8 @@ export function RentalBikeCard({
 					gap="lg"
 				>
 					<Image
-						src={BASE_IMAGE_URL + imageUrl}
-						alt={name}
+						src={BASE_IMAGE_URL + bike.image_url}
+						alt={bike.name}
 						w={{ base: "100%", sm: 220 }}
 						h={220}
 						fit="contain"
@@ -159,13 +157,11 @@ export function RentalBikeCard({
 						<Group justify="space-between" align="flex-end" wrap="wrap">
 							<Flex gap="md" rowGap="2" align="flex-end" wrap="wrap">
 								<Title order={2} style={{ wordBreak: "break-word" }}>
-									{name}
+									{bike.name}
 								</Title>
-								<Link to={`/bikes/${bikeId}`}>
-									<Badge variant="outline" color="gray" radius="xl" size="lg">
-										О модели
-									</Badge>
-								</Link>
+								<Badge variant="outline" color="gray" radius="xl" size="lg" onClick={open} style={{ cursor: "pointer" }}>
+									О модели
+								</Badge>
 							</Flex>
 							{isArchived && (
 								<Badge variant="light" color="gray" size="lg" radius="xl" visibleFrom="sm">
@@ -379,6 +375,7 @@ export function RentalBikeCard({
 				onClose={() => setExtendRentalModalOpen(false)}
 				rentId={rentId}
 			/>
+			<BikeDetailsModal bike={bike} opened={openedBikeDetail} onClose={close} />
 		</Box>
 	);
 }

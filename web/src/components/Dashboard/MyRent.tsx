@@ -65,9 +65,7 @@ export default function MyRent() {
 							<RentalBikeCard
 								key={rent.id}
 								rentId={rent.id}
-								bikeId={rent.bicycle.id}
-								name={rent.bicycle.name}
-								imageUrl={rent.bicycle.image_url}
+								bike={rent.bicycle}
 								rentStart={start?.format("DD.MM.YYYY") || "-"}
 								rentEnd={end.format("DD.MM.YYYY")}
 								daysLeft={isActive ? daysLeft : undefined}
