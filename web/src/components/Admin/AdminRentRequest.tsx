@@ -141,7 +141,7 @@ export default function AdminRentRequests() {
 		}
 
 		return r.status === statusFilter;
-;
+		;
 	});
 
 	const clearAllFilters = () => {
@@ -729,6 +729,9 @@ export default function AdminRentRequests() {
 								</Text>
 								<Text c="dimmed">
 									Дата рождения: <Text span c="black" fw={500}>{dayjs(selectedRent.user?.birthday).format('DD.MM.YYYY')}, {dayjs().diff(selectedRent.user?.birthday, 'year')} лет (года)</Text>
+								</Text>
+								<Text c="dimmed">
+									Город: <Text span c="black" fw={500}>{selectedRent.user?.city}</Text>
 								</Text>
 
 								<Divider my="xs" />
