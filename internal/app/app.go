@@ -20,7 +20,9 @@ func App(cfg *config.Config) error {
 
 	ctx := context.InitServices(db, cfg)
 
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		BodyLimit: 100 * 1024 * 1024, // 100 MB
+	})
 
 	app.Use(cors.New(cors.Config{
 		AllowOriginsFunc: func(origin string) bool {

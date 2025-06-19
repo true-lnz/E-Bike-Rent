@@ -237,7 +237,7 @@ export default function AdminAllAccessories() {
 							onChange={setNewImage}
 							placeholder={selectedAccessory.image_url ? `${BASE_IMAGE_URL}${selectedAccessory.image_url}` : "Выберите файл"}
 						/>
-						<Text size="xs" c="dimmed">Рекомендуемый размер: 1000x800</Text>
+						<Text size="xs" c="dimmed">Рекомендуемый размер: 1000x800 (до 10 МБ)</Text>
 
 						{/* Текстовые поля */}
 						<TextInput
@@ -370,7 +370,7 @@ export default function AdminAllAccessories() {
 						onChange={setNewImage}
 						placeholder={newAccessory?.image_url ? `${BASE_IMAGE_URL}${newAccessory.image_url}` : "Выберите файл"}
 					/>
-					<Text size="xs" c="dimmed">Рекомендуемый размер: 1000x800</Text>
+					<Text size="xs" c="dimmed">Рекомендуемый размер: 1000x800 (до 10 МБ)</Text>
 
 					{/* Текстовые поля */}
 					<TextInput
