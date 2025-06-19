@@ -723,138 +723,141 @@ export default function AdminMaintenanceRequests() {
 					{filtered.length === 0 ? (
 						<Text c="dimmed">Нет заявок для отображения.</Text>
 					) : (
-						filtered.map((m) => (
-							<Card withBorder radius="xl" key={m.id} shadow="sm" h={{ base: "auto", sm: 265 }} p="xl">
-								<Flex align={isMobile ? "center" : "start"} gap="xl" justify="space-between" wrap="nowrap" direction={isMobile ? "column" : "row"} style={{ width: '100%' }}>
-									{/* Левый столбец */}
-									<Stack gap={4} w={200} align="center" style={{ height: '100%' }}>
-										<UserCard r={m} companiesDict={companiesDict} />
-										<Text size="sm">Тел.: {m.user.phone_number}</Text>
-										<Button
-											variant="light"
-											color="gray"
-											size="sm"
-											mt="auto"
-											radius="xl"
-											fullWidth
-											component={Link}
-											to={`tel:${m.user.phone_number}`}
-											leftSection={<IconPhoneCall size={14} />}
-										>
-											Связаться с клиентом
-										</Button>
-									</Stack>
+						filtered
+							.slice()
+							.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+							.map((m) => (
+								<Card withBorder radius="xl" key={m.id} shadow="sm" h={{ base: "auto", sm: 265 }} p="xl">
+									<Flex align={isMobile ? "center" : "start"} gap="xl" justify="space-between" wrap="nowrap" direction={isMobile ? "column" : "row"} style={{ width: '100%' }}>
+										{/* Левый столбец */}
+										<Stack gap={4} w={200} align="center" style={{ height: '100%' }}>
+											<UserCard r={m} companiesDict={companiesDict} />
+											<Text size="sm">Тел.: {m.user.phone_number}</Text>
+											<Button
+												variant="light"
+												color="gray"
+												size="sm"
+												mt="auto"
+												radius="xl"
+												fullWidth
+												component={Link}
+												to={`tel:${m.user.phone_number}`}
+												leftSection={<IconPhoneCall size={14} />}
+											>
+												Связаться с клиентом
+											</Button>
+										</Stack>
 
-									<Divider orientation="vertical" />
+										<Divider orientation="vertical" />
 
-									{/* Правый столбец */}
-									<Stack gap={8} h={{ base: "auto", sm: '200px' }} style={{ flexGrow: 1 }}>
-										<Group justify="space-between" align="start">
-											<Stack gap={0}>
-												<Text fz="28" lh={1.2} fw={700} lineClamp={1} title={m.bicycle_name}>
-													Заявка: {m.bicycle_name}
-												</Text>
-												<Text size="md" c="dimmed">
-													Дата заявки: {dayjs(m.created_at).format('DD.MM.YYYY')}
-												</Text>
-											</Stack>
-
-											<Group gap="xs">
-												<Button
-													variant="default"
-													size="sm"
-													radius="md"
-													visibleFrom="sm"
-													onClick={() => handleDetails(m.id)}
-												>
-													Детали
-												</Button>
-
-												<Menu position="bottom-end" radius="md" trigger="click-hover" openDelay={100} closeDelay={400} shadow="sm" width={220}>
-													<Menu.Target>
-														<Button variant="subtle" size="sm" radius="md" px={8}>
-															<IconDotsVertical size={18} />
-														</Button>
-													</Menu.Target>
-													<Menu.Dropdown
-														style={{
-															borderRadius: 'var(--mantine-radius-lg)',
-															boxShadow: '0 6px 24px rgba(0, 0, 0, 0.35)',
-															padding: 'var(--mantine-spacing-sm)',
-														}}
-													>
-														<Menu.Item
-															key="info"
-															variant="default"
-															hiddenFrom="sm"
-															leftSection={<IconInfoCircle size={18} />}
-															onClick={() => handleDetails(m.id)}
-														>
-															Детали
-														</Menu.Item>
-														{handleActions(
-															m.id,
-															m.status,
-															{
-																bicycle_name: m.bicycle_name,
-																finish_date: m.finish_date,
-																admin_message: m.admin_message || '',
-																price: m.price || 0,
-															},
-															m.start_date
-														)}
-													</Menu.Dropdown>
-												</Menu>
-											</Group>
-										</Group>
-
-										<Stack gap={0}>
-											<Text size="md" lineClamp={1} title={m.details}>
-												Детали заявки: {m.details}
-											</Text>
-											{m.finish_date && (
-												<Group>
-													<Text size="md">
-														Дата окончания ремонта: {m.finish_date && dayjs(m.finish_date).year() > 1
-															? dayjs(m.finish_date).format('DD.MM.YYYY')
-															: '—'}
+										{/* Правый столбец */}
+										<Stack gap={8} h={{ base: "auto", sm: '200px' }} style={{ flexGrow: 1 }}>
+											<Group justify="space-between" align="start">
+												<Stack gap={0}>
+													<Text fz="28" lh={1.2} fw={700} lineClamp={1} title={m.bicycle_name}>
+														Заявка: {m.bicycle_name}
 													</Text>
-													{(m.status === "ремонтируется" || m.status === "готов к выдаче") &&
-														<Button
-															size="compact-sm"
-															p={0}
-															variant="transparent"
-															onClick={() => {
-																handleEditDate(m.id, m.finish_date, {
+													<Text size="md" c="dimmed">
+														Дата заявки: {dayjs(m.created_at).format('DD.MM.YYYY')}
+													</Text>
+												</Stack>
+
+												<Group gap="xs">
+													<Button
+														variant="default"
+														size="sm"
+														radius="md"
+														visibleFrom="sm"
+														onClick={() => handleDetails(m.id)}
+													>
+														Детали
+													</Button>
+
+													<Menu position="bottom-end" radius="md" trigger="click-hover" openDelay={100} closeDelay={400} shadow="sm" width={220}>
+														<Menu.Target>
+															<Button variant="subtle" size="sm" radius="md" px={8}>
+																<IconDotsVertical size={18} />
+															</Button>
+														</Menu.Target>
+														<Menu.Dropdown
+															style={{
+																borderRadius: 'var(--mantine-radius-lg)',
+																boxShadow: '0 6px 24px rgba(0, 0, 0, 0.35)',
+																padding: 'var(--mantine-spacing-sm)',
+															}}
+														>
+															<Menu.Item
+																key="info"
+																variant="default"
+																hiddenFrom="sm"
+																leftSection={<IconInfoCircle size={18} />}
+																onClick={() => handleDetails(m.id)}
+															>
+																Детали
+															</Menu.Item>
+															{handleActions(
+																m.id,
+																m.status,
+																{
 																	bicycle_name: m.bicycle_name,
-																	status: m.status,
+																	finish_date: m.finish_date,
 																	admin_message: m.admin_message || '',
 																	price: m.price || 0,
-																}, m.start_date
-															)
-															}}
-														>Изменить</Button>
-													}
+																},
+																m.start_date
+															)}
+														</Menu.Dropdown>
+													</Menu>
 												</Group>
-											)}
-											{m.admin_message && (
-												<Text size="md" lineClamp={1} title={m.admin_message}>
-													Ваш комментарий: {m.admin_message}
+											</Group>
+
+											<Stack gap={0}>
+												<Text size="md" lineClamp={1} title={m.details}>
+													Детали заявки: {m.details}
 												</Text>
-											)}
+												{m.finish_date && (
+													<Group>
+														<Text size="md">
+															Дата окончания ремонта: {m.finish_date && dayjs(m.finish_date).year() > 1
+																? dayjs(m.finish_date).format('DD.MM.YYYY')
+																: '—'}
+														</Text>
+														{(m.status === "ремонтируется" || m.status === "готов к выдаче") &&
+															<Button
+																size="compact-sm"
+																p={0}
+																variant="transparent"
+																onClick={() => {
+																	handleEditDate(m.id, m.finish_date, {
+																		bicycle_name: m.bicycle_name,
+																		status: m.status,
+																		admin_message: m.admin_message || '',
+																		price: m.price || 0,
+																	}, m.start_date
+																	)
+																}}
+															>Изменить</Button>
+														}
+													</Group>
+												)}
+												{m.admin_message && (
+													<Text size="md" lineClamp={1} title={m.admin_message}>
+														Ваш комментарий: {m.admin_message}
+													</Text>
+												)}
+											</Stack>
+											<Group mt="auto" mb="8" align="flex-end">
+												<Text size="md" fw={700} title={m.status}>
+													Текущий статус:
+												</Text>
+												<Pill c="blue">
+													{m.status}
+												</Pill>
+											</Group>
 										</Stack>
-										<Group mt="auto" mb="8" align="flex-end">
-											<Text size="md" fw={700} title={m.status}>
-												Текущий статус:
-											</Text>
-											<Pill c="blue">
-												{m.status}
-											</Pill>
-										</Group>
-									</Stack>
-								</Flex>
-							</Card>
-						))
+									</Flex>
+								</Card>
+							))
 					)}
 				</Stack>
 			</Stack>
