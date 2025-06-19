@@ -284,8 +284,8 @@ export default function AdminAllBikes() {
 				/>
 				<NumberInput
 					label="Цена за 2 недели (в копейках, ₽)"
-					value={bike.one_week_price ?? 0}
-					onChange={(v) => setBike(updateBikeField(bike, "one_week_price", v))}
+					value={bike.two_week_price ?? 0}
+					onChange={(v) => setBike(updateBikeField(bike, "two_week_price", v))}
 					radius="md"
 					min={0}
 				/>
