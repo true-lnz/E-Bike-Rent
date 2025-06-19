@@ -86,16 +86,15 @@ export default function ContactCard() {
 							>
 								Давай подберём
 							</Title>
-							<Text
+							<Title
 								fz={isMobile ? 28 : isTablet ? 36 : 45}
 								lh={1.2}
-								fw={700}
-								variant="gradient"
+								c="blue.7"
 								mb={{ base: "sm", md: "xl" }}
 							>
 								оптимальное <br />
 								решение для тебя
-							</Text>
+							</Title>
 
 							<Box my={{ base: "sm", md: "xl" }}>
 								<Group gap="xs" mb="xs">

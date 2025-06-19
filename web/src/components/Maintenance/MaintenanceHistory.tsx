@@ -1,4 +1,5 @@
 import { ActionIcon, Badge, Button, Center, Container, Divider, Group, LoadingOverlay, Paper, ScrollArea, Stack, Table, Text, Title, Tooltip } from "@mantine/core";
+import { modals } from "@mantine/modals";
 import { IconHelp, IconMail, IconPhone } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -6,7 +7,6 @@ import { useState } from "react";
 import { maintenanceService } from "../../services/maintenanceService";
 import type { Maintenance } from "../../types/maintenance";
 import { MaintenanceDetailModal } from "./MaintenanceDetailModal"; // импорт
-import { modals } from "@mantine/modals";
 
 type MaintenanceHistoryProps = {
 	data: Maintenance[];
@@ -82,7 +82,7 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 			<Title order={1} mb="xl" fz={{ base: "24px", xs: "32px", sm: "36px", lg: "45px", xxl: "60px" }}>Заявки на обслуживание</Title>
 			<Paper radius="lg" withBorder>
 				<ScrollArea type="scroll" offsetScrollbars>
-					<Table striped highlightOnHover withColumnBorders miw={900}>
+					<Table striped highlightOnHover withColumnBorders miw={1105}>
 						<Table.Thead>
 							<Table.Tr>
 								<Table.Th>ID</Table.Th>
