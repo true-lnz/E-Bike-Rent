@@ -15,7 +15,7 @@ import {
 	Title,
 	rem,
 } from '@mantine/core';
-import { IMaskInput } from 'react-imask';
+import { useForm } from '@mantine/form';
 import {
 	IconBolt,
 	IconBrandTelegram,
@@ -29,7 +29,7 @@ import {
 	IconX,
 } from '@tabler/icons-react';
 import { useState } from 'react';
-import { useForm } from '@mantine/form';
+import { IMaskInput } from 'react-imask';
 import logo from '../../assets/images/Logo512x512.png';
 import { sendFeedback } from '../../services/feedbackService';
 
@@ -128,7 +128,7 @@ export default function Contacts() {
 								</Group>
 								<Group gap="xs" wrap="nowrap">
 									<IconBrandTelegram size={18} />
-									<Anchor href="https://t.me/FulGaz_Ufa" underline="never" c="white">
+									<Anchor href="https://t.me/FulGaz_Ufa" target='_blank' underline="never" c="white">
 										<Text size="md"><b>Менеджер:</b> @FulGaz_Ufa</Text>
 									</Anchor>
 								</Group>
