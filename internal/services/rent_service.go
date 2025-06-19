@@ -23,6 +23,14 @@ func (s *RentService) CreateRent(c context.Context, req dto.CreateRentRequest, u
 	if !(req.RentalDays == 7 || req.RentalDays == 14 || req.RentalDays == 30) {
 		return nil, fmt.Errorf("некорректное количество дней: %d", req.RentalDays)
 	}
+	isAllowed, err := s.repo.IsAllowedForRent(c, userID)
+	if err != nil {
+		return nil, fmt.Errorf("не удолось проверить забронированные велосипеды: %w", err)
+	}
+	if !isAllowed {
+		return nil, fmt.Errorf("арендовать можно не более одного велосипеда за период")
+	}
+
 	bicycle, err := s.bicycleRepo.GetByID(c, req.BicycleID)
 	if err != nil {
 		return nil, fmt.Errorf("не удалось получить велосипед: %w", err)

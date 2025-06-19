@@ -13,6 +13,7 @@ type rentRepository struct {
 
 type RentRepository interface {
 	BeginTx(ctx context.Context) *gorm.DB
+	IsAllowedForRent(c context.Context, userID uint) (bool, error)
 	GetById(c context.Context, rentID uint) (*models.Rent, error)
 	GetAll(c context.Context) ([]models.Rent, error)
 	GetByUserID(c context.Context, userID uint) ([]models.Rent, error)
@@ -35,6 +36,15 @@ func (r *rentRepository) CountInRent(c context.Context, bicycleID uint) (int, er
 		Model(&models.Rent{}).
 		Count(&total).Error
 	return int(total), err
+}
+
+func (r *rentRepository) IsAllowedForRent(c context.Context, userID uint) (bool, error) {
+	var total int64
+	err := r.db.WithContext(c).
+		Where("user_id = ? AND (status = ? OR status = ? OR status = ?)", userID, "в обработке", "арендован", "аренда продлена").
+		Model(&models.Rent{}).
+		Count(&total).Error
+	return total == 0, err
 }
 
 func (r *rentRepository) Create(c context.Context, rent *models.Rent) (*models.Rent, error) {
