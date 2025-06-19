@@ -297,6 +297,7 @@ export default function RegistrationStep() {
 									label="Дата рождения"
 									placeholder="Нажмите для выбора даты"
 									radius="md"
+									maxDate={new Date()}
 									required
 									clearable
 									{...form.getInputProps("birthday")}

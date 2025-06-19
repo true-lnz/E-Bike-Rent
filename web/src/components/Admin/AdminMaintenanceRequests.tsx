@@ -142,6 +142,7 @@ export default function AdminMaintenanceRequests() {
 			admin_message: string;
 			price: number;
 		},
+		start_date: string
 	): React.ReactNode => {
 		const actions: React.ReactNode[] = [];
 
@@ -152,7 +153,7 @@ export default function AdminMaintenanceRequests() {
 					c="green"
 					leftSection={<IconCheck size={16} />}
 					onClick={() => {
-						handleAccept(id, data.bicycle_name);
+						handleAccept(id, data.bicycle_name, start_date);
 					}}
 				>
 					Принять
@@ -174,7 +175,7 @@ export default function AdminMaintenanceRequests() {
 					key="edit"
 					leftSection={<IconEdit size={16} />}
 					onClick={() => {
-						handleEditMaintenance(id, { ...data, status });
+						handleEditMaintenance(id, { ...data, status }, start_date);
 					}}
 				>
 					Редактировать
@@ -217,10 +218,10 @@ export default function AdminMaintenanceRequests() {
 			finish_date: string;
 			admin_message: string;
 			price: number;
-		}
+		},
+		start_date: string
 	) => {
 		let state = { ...initialData };
-
 		modals.openConfirmModal({
 			title: 'Редактировать заявку',
 			size: 'lg',
@@ -248,6 +249,7 @@ export default function AdminMaintenanceRequests() {
 							{ value: 'отказано', label: 'Отказано' },
 						]}
 						defaultValue={state.status}
+						allowDeselect={false}
 						onChange={(value) => (state.status = value ?? state.status)}
 					/>
 
@@ -256,7 +258,8 @@ export default function AdminMaintenanceRequests() {
 						placeholder="Выберите дату"
 						valueFormat="YYYY-MM-DD"
 						radius="md"
-						value={state.finish_date ? new Date(state.finish_date) : null}
+						defaultValue={state.finish_date}
+						minDate={start_date}
 						onChange={(date) => {
 							if (date) {
 								const yyyyMmDd = (new Date(date)).toISOString().slice(0, 10); // 'YYYY-MM-DD'
@@ -266,7 +269,7 @@ export default function AdminMaintenanceRequests() {
 					/>
 
 					<NumberInput
-						label="Стоимость (₽)"
+						label="Стоимость (в копейках ₽)"
 						defaultValue={state.price}
 						min={0}
 						step={100}
@@ -379,22 +382,29 @@ export default function AdminMaintenanceRequests() {
 			status: string;
 			admin_message: string;
 			price: number;
-		}
+		},
+		startDate: string // ← дата начала заявки
 	) => {
-		let newDate = !currentFinishDate || currentFinishDate.startsWith('0001-01-01') ? (new Date).toISOString() : currentFinishDate;
+		let newDate =
+			!currentFinishDate || currentFinishDate.startsWith('0001-01-01')
+				? new Date().toISOString()
+				: currentFinishDate;
+
+		const minDate = new Date(startDate); // ← не раньше этой даты
 
 		modals.openConfirmModal({
 			title: 'Изменить дату завершения',
 			labels: { confirm: 'Сохранить', cancel: 'Отмена' },
 			closeOnConfirm: false,
 			centered: true,
-			radius: "lg",
+			radius: 'lg',
 			children: (
 				<DateInput
 					label="Новая дата завершения"
 					defaultValue={newDate}
 					valueFormat="DD.MM.YYYY"
 					radius="md"
+					minDate={minDate} // запрещает выбирать дату до startDate
 					onChange={(date) => {
 						if (date) newDate = date;
 					}}
@@ -420,7 +430,7 @@ export default function AdminMaintenanceRequests() {
 				} catch (error) {
 					showNotification({
 						title: 'Ошибка',
-						message: 'Не удалось обновить дату',
+						message: `Не удалось обновить дату: ${error}`,
 						color: 'red',
 					});
 				} finally {
@@ -429,6 +439,7 @@ export default function AdminMaintenanceRequests() {
 			},
 		});
 	};
+
 
 	const handleReject = (
 		maintenanceId: number,
@@ -503,7 +514,7 @@ export default function AdminMaintenanceRequests() {
 		});
 	};
 
-	const handleAccept = (maintenanceId: number, bicycleName: string) => {
+	const handleAccept = (maintenanceId: number, bicycleName: string, startDate: string) => {
 		let status = 'ремонтируется';
 		let finishDate = '';
 		let adminMessage = '';
@@ -536,7 +547,7 @@ export default function AdminMaintenanceRequests() {
 					radius: "lg",
 					children: (
 						<NumberInput
-							label="Стоимость"
+							label="Стоимость (в копейках ₽)"
 							placeholder="Введите стоимость ремонта"
 							min={0}
 							radius="md"
@@ -559,6 +570,8 @@ export default function AdminMaintenanceRequests() {
 									placeholder="Выберите дату"
 									valueFormat="YYYY-MM-DD"
 									required
+									defaultValue={new Date()}
+									minDate={startDate}
 									radius="md"
 									onChange={(date) => {
 										if (date) finishDate = date;
@@ -787,7 +800,8 @@ export default function AdminMaintenanceRequests() {
 																finish_date: m.finish_date,
 																admin_message: m.admin_message || '',
 																price: m.price || 0,
-															}
+															},
+															m.start_date
 														)}
 													</Menu.Dropdown>
 												</Menu>
@@ -816,7 +830,8 @@ export default function AdminMaintenanceRequests() {
 																	status: m.status,
 																	admin_message: m.admin_message || '',
 																	price: m.price || 0,
-																})
+																}, m.start_date
+															)
 															}}
 														>Изменить</Button>
 													}

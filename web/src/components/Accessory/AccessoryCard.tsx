@@ -13,11 +13,13 @@ import type { Accessory } from "../../types/accessory.ts";
 interface AccessoryCardProps {
 	accessory: Accessory;
 	showQuantity?: boolean;
+	showPrice?: boolean;
 }
 
 export default function AccessoryCard({
 	accessory,
-	showQuantity = true
+	showQuantity = true,
+	showPrice = true
 }: AccessoryCardProps) {
 	return (
 		<Card
@@ -43,6 +45,17 @@ export default function AccessoryCard({
 							size="sm"
 						>
 							Доступно {accessory.available_quantity} из {accessory.quantity}
+						</Badge>
+					</Center>
+				)}
+				{showPrice && !showQuantity && (
+					<Center>
+						<Badge
+							variant="light"
+							color="gray"
+							size="lg"
+						>
+							{accessory.price/100} ₽
 						</Badge>
 					</Center>
 				)}

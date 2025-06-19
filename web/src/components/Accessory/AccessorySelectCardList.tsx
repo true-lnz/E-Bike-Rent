@@ -1,5 +1,7 @@
 import {
+	Badge,
 	Card,
+	Center,
 	Image,
 	LoadingOverlay,
 	SimpleGrid,
@@ -14,12 +16,14 @@ import type { Accessory } from "../../types/accessory.ts";
 interface AccessorySelectCardListProps {
 	selectedAccessories: number[];
 	lockedAccessories?: number[];
+	showPrice?: boolean;
 	onChangeSelected: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 export default function AccessorySelectCardList({
 	selectedAccessories,
 	lockedAccessories = [],
+	showPrice = true,
 	onChangeSelected,
 }: AccessorySelectCardListProps) {
 	const [accessories_list, setAccessories] = useState<Accessory[]>([]);
@@ -90,6 +94,16 @@ export default function AccessorySelectCardList({
 								justifyContent: "center",
 							}}
 						>
+							{showPrice && (
+								<Center>
+									<Badge
+										variant="default"
+										size="md"
+									>
+										+{accessory.price / 100} ₽
+									</Badge>
+								</Center>
+							)}
 							<Stack align="center" gap="4">
 								<Image
 									src={`${BASE_IMAGE_URL}${accessory.image_url}`}
@@ -101,7 +115,7 @@ export default function AccessorySelectCardList({
 									fw={600}
 									ta="center"
 									fz={{ base: "14px", sm: "16px", lg: "18px", xxl: "32px" }}
-									lineClamp={2}
+									lineClamp={1}
 								>
 									{accessory.name}
 								</Text>

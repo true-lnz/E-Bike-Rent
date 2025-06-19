@@ -153,7 +153,7 @@ export default function AccessoryModal({
 				radius="lg"
 				withCloseButton={false}
 			>
-				<Text>Отлично! Скоро с вами свяжется оператор для уточнения информации.</Text>
+				<Text>Отлично! Скоро с вами свяжется менеджер для уточнения информации.</Text>
 				<Button
 					fullWidth
 					mt="md"

@@ -257,15 +257,26 @@ export default function AdminAllAccessories() {
 							})}
 						/>
 
-						<NumberInput
-							label="Количество"
-							value={selectedAccessory.quantity}
-							radius="md"
-							onChange={(value) => setSelectedAccessory({
-								...selectedAccessory,
-								quantity: Number(value)
-							})}
-						/>
+						<Group grow>
+							<NumberInput
+								label="Количество"
+								value={selectedAccessory.quantity}
+								radius="md"
+								onChange={(value) => setSelectedAccessory({
+									...selectedAccessory,
+									quantity: Number(value)
+								})}
+							/>
+							<NumberInput
+								label="Цена (в копейках)"
+								value={selectedAccessory.price}
+								radius="md"
+								onChange={(value) => setSelectedAccessory({
+									...selectedAccessory,
+									price: Number(value)
+								})}
+							/>
+						</Group>
 
 						{/* Кнопки */}
 						<Flex justify="space-between" mt="md">

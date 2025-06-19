@@ -814,20 +814,7 @@ export default function AdminRentRequests() {
 							radius="md"
 							placeholder="Выберите дату"
 							valueFormat="YYYY-MM-DD"
-							/* 							value={
-															updateData.startDate?.startsWith('0001-01-01')
-																? new Date()
-																: dayjs(updateData.startDate).toDate()
-														} */
 							value={updateData.start_date}
-		/* 					onChange={(date) => {
-								if (date) {
-									setUpdateData((prev) => ({
-										...prev!,
-										startDate: dayjs(date).format('YYYY-MM-DD'),
-									}));
-								}
-							}} */
 							onChange={(value) =>
 								setUpdateData((prev) => ({ ...prev!, start_date: dayjs(value).toDate().toISOString() || prev!.start_date }))
 							}
@@ -844,6 +831,8 @@ export default function AdminRentRequests() {
 								{ value: 'аренда продлена', label: 'Аренда продлена' },
 							]}
 							value={updateData.status}
+							defaultValue={updateData.status}
+							allowDeselect={false}
 							onChange={(value) =>
 								setUpdateData((prev) => ({ ...prev!, status: value || prev!.status }))
 							}

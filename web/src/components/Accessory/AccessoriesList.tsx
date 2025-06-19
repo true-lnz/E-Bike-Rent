@@ -17,11 +17,13 @@ import AccessoryCard from "./AccessoryCard";
 interface AccessoriesListPageProps {
 	onlyAvailableByDefault?: boolean;
 	showQuantityByDefault?: boolean;
+	showPriceByDefault?: boolean;
 }
 
 export default function AccessoriesList({
 	onlyAvailableByDefault = false,
 	showQuantityByDefault = false,
+	showPriceByDefault = true,
 }: AccessoriesListPageProps) {
 	const [accessories, setAccessories] = useState<Accessory[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -101,6 +103,7 @@ export default function AccessoriesList({
 							key={accessories.id}
 							accessory={accessories}
 							showQuantity={showQuantityByDefault}
+							showPrice={showPriceByDefault}
 						/>
 					))}
 				</SimpleGrid>
