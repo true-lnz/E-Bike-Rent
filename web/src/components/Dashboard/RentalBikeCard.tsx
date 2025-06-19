@@ -236,7 +236,7 @@ export function RentalBikeCard({
 											<Stack gap="xs">
 												<Group gap="xs">
 													<IconMail size={18} />
-													<Text size="sm" component="a" href="mailto:thebearonegey@gmail.com">Почта: <b>thebearonegey@gmail.com</b></Text>
+													<Text size="sm" component="a" href="mailto:fulgaz.inforent@gmail.com">Почта: <b>fulgaz.inforent@gmail.com</b></Text>
 												</Group>
 												<Group gap="xs">
 													<IconPhone size={18} />
@@ -274,7 +274,7 @@ export function RentalBikeCard({
 											<Stack gap="xs">
 												<Group gap="xs">
 													<IconMail size={18} />
-													<Text size="sm" component="a" href="mailto:thebearonegey@gmail.com">Почта: <b>thebearonegey@gmail.com</b></Text>
+													<Text size="sm" component="a" href="mailto:fulgaz.inforent@gmail.com">Почта: <b>fulgaz.inforent@gmail.com</b></Text>
 												</Group>
 												<Group gap="xs">
 													<IconPhone size={18} />

@@ -12,7 +12,7 @@ import {
 	Title
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconBrandTelegram, IconMail, IconPhone } from "@tabler/icons-react";
+import { IconBrandTelegram, IconHelp, IconMail, IconPhone } from "@tabler/icons-react";
 import logo from "../../assets/images/Logo512x512.png";
 
 export default function ContactCard() {
@@ -78,10 +78,10 @@ export default function ContactCard() {
 
 					{/* Контент */}
 					<Box style={{ zIndex: 1, maxWidth: 600 }}>
-						<Stack gap={4} pl={isTablet ? 0 : "md"} mb="xl">
+						<Stack gap={4} pl={isTablet ? 0 : "md"} mb="lg">
 							<Title
 								fz={isMobile ? 28 : isTablet ? 36 : 45}
-								lh={1.2}
+								lh={1}
 								fw={700}
 							>
 								Давай подберём
@@ -90,7 +90,7 @@ export default function ContactCard() {
 								fz={isMobile ? 28 : isTablet ? 36 : 45}
 								lh={1.2}
 								c="blue.7"
-								mb={{ base: "sm", md: "xl" }}
+								mb={{ base: "sm", md: "lg" }}
 							>
 								оптимальное <br />
 								решение для тебя
@@ -103,13 +103,13 @@ export default function ContactCard() {
 									</ThemeIcon>
 									<Text
 										component="a"
-										href="mailto:thebearonegey@gmail.com"
+										href="mailto:fulgaz.inforent@gmail.com"
 										size="lg"
 										fz={isMobile ? "md" : "xl"}
 										c="dimmed"
 										style={{ textDecoration: "none" }}
 									>
-										thebearonegey@gmail.com
+										fulgaz.inforent@gmail.com
 									</Text>
 								</Group>
 
@@ -129,9 +129,26 @@ export default function ContactCard() {
 									</Text>
 								</Group>
 
-								<Group gap="xs">
+									<Group gap="xs" mb="xs">
 									<ThemeIcon color="gray.5" variant="light">
 										<IconBrandTelegram size={20} />
+									</ThemeIcon>
+									<Text
+										component="a"
+										href="https://t.me/fulgaz_ebike_rent"
+										target="_blank"
+										size="lg"
+										fz={isMobile ? "md" : "xl"}
+										c="dimmed"
+										style={{ textDecoration: "none" }}
+									>
+										t.me/fulgaz_ebike_rent
+									</Text>
+								</Group>
+
+								<Group gap="xs">
+									<ThemeIcon color="gray.5" variant="light">
+										<IconHelp size={20} />
 									</ThemeIcon>
 									<Text
 										component="a"
@@ -142,7 +159,7 @@ export default function ContactCard() {
 										c="dimmed"
 										style={{ textDecoration: "none" }}
 									>
-										@FulGaz_Ufa
+										@FulGaz_Ufa (менеджер)
 									</Text>
 								</Group>
 							</Box>

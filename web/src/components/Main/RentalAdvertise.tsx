@@ -33,7 +33,7 @@ export default function RentalAdvertise() {
 						<Box pos="relative" maw={500} mt={80}>
 							<Text size="xl">🚴 Арендуйте — и зарабатывайте больше!</Text>
 							<Title fz={45} my="4">
-								Долгосрочная аренда
+								Выгодная аренда
 							</Title>
 							<Box
 								px={8}
@@ -50,7 +50,7 @@ export default function RentalAdvertise() {
 										transform: "translateY(-3px)",
 									}}
 								>
-									от 3 месяцев
+									от 1 недели
 								</Title>
 							</Box>
 							<Text mt="md" c="dimmed">

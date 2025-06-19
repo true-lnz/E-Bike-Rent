@@ -116,8 +116,8 @@ export default function Contacts() {
 							<Stack gap={4} mt="xs">
 								<Group gap="xs" wrap="nowrap">
 									<IconMail size={18} />
-									<Anchor href="mailto:thebearonegey@gmail.com" underline="never" c="white">
-										<Text size="md"><b>Почта:</b> thebearonegey@gmail.com</Text>
+									<Anchor href="mailto:fulgaz.inforent@gmail.com" underline="never" c="white">
+										<Text size="md"><b>Почта:</b> fulgaz.inforent@gmail.com</Text>
 									</Anchor>
 								</Group>
 								<Group gap="xs">
