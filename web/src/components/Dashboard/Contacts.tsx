@@ -15,6 +15,7 @@ import {
 	Title,
 	rem,
 } from '@mantine/core';
+import { IMaskInput } from 'react-imask';
 import {
 	IconBolt,
 	IconBrandTelegram,
@@ -28,51 +29,47 @@ import {
 	IconX,
 } from '@tabler/icons-react';
 import { useState } from 'react';
-import { IMaskInput } from 'react-imask';
-import { sendFeedback } from '../../services/feedbackService';
+import { useForm } from '@mantine/form';
 import logo from '../../assets/images/Logo512x512.png';
+import { sendFeedback } from '../../services/feedbackService';
 
 export default function Contacts() {
-	const [formData, setFormData] = useState({
-		phone: '',
-		message: '',
-	});
-	const [loading, setLoading] = useState(false);
 	const [notification, setNotification] = useState<{
 		show: boolean;
 		success: boolean;
 		message: string;
 	} | null>(null);
+	const [loading, setLoading] = useState(false);
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
+	const form = useForm({
+		initialValues: {
+			phone: '',
+			message: '',
+		},
+		validate: {
+			phone: (value) => {
+				const digits = value.replace(/\D/g, '');
+				if (digits.length !== 11) return 'Введите корректный номер телефона';
+				return null;
+			},
+			message: (value) => (value.trim().length === 0 ? 'Введите сообщение' : null),
+		},
+	});
 
-		if (!formData.message.trim()) {
-			setNotification({
-				show: true,
-				success: false,
-				message: 'Пожалуйста, введите ваше сообщение',
-			});
-			return;
-		}
-
+	const handleSubmit = async (values: typeof form.values) => {
 		setLoading(true);
-
 		try {
 			await sendFeedback({
-				phoneNumber: formData.phone,
-				text: formData.message,
+				phoneNumber: values.phone,
+				text: values.message,
 			});
-
 			setNotification({
 				show: true,
 				success: true,
 				message: 'Сообщение отправлено! Мы свяжемся с вами в ближайшее время',
 			});
-
-			// Очищаем форму
-			setFormData({ phone: '', message: '' });
-		} catch (error) {
+			form.reset();
+		} catch {
 			setNotification({
 				show: true,
 				success: false,
@@ -82,14 +79,6 @@ export default function Contacts() {
 			setLoading(false);
 			setTimeout(() => setNotification(null), 5000);
 		}
-	};
-
-	const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setFormData((prev) => ({ ...prev, phone: e.target.value }));
-	};
-
-	const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-		setFormData((prev) => ({ ...prev, message: e.target.value }));
 	};
 
 	return (
@@ -114,29 +103,18 @@ export default function Contacts() {
 			</Title>
 
 			<Grid gutter="xl">
-				{/* Левая колонка */}
 				<Grid.Col span={{ base: 12, md: 5 }}>
-					{/* Информация о компании */}
-					<Card shadow="sm" radius="xl" p={{ base: "lg", sm: "xl" }} mb="md" withBorder bg="orange.5" c="white">
+					<Card shadow="sm" radius="xl" p="xl" mb="md" withBorder bg="orange.5" c="white">
 						<Stack gap="sm">
 							<Group align="center">
-								<Box
-									style={{
-										backgroundColor: 'white',
-										padding: '13px',
-										borderRadius: '9999px',
-										display: 'inline-block',
-									}}
-								>
+								<Box style={{ backgroundColor: 'white', padding: '13px', borderRadius: '9999px' }}>
 									<Image src={logo} alt="FulGaz logo" w={60} h={60} />
 								</Box>
-								<Text fw={700} fz={40}>
-									«ФулГаз»
-								</Text>
+								<Text fw={700} fz={40}>«ФулГаз»</Text>
 							</Group>
 
 							<Stack gap={4} mt="xs">
-								<Group gap="xs" wrap='nowrap'>
+								<Group gap="xs" wrap="nowrap">
 									<IconMail size={18} />
 									<Anchor href="mailto:thebearonegey@gmail.com" underline="never" c="white">
 										<Text size="md"><b>Почта:</b> thebearonegey@gmail.com</Text>
@@ -148,7 +126,7 @@ export default function Contacts() {
 										<Text size="md"><b>Телефон:</b> +7 (904) 738-26-66</Text>
 									</Anchor>
 								</Group>
-								<Group gap="xs" wrap='nowrap'>
+								<Group gap="xs" wrap="nowrap">
 									<IconBrandTelegram size={18} />
 									<Anchor href="https://t.me/FulGaz_Ufa" underline="never" c="white">
 										<Text size="md"><b>Менеджер:</b> @FulGaz_Ufa</Text>
@@ -158,39 +136,31 @@ export default function Contacts() {
 						</Stack>
 					</Card>
 
-					{/* Адрес */}
-					<Card shadow="sm" radius="xl" p={{ base: "lg", sm: "xl" }} mb="md" withBorder>
+					<Card shadow="sm" radius="xl" p="xl" mb="md" withBorder>
 						<Group gap="xs" mb="xs">
 							<IconMapPin size={20} />
-							<Text fw={600} fz="lg">
-								Адрес
-							</Text>
+							<Text fw={600} fz="lg">Адрес</Text>
 						</Group>
 						<Text size="sm">Республика Башкортостан, г. Уфа</Text>
-						<Text size="sm" c="dimmed">
-							Еще более точный адрес
-						</Text>
+						<Text size="sm" c="dimmed">Еще более точный адрес</Text>
 					</Card>
 
-					{/* Услуги */}
-					<Card shadow="sm" radius="xl" p={{ base: "lg", sm: "xl" }} withBorder>
-						<Text fw={600} fz="lg" mb="sm">
-							Услуги
-						</Text>
+					<Card shadow="sm" radius="xl" p="xl" withBorder>
+						<Text fw={600} fz="lg" mb="sm">Услуги</Text>
 						<Stack gap="xs">
-							<Group gap="xs" wrap='nowrap'>
+							<Group gap="xs" wrap="nowrap">
 								<IconBolt size={18} />
 								<Text size="sm">Сдача в аренду электровелосипедов</Text>
 							</Group>
-							<Group gap="xs" wrap='nowrap'>
+							<Group gap="xs" wrap="nowrap">
 								<IconTool size={18} />
 								<Text size="sm">Ремонт и обслуживание велосипедов</Text>
 							</Group>
-							<Group gap="xs" wrap='nowrap'>
+							<Group gap="xs" wrap="nowrap">
 								<IconDeviceDesktopCog size={18} />
 								<Text size="sm">Прошивка ПО электровелосипедов</Text>
 							</Group>
-							<Group gap="xs" wrap='nowrap'>
+							<Group gap="xs" wrap="nowrap">
 								<IconSettings size={18} />
 								<Text size="sm">Диагностика электросистем велосипедов</Text>
 							</Group>
@@ -198,9 +168,7 @@ export default function Contacts() {
 					</Card>
 				</Grid.Col>
 
-				{/* Правая колонка */}
 				<Grid.Col span={{ base: 12, md: 7 }}>
-					{/* Карта */}
 					<Card shadow="sm" radius="xl" p="md" mb="md" withBorder>
 						<iframe
 							src="https://yandex.ru/map-widget/v1/?um=constructor%3A3890c2713f646a1f6be1614c4c0cb09b2b715dba7c0d14c5ae80d1a47cdde1b8&amp;source=constructor"
@@ -212,39 +180,30 @@ export default function Contacts() {
 						/>
 					</Card>
 
-					{/* Обратная связь */}
-					<Card shadow="sm" radius="xl" p={{ base: "lg", sm: "xl" }} withBorder>
-						<Text fw={600} fz="lg" mb="sm">
-							Форма обратной связи
-						</Text>
-						<form onSubmit={handleSubmit}>
+					<Card shadow="sm" radius="xl" p="xl" withBorder>
+						<Text fw={600} fz="lg" mb="sm">Форма обратной связи</Text>
+
+						<form onSubmit={form.onSubmit(handleSubmit)}>
 							<Textarea
-								name="message"
-								value={formData.message}
-								onChange={handleMessageChange}
 								autosize
 								minRows={6}
 								maxRows={6}
 								radius="md"
 								placeholder="Какой у вас вопрос?"
-								required
+								error={form.errors.message}
+								{...form.getInputProps('message')}
 							/>
+
 							<Group mt="sm" grow>
 								<Input
-									name="phone"
-									value={formData.phone}
-									radius="md"
-									onChange={handlePhoneChange}
 									component={IMaskInput}
 									mask="+7 (000) 000-00-00"
 									placeholder="Ваш телефон"
-								/>
-								<Button
 									radius="md"
-									type="submit"
-									color="blue.7"
-									loading={loading}
-								>
+									error={form.errors.phone}
+									{...form.getInputProps('phone')}
+								/>
+								<Button type="submit" radius="md" color="blue.7" loading={loading}>
 									Отправить
 								</Button>
 							</Group>
