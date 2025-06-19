@@ -354,7 +354,3 @@ export function BikeDetailPage() {
 		</Container>
 	);
 }
-function divide(arg0: number, arg1: number) {
-	throw new Error("Function not implemented.");
-}
-
