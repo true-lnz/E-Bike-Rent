@@ -340,7 +340,7 @@ export function RentalBikeCard({
 								</Text>
 							</Stack>
 						))}
-						{1 && (
+						{isActive  && (
 							<Stack
 								justify="center"
 								align="center"
