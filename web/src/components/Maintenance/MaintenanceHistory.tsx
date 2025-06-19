@@ -129,7 +129,7 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 									const start = dayjs(item.start_date);
 									const end = dayjs(item.finish_date);
 									const days = end.diff(start, "day");
-									repairDuration = `до ${end.format("DD.MM.YYYY")} (${days} дн.)`;
+									repairDuration = `до ${end.format("DD.MM.YYYY")} (${days+1} дн.)`;
 								}
 
 								return (
