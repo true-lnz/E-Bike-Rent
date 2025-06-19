@@ -43,7 +43,14 @@ export default function AdminAllAccessories() {
 			.then(([fetchedAccessories]) => {
 				setAccessories(fetchedAccessories);
 			})
-			.catch((error) => console.error("Ошибка загрузки:", error))
+			.catch((error) =>
+				showNotification({
+					title: "Ошибка",
+					message: `Ошибка при загрузке: ${error}`,
+					color: "red",
+					radius: 'md',
+					icon: <IconX size={16} />,
+				}))
 			.finally(() => setLoading(false));
 	};
 
@@ -154,12 +161,12 @@ export default function AdminAllAccessories() {
 		}
 	};
 
-	if (loading) return 
-		<LoadingOverlay
-			visible
-			overlayProps={{ radius: 'sm', blur: 2 }}
-			loaderProps={{ color: 'blue.5', type: 'bars' }}
-		/>;
+	if (loading) return
+	<LoadingOverlay
+		visible
+		overlayProps={{ radius: 'sm', blur: 2 }}
+		loaderProps={{ color: 'blue.5', type: 'bars' }}
+	/>;
 
 	return (
 		<Container id="accessories" py="xl" size="lg">
@@ -272,7 +279,7 @@ export default function AdminAllAccessories() {
 								Удалить аксессуар
 							</Button>
 							<Group>
-							
+
 								<Button variant="outline" radius="md" onClick={() => setEditModalOpened(false)}>
 									Отмена
 								</Button>

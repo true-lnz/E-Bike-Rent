@@ -1,6 +1,8 @@
 // components/Maintenance/MaintenanceList.tsx
 import { Button, Container, Grid, Group, Modal, Text, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import { showNotification } from "@mantine/notifications";
+import { IconX } from "@tabler/icons-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import battery from "../../assets/icons/battery.png";
@@ -87,7 +89,13 @@ export function MaintenanceList({ onCreated }: MaintenanceListProps) {
 			await maintenanceService.createMaintenance(form);
 			onCreated();
 		} catch (err) {
-			console.error(err);
+			showNotification({
+				title: "Ошибка",
+				message: `Ошибка: ${err}`,
+				color: "red",
+				radius: 'md',
+				icon: <IconX size={16} />,
+			});
 		}
 	};
 

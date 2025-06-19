@@ -18,7 +18,8 @@ import {
 	Title
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconPhoto, IconPlus, IconTrash } from "@tabler/icons-react";
+import { showNotification } from "@mantine/notifications";
+import { IconPhoto, IconPlus, IconTrash, IconX } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { BASE_IMAGE_URL } from "../../constants";
 import { createBike, deleteBike, getAllBikes, updateBike } from "../../services/bikeService";
@@ -50,7 +51,15 @@ export default function AdminAllBikes() {
 		setLoading(true);
 		getAllBikes()
 			.then(([fetchedBikes]) => setBikes(fetchedBikes))
-			.catch((error) => console.error("Ошибка загрузки:", error))
+			.catch((error) =>
+				showNotification({
+					title: "Ошибка",
+					message: `Ошибка загрузки: ${error}`,
+					color: "red",
+					radius: 'md',
+					icon: <IconX size={16} />,
+				})
+			)
 			.finally(() => setLoading(false));
 	};
 
@@ -102,7 +111,13 @@ export default function AdminAllBikes() {
 			setSelectedBike(null);
 			loadBikes();
 		} catch (error) {
-			console.error("Ошибка удаления:", error);
+			showNotification({
+				title: "Ошибка",
+				message: `Ошибка удаления: ${error}`,
+				color: "red",
+				radius: 'md',
+				icon: <IconX size={16} />,
+			});
 		} finally {
 			setSaving(false);
 		}
@@ -397,7 +412,13 @@ export default function AdminAllBikes() {
 										setImagePreview(null);
 										loadBikes();
 									} catch (e) {
-										console.error("Ошибка при создании:", e);
+										showNotification({
+											title: "Ошибка",
+											message: `Ошибка при создании: ${e}`,
+											color: "red",
+											radius: 'md',
+											icon: <IconX size={16} />,
+										})
 									} finally {
 										setSaving(false);
 									}
@@ -475,7 +496,13 @@ export default function AdminAllBikes() {
 										setImagePreview(null);
 										loadBikes();
 									} catch (error) {
-										console.error("Ошибка при удалении:", error);
+										showNotification({
+											title: "Ошибка",
+											message: `Ошибка при сохранении: ${error}`,
+											color: "red",
+											radius: 'md',
+											icon: <IconX size={16} />,
+										});
 									} finally {
 										setSaving(false);
 									}
@@ -501,7 +528,13 @@ export default function AdminAllBikes() {
 										setImagePreview(null);
 										loadBikes();
 									} catch (error) {
-										console.error("Ошибка при сохранении:", error);
+										showNotification({
+											title: "Ошибка",
+											message: `Ошибка при сохранении: ${error}`,
+											color: "red",
+											radius: 'md',
+											icon: <IconX size={16} />,
+										});
 									} finally {
 										setSaving(false);
 									}
@@ -524,6 +557,6 @@ export default function AdminAllBikes() {
 					</Button>
 				</Flex>
 			</Modal>
-		</Container>
+		</Container >
 	);
 }

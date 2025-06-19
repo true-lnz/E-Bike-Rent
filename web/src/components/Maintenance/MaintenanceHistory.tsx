@@ -1,6 +1,7 @@
 import { ActionIcon, Badge, Button, Center, Container, Divider, Group, LoadingOverlay, Paper, ScrollArea, Stack, Table, Text, Title, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { IconHelp, IconMail, IconPhone } from "@tabler/icons-react";
+import { showNotification } from "@mantine/notifications";
+import { IconHelp, IconMail, IconPhone, IconX } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useState } from "react";
@@ -73,7 +74,13 @@ export function MaintenanceHistory({ data, loading }: MaintenanceHistoryProps) {
 			setSelectedMaintenance(result);
 			setModalOpened(true);
 		} catch (err) {
-			console.error("Ошибка при загрузке деталей:", err);
+			showNotification({
+				title: "Ошибка",
+				message: `Ошибка при загрузке деталей: ${err}`,
+				color: "red",
+				radius: 'md',
+				icon: <IconX size={16} />,
+			});
 		}
 	};
 

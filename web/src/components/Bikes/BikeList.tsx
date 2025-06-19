@@ -35,7 +35,9 @@ export default function BikeListPage({
 			.then(([fetchedBikes]) => {
 				setBikes(fetchedBikes);
 			})
-			.catch((error) => console.error("Ошибка загрузки:", error))
+			.catch((error) => 
+				console.error("Ошибка загрузки:", error)
+		)
 			.finally(() => setLoading(false));
 	}, []);
 

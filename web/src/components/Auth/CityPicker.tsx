@@ -45,7 +45,6 @@ export function CityPicker({ value, onChange }: CityPickerProps) {
 			setCities(filtered);
 		} catch (e) {
 			console.error('Ошибка загрузки городов:', e);
-			// Fallback на статические данные при ошибке
 			setCities([
 				'Москва', 'Санкт-Петербург', 'Новосибирск',
 				'Екатеринбург', 'Казань', 'Нижний Новгород', 'Уфа'

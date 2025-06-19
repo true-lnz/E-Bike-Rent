@@ -59,7 +59,13 @@ export default function AdminMaintenanceRequests() {
 				}, {} as Record<number, Company>);
 				setCompaniesDict(dict);
 			} catch (err) {
-				console.error("Ошибка загрузки компаний:", err);
+				showNotification({
+					title: "Ошибка",
+					message: `Ошибка загрузки компаний: ${err}`,
+					color: "red",
+					radius: 'md',
+					icon: <IconX size={16} />,
+				})
 			}
 		};
 		fetchCompanies();
