@@ -75,14 +75,12 @@ export function BikeDetailPage() {
 			bikePrice = bike.month_price / 100;
 		}
 
-		// Найдем выбранные аксессуары
 		const selectedAccessoryObjects = accessories.filter(acc =>
 			selectedAccessories.includes(acc.id)
 		);
 
-		// Суммируем их цену
 		const accessoriesPrice = selectedAccessoryObjects.reduce(
-			(total, acc) => total + acc.price / 100, // делим на 100, если цена в копейках
+			(total, acc) => total + acc.price / 100,
 			0
 		);
 
@@ -356,3 +354,7 @@ export function BikeDetailPage() {
 		</Container>
 	);
 }
+function divide(arg0: number, arg1: number) {
+	throw new Error("Function not implemented.");
+}
+
