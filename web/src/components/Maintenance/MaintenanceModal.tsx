@@ -5,7 +5,6 @@ import {
 	Checkbox,
 	Combobox,
 	Group,
-	Input,
 	Modal,
 	Pill,
 	PillsInput,
@@ -14,7 +13,7 @@ import {
 	Text,
 	Textarea,
 	TextInput,
-	useCombobox,
+	useCombobox
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconExclamationCircle, IconSquareCheck } from "@tabler/icons-react";
@@ -86,9 +85,10 @@ export function MaintenanceModal({
 	const [loading, setLoading] = useState(false);
 	const [success, setSuccess] = useState(false);
 	const [error, setError] = useState("");
-	const currentOptions = typeOptions[type] ?? [];
+	const [options, setOptions] = useState<string[]>(typeOptions[type] || []);
 	const isMobile = useMediaQuery("(max-width: 576px)");
 	const [value, setValue] = useState<string[]>([]); //это для выборки услуг
+	const [search, setSearch] = useState('');
 
 	useEffect(() => {
 		if (opened) {
@@ -114,7 +114,7 @@ export function MaintenanceModal({
 			let finalDetails = detailsSuffix.trim();
 
 			if (value.length > 0) {
-				const servicesText = `Выбранные услуги: ${value.join(', ')}`;
+				const servicesText = `Выбранные услуги: ${value.join('; ')}`;
 				finalDetails += `\n\n${servicesText}`;
 			}
 
@@ -133,17 +133,30 @@ export function MaintenanceModal({
 		}
 	};
 
-
+	useEffect(() => {
+		setOptions(typeOptions[type] || []);
+	}, [type]);
 
 	const combobox = useCombobox({
 		onDropdownClose: () => combobox.resetSelectedOption(),
 		onDropdownOpen: () => combobox.updateSelectedOptionIndex('active'),
 	});
 
+	const exactOptionMatch = (options ?? []).some((item) => item === search);
+
 	const handleValueSelect = (val: string) => {
-		setValue((current) => current.includes(val) ? current.filter((v) => v !== val) : [...current, val]
-		);
-	}
+		setSearch('');
+
+		if (val === '$create') {
+			setOptions((current) => [...current, search]);
+			setValue((current) => [...current, search]);
+		} else {
+			setValue((current) =>
+				current.includes(val) ? current.filter((v) => v !== val) : [...current, val]
+			);
+		}
+	};
+
 
 	const handleValueRemove = (val: string) =>
 		setValue((current) => current.filter((v) => v !== val));
@@ -155,20 +168,21 @@ export function MaintenanceModal({
 		</Pill>
 	));
 
-	const options = currentOptions.map((item) => (
-		<Combobox.Option value={item} key={item} active={value.includes(item)}>
-			<Group gap="sm" wrap="nowrap">
-				<Checkbox
-					checked={value.includes(item)}
-					onChange={() => { }}
-					aria-hidden
-					tabIndex={-1}
-					style={{ pointerEvents: 'none' }}
-				/>
-				<span>{item}</span>
-			</Group>
-		</Combobox.Option>
-	));
+	const optionsList = options.filter((item) => item.toLowerCase().includes(search.trim().toLowerCase()))
+		.map((item) => (
+			<Combobox.Option value={item} key={item} active={value.includes(item)}>
+				<Group gap="sm" wrap="nowrap">
+					<Checkbox
+						checked={value.includes(item)}
+						onChange={() => { }}
+						aria-hidden
+						tabIndex={-1}
+						style={{ pointerEvents: 'none' }}
+					/>
+					<span>{item}</span>
+				</Group>
+			</Combobox.Option>
+		));
 
 	return (
 		<Modal
@@ -210,20 +224,22 @@ export function MaintenanceModal({
 					/>
 					<Combobox shadow="md" store={combobox} onOptionSubmit={handleValueSelect} withinPortal={false}>
 						<Combobox.DropdownTarget>
-							<PillsInput label="Выбор услуг" required pointer onClick={() => combobox.toggleDropdown()}>
+							<PillsInput label="Выбор услуг" onClick={() => combobox.toggleDropdown()}>
 								<Pill.Group>
-									{values.length > 0 ? (
-										values
-									) : (
-										<Input.Placeholder>Выберите перечень необходимых услуг</Input.Placeholder>
-									)}
+									{values}
 
 									<Combobox.EventsTarget>
 										<PillsInput.Field
-											type="hidden"
+											// onFocus={() => combobox.openDropdown()}
 											onBlur={() => combobox.closeDropdown()}
+											value={search}
+											placeholder="Найди или напиши свой вариант"
+											onChange={(event) => {
+												combobox.updateSelectedOptionIndex();
+												setSearch(event.currentTarget.value);
+											}}
 											onKeyDown={(event) => {
-												if (event.key === 'Backspace') {
+												if (event.key === 'Backspace' && search.length === 0) {
 													event.preventDefault();
 													handleValueRemove(value[value.length - 1]);
 												}
@@ -237,7 +253,17 @@ export function MaintenanceModal({
 						<Combobox.Dropdown>
 							<Combobox.Options>
 								<ScrollArea.Autosize mah={100} type="scroll">
-									{options}
+
+									{!exactOptionMatch && search.trim().length > 0 && (
+										<Combobox.Option value="$create">+ Добавить: {search}</Combobox.Option>
+									)}
+
+									{exactOptionMatch && search.trim().length > 0 && options.length === 0 && (
+										<Combobox.Empty>Ничего не найдено</Combobox.Empty>
+									)}
+
+									{optionsList}
+
 								</ScrollArea.Autosize>
 							</Combobox.Options>
 							<Combobox.Footer>
@@ -247,6 +273,7 @@ export function MaintenanceModal({
 							</Combobox.Footer>
 						</Combobox.Dropdown>
 					</Combobox>
+
 					<Textarea
 						label="Описание проблемы"
 						description="Расскажите подробно, что необходимо отремонтировать, настроить, осмотреть"
