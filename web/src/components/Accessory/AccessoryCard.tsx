@@ -1,11 +1,8 @@
 import {
 	Badge,
 	Card,
-	Center,
 	Image,
-	Stack,
-	Text,
-	rem
+	Text
 } from "@mantine/core";
 import { BASE_IMAGE_URL } from "../../constants.ts";
 import type { Accessory } from "../../types/accessory.ts";
@@ -28,57 +25,43 @@ export default function AccessoryCard({
 			radius="xl"
 			withBorder
 			style={{
-				aspectRatio: '1', // делает карточку квадратной
-				display: "flex",
-				flexDirection: "column",
-				justifyContent: "space-between",
-				width: "100%",
-				boxSizing: "border-box",
+				aspectRatio: '1',
+				alignItems: "center",
+				justifyContent: "space-between"
 			}}
 		>
-			<Stack gap="xs" h="100%" justify="space-between">
-				{showQuantity && (
-					<Center>
-						<Badge
-							variant="light"
-							color={accessory.available_quantity > 0 ? "gray" : "red"}
-							size="sm"
-						>
-							Доступно {accessory.available_quantity} из {accessory.quantity}
-						</Badge>
-					</Center>
-				)}
-				{showPrice && !showQuantity && (
-					<Center>
-						<Badge
-							variant="light"
-							color="gray"
-							size="lg"
-						>
-							{accessory.price/100} ₽
-						</Badge>
-					</Center>
-				)}
+			{showQuantity && (
+				<Badge
+					variant="light"
+					color={accessory.available_quantity > 0 ? "gray" : "red"}
+					size="sm"
+				>
+					Доступно {accessory.available_quantity} из {accessory.quantity}
+				</Badge>
+			)}
+			{showPrice && !showQuantity && (
+				<Badge
+					variant="light"
+					color="gray"
+					size="lg"
+				>
+					{accessory.price / 100} ₽
+				</Badge>
+			)}
 
-				<Center h="100%">
-					<Image
-						src={`${BASE_IMAGE_URL}${accessory.image_url}`}
-						alt={accessory.name}
-						fit="contain"
-						style={{
-							maxHeight: rem(100),
-							filter: accessory.available_quantity === 0 ? "grayscale(80%)" : "none",
-							opacity: accessory.available_quantity === 0 ? 0.7 : 1
-						}}
-					/>
-				</Center>
-
-				<Center>
-					<Text fw={600} ta="center" lineClamp={2} fz="sm">
-						{accessory.name}
-					</Text>
-				</Center>
-			</Stack>
+			<Image
+				src={`${BASE_IMAGE_URL}${accessory.image_url}`}
+				alt={accessory.name}
+				fit="contain"
+				w={{base: "80%", md: "100%"}}
+				style={{
+					filter: accessory.available_quantity === 0 ? "grayscale(80%)" : "none",
+					opacity: accessory.available_quantity === 0 ? 0.7 : 1
+				}}
+			/>
+			<Text fw={600} ta="center" lineClamp={1} fz="sm">
+				{accessory.name}
+			</Text>
 		</Card>
 	);
 }
