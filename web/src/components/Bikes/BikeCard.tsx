@@ -6,6 +6,7 @@ import {
 	Divider,
 	Group,
 	Image,
+	Modal,
 	Text,
 	rem
 } from "@mantine/core";
@@ -23,7 +24,7 @@ interface BikeCardProps {
 export default function BikeCard({ bike }: BikeCardProps) {
 	const [opened, { open, close }] = useDisclosure(false);
 	const isMobile = useMediaQuery("(max-width: 576px)");
-
+	const [imageOpened, { open: openImage, close: closeImage }] = useDisclosure(false);
 	return (
 		<>
 			<Card
@@ -55,7 +56,8 @@ export default function BikeCard({ bike }: BikeCardProps) {
 						h={220}
 						fit="contain"
 						mx="auto"
-						style={{ objectFit: 'contain' }}
+						style={{ objectFit: 'contain', cursor: 'pointer' }}
+						onClick={openImage}
 					/>
 				</Box>
 
@@ -83,7 +85,7 @@ export default function BikeCard({ bike }: BikeCardProps) {
 								<Text size="xs" c="dimmed" className="nobr">
 									1 неделя
 								</Text>
-								<Text fz={{base: 'xs', xs: '18px', sm: "14px", md: "16px", xxl: '24px'}} fw={600} className="nobr">{(bike.one_week_price / 100).toLocaleString()} ₽</Text>
+								<Text fz={{ base: 'xs', xs: '18px', sm: "14px", md: "16px", xxl: '24px' }} fw={600} className="nobr">{(bike.one_week_price / 100).toLocaleString()} ₽</Text>
 							</Box>
 
 							<Divider orientation="vertical" />
@@ -92,7 +94,7 @@ export default function BikeCard({ bike }: BikeCardProps) {
 								<Text size="xs" c="dimmed" className="nobr">
 									2 недели
 								</Text>
-								<Text fz={{base: 'xs', xs: '18px', sm: "14px", md: "16px", xxl: '24px'}} fw={600} className="nobr">{(bike.two_week_price / 100).toLocaleString()} ₽</Text>
+								<Text fz={{ base: 'xs', xs: '18px', sm: "14px", md: "16px", xxl: '24px' }} fw={600} className="nobr">{(bike.two_week_price / 100).toLocaleString()} ₽</Text>
 							</Box>
 
 							<Divider orientation="vertical" />
@@ -101,7 +103,7 @@ export default function BikeCard({ bike }: BikeCardProps) {
 								<Text size="xs" c="dimmed" className="nobr">
 									1 месяц
 								</Text>
-								<Text fw={600} fz={{base: 'xs', xs: '18px', sm: "14px", md: "16px", xxl: '24px'}} className="nobr">
+								<Text fw={600} fz={{ base: 'xs', xs: '18px', sm: "14px", md: "16px", xxl: '24px' }} className="nobr">
 									{(bike.month_price / 100).toLocaleString()} ₽
 								</Text>
 							</Box>
@@ -113,7 +115,7 @@ export default function BikeCard({ bike }: BikeCardProps) {
 							radius="xl"
 							color="orange.5"
 							size="md"
-							fz={{base: "sm", sm: "md"}}
+							fz={{ base: "sm", sm: "md" }}
 							component={Link}
 							to={`/bikes/${bike.id}`}
 							style={{ flex: 1, whiteSpace: 'nowrap' }}
@@ -137,6 +139,31 @@ export default function BikeCard({ bike }: BikeCardProps) {
 
 
 			<BikeDetailsModal bike={bike} opened={opened} onClose={close} />
+			<Modal
+				opened={imageOpened}
+				onClose={closeImage}
+				withCloseButton
+				title={`Просмотр: ${bike.name}`}
+				centered
+				size="xl"
+				radius="xl"
+				styles={{
+					body: {
+						backgroundColor: 'white',
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+					},
+				}}
+			>
+				<Image
+					src={`${BASE_IMAGE_URL}${bike.image_url}`}
+					alt={bike.name}
+					fit="contain"
+					style={{ maxHeight: '80vh', maxWidth: '80vw' }}
+				/>
+			</Modal>
+
 		</>
 	);
 }
