@@ -18,7 +18,7 @@ import {
 	Tooltip
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { IconArrowLeft, IconInfoCircle, IconMoodSad, IconX } from "@tabler/icons-react";
+import { IconAlertSquareRounded, IconArrowLeft, IconInfoCircle, IconMoodSad, IconX } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AccessorySelectCardList from "../components/Accessory/AccessorySelectCardList";
@@ -139,12 +139,15 @@ export function BikeDetailPage() {
 						centered: true,
 						radius: "lg",
 						children: (
-							<Text>
+							<Text fz="sm">
 								К сожалению, не удалось выполнить бронирование. Пожалуйста, попробуйте позже.
 								{error.message && (
-									<Text tt="capitalize" size="sm" c="red" mt="sm">
-										{error.response?.data?.error}
-									</Text>
+									<Group mt="md" gap="sm" wrap="nowrap">
+										<IconAlertSquareRounded size={45} color="red" />
+										<Text size="sm" c="red">
+											Внимание: {error.response?.data?.error}!
+										</Text>
+									</Group>
 								)}
 							</Text>
 						),
